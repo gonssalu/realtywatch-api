@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/', function () {
+    return ['Laravel' => app()->version()];
+});
+
+Route::controller(AuthController::class)->group(function () {
+    Route::post('login', 'login');
+    Route::delete('logout', 'logout')->middleware('auth:api');
+
+    Route::get('test', 'test')->middleware('auth:api');
 });
