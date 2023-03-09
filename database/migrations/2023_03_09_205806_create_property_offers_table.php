@@ -17,7 +17,7 @@ class CreatePropertyOffersTable extends Migration
 
         Schema::create('property_offers', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('property_id');
+            $table->unsignedBigInteger('property_id');
             $table->foreign('property_id')->references('id')->on('properties');
             $table->text('url');
         });

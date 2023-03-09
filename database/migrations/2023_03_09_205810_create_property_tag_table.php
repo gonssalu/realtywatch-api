@@ -16,10 +16,11 @@ class CreatePropertyTagTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('property_tag', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('property_id');
             $table->foreign('property_id')->references('id')->on('properties');
-            $table->bigInteger('tag_id')->primary();
+            $table->unsignedBigInteger('tag_id');
             $table->foreign('tag_id')->references('id')->on('tags');
+            $table->primary(['tag_id', 'property_id']);
         });
 
         Schema::enableForeignKeyConstraints();

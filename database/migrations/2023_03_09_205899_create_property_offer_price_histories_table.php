@@ -16,11 +16,12 @@ class CreatePropertyOfferPriceHistoriesTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('property_offer_price_histories', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('offer_id');
             $table->foreign('offer_id')->references('id')->on('property_offers');
-            $table->dateTime('datetime')->primary();
-            $table->decimal('price')->nullable();
+            $table->dateTime('datetime');
+            $table->decimal('price', 9, 2)->nullable();
             $table->boolean('online');
+            $table->primary(['offer_id', 'datetime']);
         });
 
         Schema::enableForeignKeyConstraints();

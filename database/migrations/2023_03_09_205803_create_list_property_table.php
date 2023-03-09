@@ -16,10 +16,11 @@ class CreateListPropertyTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('list_property', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('list_id');
             $table->foreign('list_id')->references('id')->on('lists');
-            $table->bigInteger('property_id')->primary();
+            $table->unsignedBigInteger('property_id');
             $table->foreign('property_id')->references('id')->on('properties');
+            $table->primary(['list_id', 'property_id']);
         });
 
         Schema::enableForeignKeyConstraints();

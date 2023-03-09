@@ -16,10 +16,11 @@ class CreateListTagTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('list_tag', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('list_id');
             $table->foreign('list_id')->references('id')->on('lists');
-            $table->bigInteger('tag_id')->primary();
+            $table->unsignedBigInteger('tag_id');
             $table->foreign('tag_id')->references('id')->on('tags');
+            $table->primary(['tag_id', 'list_id']);
         });
 
         Schema::enableForeignKeyConstraints();

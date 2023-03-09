@@ -13,6 +13,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('users');
         Schema::disableForeignKeyConstraints();
 
         Schema::create('users', function (Blueprint $table) {
