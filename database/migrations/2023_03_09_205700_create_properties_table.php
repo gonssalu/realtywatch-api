@@ -17,7 +17,7 @@ class CreatePropertiesTable extends Migration
 
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->smallInteger('quantity')->nullable();
             $table->string('title');
@@ -28,11 +28,10 @@ class CreatePropertiesTable extends Migration
             $table->string('type')->nullable();
             $table->string('typology')->nullable();
             $table->tinyInteger('rating')->nullable();
-            $table->decimal('current_price')->nullable();
-            $table->enum('status');
+            $table->decimal('current_price', 9, 2)->nullable();
+            $table->enum('status', ['available', 'sold', 'rented', 'unavailable', 'unknown'])->default('unknown');
             $table->index('title');
             $table->index('description');
-            $table->index(['title', 'description']);
             $table->index('status');
         });
 

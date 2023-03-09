@@ -16,7 +16,7 @@ class CreatePropertyAddressTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('property_address', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('property_id')->primary();
             $table->foreign('property_id')->references('id')->on('properties');
             $table->string('country')->nullable();
             $table->string('region')->nullable();
