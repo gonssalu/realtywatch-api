@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\RegisterUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Hash;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+
     function login(Request $request)
     {
         $request->validate([
@@ -23,16 +26,30 @@ class AuthController extends Controller
             return response(['message' => 'Invalid login credentials'], 401);
         }
 
-        $accessToken = $user->createToken($request->device_name)->plainTextToken;
+        $accessToken = $user->myCreateToken($request->device_name);
         return response(['message' => 'Login was successful', 'user' => new UserResource($user), 'access_token' => $accessToken]);
     }
 
     public function logout(Request $request)
     {
-        $accessToken = $request->user()->token();
-        $token = $request->user()->tokens->find($accessToken);
-        $token->revoke();
+        $token = $request->user()->currentAccessToken();
         $token->delete();
         return response(['message' => 'Token revoked']);
+    }
+
+    public function register(RegisterUserRequest $request)
+    {
+        $newUser = $request->validated();
+
+        $newUser["password"] = Hash::make($newUser["password"]);
+        $newUser["blocked"] = false;
+
+        $regUser = User::create($newUser);
+
+        $accessToken = $regUser->myCreateToken($request->device_name);
+
+        event(new Registered($regUser)); /* TODO: IS THIS NEEDED ? */
+
+        return response(["message" => "User was successfuly registered", "user" => new UserResource($regUser), 'access_token' => $accessToken]);
     }
 }
