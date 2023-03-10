@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -20,14 +20,11 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            /*throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);*/
             return response(['message' => 'Invalid login credentials'], 401);
         }
 
         $accessToken = $user->createToken($request->device_name)->plainTextToken;
-        return response(['message' => 'Login was successful'/*, 'user' => new MyUserResource($authUser)*/, 'access_token' => $accessToken]);
+        return response(['message' => 'Login was successful', 'user' => new UserResource($user), 'access_token' => $accessToken]);
     }
 
     public function logout(Request $request)
