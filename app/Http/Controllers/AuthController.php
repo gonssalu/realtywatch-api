@@ -20,10 +20,10 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
+            /*throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
-            ]);
-            //return response(['message' => 'Invalid login credentials'], 401);
+            ]);*/
+            return response(['message' => 'Invalid login credentials'], 401);
         }
 
         $accessToken = $user->createToken($request->device_name)->plainTextToken;
