@@ -46,4 +46,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'blocked' => 'boolean',
     ];
+
+    public function myCreateToken($deviceName)
+    {
+        return $this->createToken($deviceName)->plainTextToken;
+    }
 }
