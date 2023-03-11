@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->text('photo_url')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::enableForeignKeyConstraints();
