@@ -22,7 +22,7 @@ class ListProperty extends Model
 
     public function list(): BelongsTo
     {
-        return $this->belongsTo(List::class);
+        return $this->belongsTo(MyList::class);
     }
 
     public function property(): BelongsTo

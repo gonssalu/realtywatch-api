@@ -3,8 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
-use App\Models\List;
 use App\Models\User;
 
 class ListFactory extends Factory
@@ -14,7 +12,7 @@ class ListFactory extends Factory
      *
      * @var string
      */
-    protected $model = List::class;
+    protected $model = MyList::class;
 
     /**
      * Define the model's default state.
