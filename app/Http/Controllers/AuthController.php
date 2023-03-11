@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class AuthController extends Controller
 {
 
-    function login(Request $request)
+    public function login(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
