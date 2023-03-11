@@ -1,0 +1,91 @@
+models:
+    PropertyAddress:
+        id: false
+        property_id: bigIncrements foreign:properties.id
+        country: string nullable
+        region: string nullable
+        locality: string nullable
+        postal_code: string nullable
+        street: string nullable
+        coordinates: point nullable
+        indexes:
+            - index: country
+            - index: region
+            - index: locality
+            - index: postal_code
+            - index: street
+            - index: coordinates
+    PropertyOfferPriceHistory:
+        id: false
+        offer_id: bigIncrements foreign:property_offers.id
+        datetime: dateTime primary
+        price: decimal nullable
+        online: boolean
+    User:
+        id: id
+        name: string
+        email: string
+        password: string
+        blocked: boolean
+        photo_url: text nullable
+    ListProperty:
+        id: false
+        list_id: bigIncrements foreign:lists.id
+        property_id: bigIncrements foreign:properties.id
+    PropertyMedia:
+        id: id foreign:properties.id
+        property_id: bigInteger unsigned
+        type: enum
+        url: text
+        indexes:
+            - index: property_id, type
+    Tag:
+        id: id
+        user_id: bigInteger unsigned foreign:users.id
+        name: string
+        indexes:
+            - unique: user_id, name
+    PropertyOffer:
+        id: id
+        property_id: bigInteger unsigned foreign:properties.id
+        url: text
+    List:
+        id: id
+        user_id: bigInteger foreign:users.id
+        name: string
+        indexes:
+            - unique: user_id, name
+    Property:
+        id: id
+        user_id: bigInteger unsigned foreign:users.id
+        quantity: smallInteger nullable
+        title: string
+        description: text nullable
+        cover_url: text nullable
+        total_area: decimal nullable
+        gross_area: decimal nullable
+        type: string nullable
+        typology: string nullable
+        rating: tinyInteger nullable
+        current_price: decimal nullable
+        status: enum
+        indexes:
+            - index: title
+            - index: description
+            - index: status
+    ListTag:
+        id: false
+        list_id: bigIncrements foreign:lists.id
+        tag_id: bigIncrements foreign:tags.id
+    PropertyTag:
+        id: false
+        property_id: bigIncrements foreign:properties.id
+        tag_id: bigIncrements foreign:tags.id
+    PropertyCharacteristic:
+        id: id
+        property_id: bigInteger unsigned foreign:properties.id
+        name: string
+        value: string
+        indexes:
+            - unique: property_id, name
+
