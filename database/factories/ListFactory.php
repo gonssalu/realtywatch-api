@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\PropertyList;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
 
@@ -12,7 +13,7 @@ class ListFactory extends Factory
      *
      * @var string
      */
-    protected $model = MyList::class;
+    protected $model = PropertyList::class;
 
     /**
      * Define the model's default state.
