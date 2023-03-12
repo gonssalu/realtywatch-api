@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Property;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\PropertyMedia;
@@ -21,8 +22,10 @@ class PropertyMediaFactory extends Factory
     public function definition(): array
     {
         return [
-            'property_id' => $this->faker->randomNumber(),
-            'type' => $this->faker->randomElement(/** enum_attributes **/),
+            'property_id' => Property::factory(),
+            'type' => $this->faker->randomElement(
+                ['image', 'video', 'blueprint', 'other']
+            ),
             'url' => $this->faker->url,
         ];
     }
