@@ -22,6 +22,7 @@ class PropertyAddress extends Model
         'locality',
         'postal_code',
         'street',
+        'building',
         'coordinates',
     ];
 

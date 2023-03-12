@@ -6,7 +6,7 @@ use App\Models\PropertyList;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
 
-class ListFactory extends Factory
+class PropertyListFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.

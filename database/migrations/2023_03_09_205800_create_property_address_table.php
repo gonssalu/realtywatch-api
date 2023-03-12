@@ -23,12 +23,12 @@ class CreatePropertyAddressTable extends Migration
             $table->string('locality')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('street')->nullable();
+            $table->string('building')->nullable();
             $table->point('coordinates')->nullable();
             $table->index('country');
             $table->index('region');
             $table->index('locality');
             $table->index('postal_code');
-            $table->index('street');
             $table->index('coordinates');
         });
 

@@ -7,13 +7,13 @@ models:
     locality: string nullable
     postal_code: string nullable
     street: string nullable
+    building: string nullable
     coordinates: point nullable
     indexes:
       - index: country
       - index: region
       - index: locality
       - index: postal_code
-      - index: street
       - index: coordinates
   PropertyOfferPriceHistory:
     id: false
