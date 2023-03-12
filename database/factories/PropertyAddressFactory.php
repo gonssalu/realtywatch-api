@@ -28,6 +28,7 @@ class PropertyAddressFactory extends Factory
             'locality' => $this->faker->word,
             'postal_code' => $this->faker->postcode,
             'street' => $this->faker->streetName,
+            'building' => $this->faker->word,
             'coordinates' => $this->faker->word,
         ];
     }
