@@ -33,7 +33,7 @@ class PropertyFactory extends Factory
             'typology' => $this->faker->word,
             'rating' => $this->faker->numberBetween(-8, 8),
             'current_price' => $this->faker->randomFloat(0, 0, 9999999999.),
-            'status' => $this->faker->randomElement(/** enum_attributes **/),
+            'status' => $this->faker->randomElement(['available', 'sold', 'rented', 'unavailable', 'unknown']),
         ];
     }
 }

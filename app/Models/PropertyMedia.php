@@ -31,7 +31,7 @@ class PropertyMedia extends Model
         'property_id' => 'integer',
     ];
 
-    public function id(): BelongsTo
+    public function property(): BelongsTo
     {
         return $this->belongsTo(Property::class);
     }
