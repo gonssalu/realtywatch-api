@@ -4,8 +4,8 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\ListProperty;
-use App\Models\MyList;
 use App\Models\Property;
+use App\Models\PropertyList;
 
 class ListPropertyFactory extends Factory
 {
@@ -22,7 +22,7 @@ class ListPropertyFactory extends Factory
     public function definition(): array
     {
         return [
-            'list_id' => MyList::factory(),
+            'list_id' => PropertyList::factory(),
             'property_id' => Property::factory(),
         ];
     }

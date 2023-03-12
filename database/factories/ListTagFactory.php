@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\ListTag;
 use App\Models\MyList;
+use App\Models\PropertyList;
 use App\Models\Tag;
 
 class ListTagFactory extends Factory
@@ -22,7 +23,7 @@ class ListTagFactory extends Factory
     public function definition(): array
     {
         return [
-            'list_id' => MyList::factory(),
+            'list_id' => PropertyList::factory(),
             'tag_id' => Tag::factory(),
         ];
     }

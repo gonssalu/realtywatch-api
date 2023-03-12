@@ -22,7 +22,7 @@ class ListTag extends Model
 
     public function list(): BelongsTo
     {
-        return $this->belongsTo(MyList::class);
+        return $this->belongsTo(PropertyList::class);
     }
 
     public function tag(): BelongsTo
