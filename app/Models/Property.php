@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Property extends Model
@@ -61,5 +64,31 @@ class Property extends Model
     public function lists(): BelongsToMany
     {
         return $this->belongsToMany(PropertyList::class);
+    }
+
+    public function media(): HasMany
+    {
+        return $this->hasMany(PropertyMedia::class);
+    }
+
+    public function address(): HasOne
+    {
+        return $this->hasOne(PropertyAddress::class);
+    }
+
+    public function characteristics(): HasMany
+    {
+        return $this->hasMany(PropertyCharacteristic::class);
+    }
+
+    public function offers(): HasMany
+    {
+        return $this->hasMany(PropertyOffer::class);
+    }
+
+    /* TODO: Is this needed? */
+    public function priceHistories(): HasManyThrough
+    {
+        return $this->hasManyThrough(PropertyOfferPriceHistory::class, PropertyOffer::class);
     }
 }
