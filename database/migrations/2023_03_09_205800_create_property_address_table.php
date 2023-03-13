@@ -20,6 +20,7 @@ class CreatePropertyAddressTable extends Migration
             $table->foreign('property_id')->references('id')->on('properties');
             $table->string('country')->nullable();
             $table->string('region')->nullable();
+            $table->string('city')->nullable();
             $table->string('locality')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('street')->nullable();
@@ -27,6 +28,7 @@ class CreatePropertyAddressTable extends Migration
             $table->point('coordinates')->nullable();
             $table->index('country');
             $table->index('region');
+            $table->index('city');
             $table->index('locality');
             $table->index('postal_code');
             $table->index('coordinates');
