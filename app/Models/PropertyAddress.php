@@ -19,11 +19,16 @@ class PropertyAddress extends Model
         'property_id',
         'country',
         'region',
+        'city',
         'locality',
         'postal_code',
         'street',
         'building',
         'coordinates',
+    ];
+
+    protected $casts = [
+        'coordinates' => 'array',
     ];
 
     public function property(): BelongsTo

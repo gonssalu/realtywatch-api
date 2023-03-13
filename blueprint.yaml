@@ -4,6 +4,7 @@ models:
     property_id: bigIncrements foreign:properties.id
     country: string nullable
     region: string nullable
+    city: string nullable
     locality: string nullable
     postal_code: string nullable
     street: string nullable
@@ -12,6 +13,7 @@ models:
     indexes:
       - index: country
       - index: region
+      - index: city
       - index: locality
       - index: postal_code
       - index: coordinates
