@@ -23,8 +23,8 @@ class CreatePropertiesTable extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->text('cover_url')->nullable();
-            $table->decimal('useful_area')->nullable();
             $table->decimal('gross_area')->nullable();
+            $table->decimal('useful_area')->nullable();
             $table->string('type')->nullable();
             $table->string('typology')->nullable();
             $table->tinyInteger('rating')->nullable();
@@ -33,8 +33,6 @@ class CreatePropertiesTable extends Migration
             $table->index('title');
             $table->index('description');
             $table->index('status');
-            $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::enableForeignKeyConstraints();

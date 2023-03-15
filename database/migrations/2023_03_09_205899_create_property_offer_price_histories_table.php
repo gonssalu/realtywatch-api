@@ -21,6 +21,7 @@ class CreatePropertyOfferPriceHistoriesTable extends Migration
             $table->dateTime('datetime');
             $table->decimal('price', 9, 2)->nullable();
             $table->boolean('online');
+            $table->boolean('latest');
             $table->primary(['offer_id', 'datetime']);
         });
 

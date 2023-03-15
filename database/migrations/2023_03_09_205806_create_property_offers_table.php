@@ -20,6 +20,9 @@ class CreatePropertyOffersTable extends Migration
             $table->unsignedBigInteger('property_id');
             $table->foreign('property_id')->references('id')->on('properties');
             $table->text('url');
+            $table->string('description')->nullable();
+            $table->bigInteger('agency_id')->nullable();
+            $table->foreign('agency_id')->references('id')->on('agency');
         });
 
         Schema::enableForeignKeyConstraints();
