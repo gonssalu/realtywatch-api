@@ -5,17 +5,16 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Agency;
-use App\Models\Property;
-use App\Models\PropertyOffer;
+use App\Models\User;
 
-class PropertyOfferFactory extends Factory
+class AgencyFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = PropertyOffer::class;
+    protected $model = Agency::class;
 
     /**
      * Define the model's default state.
@@ -23,10 +22,9 @@ class PropertyOfferFactory extends Factory
     public function definition(): array
     {
         return [
-            'property_id' => Property::factory(),
-            'url' => $this->faker->url,
-            'description' => $this->faker->text,
-            'agency_id' => Agency::factory(),
+            'name' => $this->faker->name,
+            'logo_url' => $this->faker->text,
+            'user_id' => User::factory(),
         ];
     }
 }

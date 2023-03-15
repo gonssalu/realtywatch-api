@@ -26,6 +26,7 @@ class PropertyOfferPriceHistoryFactory extends Factory
             'datetime' => $this->faker->dateTime(),
             'price' => $this->faker->randomFloat(0, 0, 9999999999.),
             'online' => $this->faker->boolean,
+            'latest' => $this->faker->boolean,
         ];
     }
 }

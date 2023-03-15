@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PropertyCharacteristic extends Model
+class Characteristic extends Model
 {
     use HasFactory;
 
@@ -16,9 +16,9 @@ class PropertyCharacteristic extends Model
      * @var array
      */
     protected $fillable = [
-        'property_id',
-        'characteristic_id',
-        'value',
+        'user_id',
+        'name',
+        'type',
     ];
 
     /**
@@ -28,16 +28,11 @@ class PropertyCharacteristic extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'property_id' => 'integer',
+        'user_id' => 'integer',
     ];
 
-    public function property(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Property::class);
-    }
-
-    public function characteristic(): BelongsTo
-    {
-        return $this->belongsTo(Characteristic::class);
+        return $this->belongsTo(User::class);
     }
 }

@@ -1,50 +1,62 @@
 created:
+    - database/factories/AdministrativeDivisionFactory.php
     - database/factories/PropertyAddressFactory.php
     - database/factories/PropertyOfferPriceHistoryFactory.php
     - database/factories/UserFactory.php
     - database/factories/ListPropertyFactory.php
+    - database/factories/AgencyFactory.php
     - database/factories/PropertyMediaFactory.php
     - database/factories/TagFactory.php
     - database/factories/PropertyOfferFactory.php
+    - database/factories/CharacteristicFactory.php
     - database/factories/ListFactory.php
     - database/factories/PropertyFactory.php
     - database/factories/ListTagFactory.php
     - database/factories/PropertyTagFactory.php
     - database/factories/PropertyCharacteristicFactory.php
-    - database/migrations/2023_03_11_233815_create_property_addresses_table.php
-    - database/migrations/2023_03_11_233816_create_property_offer_price_histories_table.php
-    - database/migrations/2023_03_11_233817_create_users_table.php
-    - database/migrations/2023_03_11_233818_create_list_properties_table.php
-    - database/migrations/2023_03_11_233819_create_property_media_table.php
-    - database/migrations/2023_03_11_233820_create_tags_table.php
-    - database/migrations/2023_03_11_233821_create_property_offers_table.php
-    - database/migrations/2023_03_11_233822_create_lists_table.php
-    - database/migrations/2023_03_11_233823_create_properties_table.php
-    - database/migrations/2023_03_11_233824_create_list_tags_table.php
-    - database/migrations/2023_03_11_233825_create_property_tags_table.php
-    - database/migrations/2023_03_11_233826_create_property_characteristics_table.php
+    - database/migrations/2023_03_15_202720_create_administrative_divisions_table.php
+    - database/migrations/2023_03_15_202721_create_property_addresses_table.php
+    - database/migrations/2023_03_15_202722_create_property_offer_price_histories_table.php
+    - database/migrations/2023_03_15_202723_create_users_table.php
+    - database/migrations/2023_03_15_202724_create_list_properties_table.php
+    - database/migrations/2023_03_15_202725_create_agencies_table.php
+    - database/migrations/2023_03_15_202726_create_property_media_table.php
+    - database/migrations/2023_03_15_202727_create_tags_table.php
+    - database/migrations/2023_03_15_202728_create_property_offers_table.php
+    - database/migrations/2023_03_15_202729_create_characteristics_table.php
+    - database/migrations/2023_03_15_202730_create_lists_table.php
+    - database/migrations/2023_03_15_202731_create_properties_table.php
+    - database/migrations/2023_03_15_202732_create_list_tags_table.php
+    - database/migrations/2023_03_15_202733_create_property_tags_table.php
+    - database/migrations/2023_03_15_202734_create_property_characteristics_table.php
+    - app/Models/AdministrativeDivision.php
     - app/Models/PropertyAddress.php
     - app/Models/PropertyOfferPriceHistory.php
     - app/Models/User.php
     - app/Models/ListProperty.php
+    - app/Models/Agency.php
     - app/Models/PropertyMedia.php
     - app/Models/Tag.php
     - app/Models/PropertyOffer.php
+    - app/Models/Characteristic.php
     - app/Models/List.php
     - app/Models/Property.php
     - app/Models/ListTag.php
     - app/Models/PropertyTag.php
     - app/Models/PropertyCharacteristic.php
 models:
-    PropertyAddress: { id: false, property_id: 'bigIncrements foreign:properties.id', country: 'string nullable', region: 'string nullable', locality: 'string nullable', postal_code: 'string nullable', street: 'string nullable', coordinates: 'point nullable', indexes: [{ index: country }, { index: region }, { index: locality }, { index: postal_code }, { index: street }, { index: coordinates }] }
-    PropertyOfferPriceHistory: { id: false, offer_id: 'bigIncrements foreign:property_offers.id', datetime: 'dateTime primary', price: 'decimal nullable', online: boolean }
+    PropertyAddress: { id: false, property_id: 'bigIncrements foreign:properties.id', country: 'string nullable', adm1_id: 'bigInteger nullable foreign:administrative_divisions.id', adm2_id: 'bigInteger nullable foreign:administrative_divisions.id', adm3_id: 'bigInteger nullable foreign:administrative_divisions.id', full_address: 'text nullable', coordinates: 'point nullable', indexes: [{ index: country }, { index: full_address }, { index: coordinates }] }
+    PropertyOfferPriceHistory: { id: false, offer_id: 'bigIncrements foreign:property_offers.id', datetime: 'dateTime primary', price: 'decimal nullable', online: boolean, latest: boolean }
     User: { id: id, name: string, email: string, password: string, blocked: boolean, photo_url: 'text nullable' }
     ListProperty: { id: false, list_id: 'bigIncrements foreign:lists.id', property_id: 'bigIncrements foreign:properties.id' }
-    PropertyMedia: { id: 'id foreign:properties.id', property_id: 'bigInteger unsigned', type: enum, url: text, indexes: [{ index: 'property_id, type' }] }
+    PropertyMedia: { id: id, property_id: 'bigInteger unsigned foreign:properties.id', type: enum, url: text, indexes: [{ index: 'property_id, type' }] }
     Tag: { id: id, user_id: 'bigInteger unsigned foreign:users.id', name: string, indexes: [{ unique: 'user_id, name' }] }
-    PropertyOffer: { id: id, property_id: 'bigInteger unsigned foreign:properties.id', url: text }
+    PropertyOffer: { id: id, property_id: 'bigInteger unsigned foreign:properties.id', url: text, description: 'string nullable', agency_id: 'bigInteger nullable foreign:agency.id' }
     List: { id: id, user_id: 'bigInteger foreign:users.id', name: string, indexes: [{ unique: 'user_id, name' }] }
-    Property: { id: id, user_id: 'bigInteger unsigned foreign:users.id', quantity: 'smallInteger nullable', title: string, description: 'text nullable', cover_url: 'text nullable', useful_area: 'decimal nullable', gross_area: 'decimal nullable', type: 'string nullable', typology: 'string nullable', rating: 'tinyInteger nullable', current_price: 'decimal nullable', status: enum, indexes: [{ index: title }, { index: description }, { index: status }] }
+    Property: { id: id, user_id: 'bigInteger unsigned foreign:users.id', quantity: 'smallInteger nullable', title: string, description: 'text nullable', cover_url: 'text nullable', gross_area: 'decimal nullable', useful_area: 'decimal nullable', type: 'string nullable', typology: 'string nullable', rating: 'tinyInteger nullable', current_price: 'decimal nullable', status: enum, indexes: [{ index: title }, { index: description }, { index: status }] }
     ListTag: { id: false, list_id: 'bigIncrements foreign:lists.id', tag_id: 'bigIncrements foreign:tags.id' }
     PropertyTag: { id: false, property_id: 'bigIncrements foreign:properties.id', tag_id: 'bigIncrements foreign:tags.id' }
-    PropertyCharacteristic: { id: id, property_id: 'bigInteger unsigned foreign:properties.id', name: string, value: string, indexes: [{ unique: 'property_id, name' }] }
+    PropertyCharacteristic: { id: id, property_id: 'bigInteger unsigned foreign:properties.id', characteristic_id: 'string foreign:characteristics.id', value: string }
+    AdministrativeDivision: { id: id, name: string, level: smallInteger }
+    Agency: { id: id, name: string, logo_url: text, user_id: 'bigInteger foreign:users.id' }
+    Characteristic: { id: id, user_id: 'bigInteger foreign:users.id', name: string, type: enum, indexes: [{ unique: 'user_id, name, type' }, { index: 'user_id, name' }] }
