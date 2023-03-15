@@ -7,9 +7,9 @@ models:
     id: false
     property_id: bigIncrements foreign:properties.id
     country: string nullable
-    adm1_id: bigInteger nullable foreign:administrative_divisions.id
-    adm2_id: bigInteger nullable foreign:administrative_divisions.id
-    adm3_id: bigInteger nullable foreign:administrative_divisions.id
+    adm1_id: bigInteger unsigned nullable foreign:administrative_divisions.id
+    adm2_id: bigInteger unsigned nullable foreign:administrative_divisions.id
+    adm3_id: bigInteger unsigned nullable foreign:administrative_divisions.id
     full_address: text nullable
     coordinates: point nullable
     indexes:
@@ -38,7 +38,7 @@ models:
     id: id
     name: string
     logo_url: text
-    user_id: bigInteger foreign:users.id
+    user_id: bigInteger unsigned foreign:users.id
   PropertyMedia:
     id: id
     property_id: bigInteger unsigned foreign:properties.id
@@ -60,7 +60,7 @@ models:
     agency_id: bigInteger nullable foreign:agency.id
   Characteristic:
     id: id
-    user_id: bigInteger foreign:users.id
+    user_id: bigInteger unsigned foreign:users.id
     name: string
     type: enum
     indexes:
@@ -68,7 +68,7 @@ models:
       - index: user_id, name
   List:
     id: id
-    user_id: bigInteger foreign:users.id
+    user_id: bigInteger unsigned foreign:users.id
     name: string
     indexes:
       - unique: user_id, name
@@ -101,5 +101,5 @@ models:
   PropertyCharacteristic:
     id: id
     property_id: bigInteger unsigned foreign:properties.id
-    characteristic_id: string foreign:characteristics.id
+    characteristic_id: bigInteger unsigned foreign:characteristics.id
     value: string
