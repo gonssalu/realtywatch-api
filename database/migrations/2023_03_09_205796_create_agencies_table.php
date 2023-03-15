@@ -15,7 +15,7 @@ class CreateAgencyTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('agency', function (Blueprint $table) {
+        Schema::create('agencies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->text('logo_url');
