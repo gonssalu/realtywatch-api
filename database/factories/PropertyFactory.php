@@ -21,14 +21,22 @@ class PropertyFactory extends Factory
      */
     public function definition(): array
     {
+        $useful_area = $this->faker->biasedNumberBetween(100, 480);
         return [
             'user_id' => User::factory(),
-            'quantity' => $this->faker->numberBetween(-1000, 1000),
-            'title' => $this->faker->sentence(4),
+            'quantity' => ($this->faker->numberBetween(1, 30) == 8 ?
+                $this->faker->biasedNumberBetween(
+                    2,
+                    8,
+                    function ($x) {
+                        return pow($x, 2);
+                    }
+                ) : 1),
+            'title' => 'Something went wrong while seeding the database',
             'description' => $this->faker->text,
-            'cover_url' => $this->faker->text,
-            'total_area' => $this->faker->randomFloat(0, 0, 9999999999.),
-            'gross_area' => $this->faker->randomFloat(0, 0, 9999999999.),
+            /*'cover_url' => $this->faker->text,*/
+            'useful_area' => $useful_area,
+            'gross_area' => $useful_area + $this->faker->biasedNumberBetween(80, 140),
             'type' => $this->faker->word,
             'typology' => $this->faker->word,
             'rating' => $this->faker->numberBetween(-8, 8),
