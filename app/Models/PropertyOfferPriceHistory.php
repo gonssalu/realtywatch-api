@@ -20,6 +20,7 @@ class PropertyOfferPriceHistory extends Model
         'datetime',
         'price',
         'online',
+        'latest',
     ];
 
     /**
@@ -31,6 +32,7 @@ class PropertyOfferPriceHistory extends Model
         'datetime' => 'datetime',
         'price' => 'decimal',
         'online' => 'boolean',
+        'latest' => 'boolean',
     ];
 
     public function offer(): BelongsTo

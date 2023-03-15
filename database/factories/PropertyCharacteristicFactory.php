@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use App\Models\Characteristic;
 use App\Models\Property;
 use App\Models\PropertyCharacteristic;
 
@@ -23,8 +24,8 @@ class PropertyCharacteristicFactory extends Factory
     {
         return [
             'property_id' => Property::factory(),
-            'name' => $this->faker->word,
-            'value' => $this->faker->words($this->faker->biasedNumberBetween(1, 5, 'log'), true),
+            'characteristic_id' => Characteristic::factory(),
+            'value' => $this->faker->word,
         ];
     }
 }
