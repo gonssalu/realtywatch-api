@@ -19,7 +19,7 @@ class CreatePropertyCharacteristicsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('property_id');
             $table->foreign('property_id')->references('id')->on('properties');
-            $table->string('characteristic_id');
+            $table->unsignedBigInteger('characteristic_id');
             $table->foreign('characteristic_id')->references('id')->on('characteristics');
             $table->string('value');
         });

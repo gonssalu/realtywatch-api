@@ -21,7 +21,7 @@ class CreatePropertyOffersTable extends Migration
             $table->foreign('property_id')->references('id')->on('properties');
             $table->text('url');
             $table->string('description')->nullable();
-            $table->bigInteger('agency_id')->nullable();
+            $table->unsignedBigInteger('agency_id')->nullable();
             $table->foreign('agency_id')->references('id')->on('agency');
         });
 

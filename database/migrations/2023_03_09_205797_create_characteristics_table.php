@@ -17,7 +17,7 @@ class CreateCharacteristicsTable extends Migration
 
         Schema::create('characteristics', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('name');
             $table->enum('type', ['numerical', 'textual', 'other'])->default('other');
