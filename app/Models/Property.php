@@ -16,6 +16,7 @@ class Property extends Model
     use HasFactory, SoftDeletes;
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,8 +28,8 @@ class Property extends Model
         'title',
         'description',
         'cover_url',
-        'useful_area',
         'gross_area',
+        'useful_area',
         'type',
         'typology',
         'rating',
@@ -45,8 +46,8 @@ class Property extends Model
         'id' => 'integer',
         'user_id' => 'integer',
         'quantity' => 'integer',
-        'useful_area' => 'decimal',
         'gross_area' => 'decimal',
+        'useful_area' => 'decimal',
         'rating' => 'integer',
         'current_price' => 'decimal',
     ];
