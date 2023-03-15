@@ -18,21 +18,41 @@ class PropertyAddress extends Model
     protected $fillable = [
         'property_id',
         'country',
-        'region',
-        'city',
-        'locality',
-        'postal_code',
-        'street',
-        'building',
+        'adm1_id',
+        'adm2_id',
+        'adm3_id',
+        'full_address',
         'coordinates',
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
     protected $casts = [
-        'coordinates' => 'array',
+        'adm1_id' => 'integer',
+        'adm2_id' => 'integer',
+        'adm3_id' => 'integer',
     ];
 
     public function property(): BelongsTo
     {
         return $this->belongsTo(Property::class);
+    }
+
+    public function adm1(): BelongsTo
+    {
+        return $this->belongsTo(AdministrativeDivision::class);
+    }
+
+    public function adm2(): BelongsTo
+    {
+        return $this->belongsTo(AdministrativeDivision::class);
+    }
+
+    public function adm3(): BelongsTo
+    {
+        return $this->belongsTo(AdministrativeDivision::class);
     }
 }

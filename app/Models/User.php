@@ -65,6 +65,16 @@ class User extends Authenticatable
         return $this->hasMany(Property::class);
     }
 
+    public function customCharacteristics(): HasMany
+    {
+        return $this->hasMany(Characteristic::class);
+    }
+
+    public function agencies(): HasMany
+    {
+        return $this->hasMany(Agency::class);
+    }
+
     public function myCreateToken($deviceName)
     {
         return $this->createToken($deviceName)->plainTextToken;

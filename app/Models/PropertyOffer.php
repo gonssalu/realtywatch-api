@@ -19,6 +19,8 @@ class PropertyOffer extends Model
     protected $fillable = [
         'property_id',
         'url',
+        'description',
+        'agency_id',
     ];
 
     /**
@@ -29,6 +31,7 @@ class PropertyOffer extends Model
     protected $casts = [
         'id' => 'integer',
         'property_id' => 'integer',
+        'agency_id' => 'integer',
     ];
 
     public function property(): BelongsTo
@@ -39,5 +42,10 @@ class PropertyOffer extends Model
     public function priceHistory(): HasMany
     {
         return $this->hasMany(PropertyOfferPriceHistory::class);
+    }
+
+    public function agency(): BelongsTo
+    {
+        return $this->belongsTo(Agency::class);
     }
 }

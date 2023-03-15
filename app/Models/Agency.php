@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class PropertyCharacteristic extends Model
+class Agency extends Model
 {
     use HasFactory;
 
@@ -16,9 +17,9 @@ class PropertyCharacteristic extends Model
      * @var array
      */
     protected $fillable = [
-        'property_id',
-        'characteristic_id',
-        'value',
+        'name',
+        'logo_url',
+        'user_id',
     ];
 
     /**
@@ -28,16 +29,16 @@ class PropertyCharacteristic extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'property_id' => 'integer',
+        'user_id' => 'integer',
     ];
 
-    public function property(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Property::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function characteristic(): BelongsTo
+    public function propertyOffers(): HasMany
     {
-        return $this->belongsTo(Characteristic::class);
+        return $this->hasMany(PropertyOffer::class);
     }
 }
