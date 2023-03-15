@@ -23,8 +23,8 @@ class PropertyCharacteristicFactory extends Factory
     {
         return [
             'property_id' => Property::factory(),
-            'name' => $this->faker->name,
-            'value' => $this->faker->word,
+            'name' => $this->faker->word,
+            'value' => $this->faker->words($this->faker->biasedNumberBetween(1, 5, 'log'), true),
         ];
     }
 }

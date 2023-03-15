@@ -64,7 +64,7 @@ models:
     title: string
     description: text nullable
     cover_url: text nullable
-    total_area: decimal nullable
+    useful_area: decimal nullable
     gross_area: decimal nullable
     type: string nullable
     typology: string nullable
