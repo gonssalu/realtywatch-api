@@ -86,6 +86,7 @@ models:
     rating: tinyInteger nullable
     current_price: decimal nullable
     status: enum
+    wc: tinyInteger nullable
     indexes:
       - index: title
       - index: description

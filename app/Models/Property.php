@@ -32,6 +32,7 @@ class Property extends Model
         'useful_area',
         'type',
         'typology',
+        'wc',
         'rating',
         'current_price',
         'status',
@@ -91,5 +92,10 @@ class Property extends Model
     public function priceHistories(): HasManyThrough
     {
         return $this->hasManyThrough(PropertyOfferPriceHistory::class, PropertyOffer::class);
+    }
+
+    public function numberOfRooms()
+    {
+        return substr($this->tipology, 0, 1);
     }
 }
