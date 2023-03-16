@@ -11,7 +11,7 @@ return [
                 'lon' => -9.13458,
             ],
             'quantity' => 35,
-            'radius' => 2500
+            'radius' => 2000
         ],
         'leiria' => [
             'coords' => [
@@ -19,7 +19,7 @@ return [
                 'lon' => -8.80725,
             ],
             'quantity' => 55,
-            'radius' => 3500
+            'radius' => 3000
         ],
         'nazare' => [
             'coords' => [
@@ -43,7 +43,7 @@ return [
                 'lon' => -9.013047,
             ],
             'quantity' => 15,
-            'radius' => 3500
+            'radius' => 3250
         ],
         'torres_vedras' => [
             'coords' => [
