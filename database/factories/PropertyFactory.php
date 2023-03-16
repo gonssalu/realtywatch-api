@@ -39,6 +39,9 @@ class PropertyFactory extends Factory
             'gross_area' => $useful_area + $this->faker->biasedNumberBetween(80, 140),
             'type' => $this->faker->word,
             'typology' => $this->faker->word,
+            'wc' => $this->faker->biasedNumberBetween(1, 4, function ($x) {
+                return pow($x, 2);
+            }),
             'rating' => $this->faker->numberBetween(-8, 8),
             'current_price' => $this->faker->randomFloat(0, 0, 9999999999.),
             'status' => $this->faker->randomElement(['available', 'sold', 'rented', 'unavailable', 'unknown']),
