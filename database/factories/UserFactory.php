@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\User;
+use Database\Seeders\MediaHelper;
 
 class UserFactory extends Factory
 {
@@ -20,12 +21,12 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->name;
         return [
-            'name' => $this->faker->name,
+            'name' => $name,
             'email' => $this->faker->safeEmail,
-            'password' => $this->faker->password,
-            /*'blocked' => $this->faker->boolean,
-            'photo_url' => $this->faker->text,*/
+            'password' => bcrypt('123456'),
+            'photo_url' => MediaHelper::GetUserPhoto($name),
         ];
     }
 }
