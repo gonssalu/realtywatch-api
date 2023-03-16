@@ -24,8 +24,8 @@ class UserFactory extends Factory
             'name' => $this->faker->name,
             'email' => $this->faker->safeEmail,
             'password' => $this->faker->password,
-            'blocked' => $this->faker->boolean,
-            'photo_url' => $this->faker->text,
+            /*'blocked' => $this->faker->boolean,
+            'photo_url' => $this->faker->text,*/
         ];
     }
 }
