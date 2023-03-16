@@ -21,6 +21,7 @@ class PropertyOffer extends Model
         'url',
         'description',
         'agency_id',
+        'listing_type',
     ];
 
     /**

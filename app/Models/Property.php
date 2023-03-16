@@ -25,6 +25,7 @@ class Property extends Model
     protected $fillable = [
         'user_id',
         'quantity',
+        'listing_type',
         'title',
         'description',
         'cover_url',
@@ -34,8 +35,9 @@ class Property extends Model
         'typology',
         'wc',
         'rating',
-        'current_price',
-        'status',
+        'current_price_sale',
+        'current_price_rent',
+        'status'
     ];
 
     /**
@@ -50,7 +52,8 @@ class Property extends Model
         'gross_area' => 'decimal',
         'useful_area' => 'decimal',
         'rating' => 'integer',
-        'current_price' => 'decimal',
+        'current_price_sale' => 'decimal',
+        'current_price_rent' => 'decimal',
     ];
 
     public function user(): BelongsTo

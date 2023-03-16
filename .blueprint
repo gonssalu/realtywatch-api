@@ -53,7 +53,7 @@ models:
     Tag: { id: id, user_id: 'bigInteger unsigned foreign:users.id', name: string, indexes: [{ unique: 'user_id, name' }] }
     PropertyOffer: { id: id, property_id: 'bigInteger unsigned foreign:properties.id', url: text, description: 'string nullable', agency_id: 'bigInteger nullable foreign:agency.id' }
     List: { id: id, user_id: 'bigInteger foreign:users.id', name: string, indexes: [{ unique: 'user_id, name' }] }
-    Property: { id: id, user_id: 'bigInteger unsigned foreign:users.id', quantity: 'smallInteger nullable', title: string, description: 'text nullable', cover_url: 'text nullable', gross_area: 'decimal nullable', useful_area: 'decimal nullable', type: 'string nullable', typology: 'string nullable', rating: 'tinyInteger nullable', current_price: 'decimal nullable', status: enum, indexes: [{ index: title }, { index: description }, { index: status }] }
+    Property: { id: id, user_id: 'bigInteger unsigned foreign:users.id', quantity: 'smallInteger nullable', title: string, description: 'text nullable', cover_url: 'text nullable', gross_area: 'decimal nullable', useful_area: 'decimal nullable', type: 'string nullable', typology: 'string nullable', rating: 'tinyInteger nullable', current_price_sale: 'decimal nullable', status: enum, indexes: [{ index: title }, { index: description }, { index: status }] }
     ListTag: { id: false, list_id: 'bigIncrements foreign:lists.id', tag_id: 'bigIncrements foreign:tags.id' }
     PropertyTag: { id: false, property_id: 'bigIncrements foreign:properties.id', tag_id: 'bigIncrements foreign:tags.id' }
     PropertyCharacteristic: { id: id, property_id: 'bigInteger unsigned foreign:properties.id', characteristic_id: 'string foreign:characteristics.id', value: string }

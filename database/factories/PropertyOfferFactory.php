@@ -27,6 +27,7 @@ class PropertyOfferFactory extends Factory
             'url' => $this->faker->url,
             'description' => $this->faker->text,
             'agency_id' => Agency::factory(),
+            'listing_type' => 'sale',
         ];
     }
 }
