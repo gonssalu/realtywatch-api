@@ -19,7 +19,7 @@ class MediaHelper
     public static function GetUserPhoto($name): string
     {
         // Download the photo and save it to storage
-        $photoContents = file_get_contents(config('factory.photo.api.url') . $name);
+        $photoContents = file_get_contents(config('factory.media.api.url') . $name);
         $photoPath = 'public/users/' . uniqid() . '.jpg';
         Storage::put($photoPath, $photoContents);
         return Storage::url($photoPath);

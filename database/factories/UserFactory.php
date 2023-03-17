@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use Database\Seeders\MediaHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserFactory extends Factory
@@ -24,8 +25,8 @@ class UserFactory extends Factory
             'name' => $name,
             'email' => $this->faker->safeEmail,
             'password' => bcrypt('123456'),
-            // 'photo_url' => MediaHelper::GetUserPhoto($name),
-            'photo_url' => '',
+            'photo_url' => MediaHelper::GetUserPhoto($name),
+            //'photo_url' => '',
         ];
     }
 }
