@@ -95,6 +95,7 @@ models:
       - index: title
       - index: description
       - index: status
+      - index: listing_type
   ListTag:
     id: false
     list_id: bigIncrements foreign:lists.id
