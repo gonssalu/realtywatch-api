@@ -11,20 +11,46 @@ class LoginTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_users_can_login(): void
+    private $formData = [
+        'email' => 'test@example.com',
+        'password' => 'password',
+        'device_name' => 'Test Device',
+    ];
+
+    public function test_user_can_login(): void
     {
-        $user = User::factory()->create();
+        User::factory()->create([
+            'email' => $this->formData['email'],
+            'password' => bcrypt($this->formData['password']),
+        ]);
 
-        $hasUser = $user ? true : false;
-
-        $this->assertTrue($hasUser);
-
-        $response = $this->actingAs($user)->get('/api/user');
+        $response = $this->postJson('/login', $this->formData);
 
         $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'message',
+            'user',
+            'access_token',
+        ]);
     }
 
-    public function test_users_can_logout(): void
+    public function test_user_cant_login_with_blocked_account(): void
+    {
+        User::factory()->create([
+            'email' => $this->formData['email'],
+            'password' => bcrypt($this->formData['password']),
+            'blocked' => true,
+        ]);
+
+        $response = $this->postJson('/login', $this->formData);
+
+        $response->assertStatus(403);
+
+        $response->assertJsonStructure(['message']);
+    }
+
+    public function test_user_can_logout(): void
     {
         $user = User::factory()->create();
 
