@@ -2,11 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Agency;
 use App\Models\Property;
 use App\Models\PropertyOffer;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PropertyOfferFactory extends Factory
 {

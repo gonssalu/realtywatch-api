@@ -2,11 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Characteristic;
 use App\Models\Property;
 use App\Models\PropertyCharacteristic;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PropertyCharacteristicFactory extends Factory
 {

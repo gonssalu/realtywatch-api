@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\PropertyList;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PropertyListFactory extends Factory
 {

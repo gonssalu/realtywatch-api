@@ -2,11 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Property;
 use App\Models\PropertyTag;
 use App\Models\Tag;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PropertyTagFactory extends Factory
 {

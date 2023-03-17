@@ -2,11 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\AdministrativeDivision;
 use App\Models\Property;
 use App\Models\PropertyAddress;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PropertyAddressFactory extends Factory
 {

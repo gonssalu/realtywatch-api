@@ -3,9 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Property;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\PropertyMedia;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PropertyMediaFactory extends Factory
 {

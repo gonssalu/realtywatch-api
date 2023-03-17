@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\ListProperty;
 use App\Models\Property;
 use App\Models\PropertyList;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ListPropertyFactory extends Factory
 {

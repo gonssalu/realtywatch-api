@@ -20,11 +20,11 @@ class CreatePropertyAddressTable extends Migration
             $table->foreign('property_id')->references('id')->on('properties');
             $table->string('country')->nullable();
             $table->unsignedBigInteger('adm1_id')->nullable();
-            $table->foreign('adm1_id')->references('id')->on('administrative_divisions')->where('level', '=', 1);;
+            $table->foreign('adm1_id')->references('id')->on('administrative_divisions')->where('level', '=', 1);
             $table->unsignedBigInteger('adm2_id')->nullable();
-            $table->foreign('adm2_id')->references('id')->on('administrative_divisions')->where('level', '=', 2);;
+            $table->foreign('adm2_id')->references('id')->on('administrative_divisions')->where('level', '=', 2);
             $table->unsignedBigInteger('adm3_id')->nullable();
-            $table->foreign('adm3_id')->references('id')->on('administrative_divisions')->where('level', '=', 3);;
+            $table->foreign('adm3_id')->references('id')->on('administrative_divisions')->where('level', '=', 3);
             $table->text('full_address')->nullable();
             $table->point('coordinates')->nullable();
             $table->index('country');

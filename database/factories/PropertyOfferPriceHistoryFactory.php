@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\PropertyOffer;
 use App\Models\PropertyOfferPriceHistory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PropertyOfferPriceHistoryFactory extends Factory
 {

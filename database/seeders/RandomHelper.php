@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-
 class RandomHelper
 {
     public static function RandomWeightedElement($array)

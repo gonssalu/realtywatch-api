@@ -37,7 +37,7 @@ class Property extends Model
         'rating',
         'current_price_sale',
         'current_price_rent',
-        'status'
+        'status',
     ];
 
     /**

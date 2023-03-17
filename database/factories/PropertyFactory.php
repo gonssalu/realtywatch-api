@@ -2,11 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Property;
 use App\Models\User;
 use Database\Seeders\RandomHelper;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PropertyFactory extends Factory
 {
@@ -27,6 +26,7 @@ class PropertyFactory extends Factory
         $all_listing = ['sale' => 45, 'rent' => 40, 'both' => 15];
 
         $useful_area = $this->faker->biasedNumberBetween(100, 480);
+
         return [
             'user_id' => User::factory(),
             'quantity' => ($this->faker->numberBetween(1, 30) == 8 ?

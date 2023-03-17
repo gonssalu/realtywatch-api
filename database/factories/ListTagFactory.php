@@ -2,11 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\ListTag;
-use App\Models\MyList;
 use App\Models\PropertyList;
 use App\Models\Tag;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ListTagFactory extends Factory
 {
