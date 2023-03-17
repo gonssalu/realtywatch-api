@@ -59,6 +59,8 @@ models:
     description: string nullable
     agency_id: bigInteger nullable foreign:agency.id
     listing_type: enum
+    indexes:
+      - index: property_id, listing_type
   Characteristic:
     id: id
     user_id: bigInteger unsigned foreign:users.id
