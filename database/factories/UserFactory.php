@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\User;
 use Database\Seeders\MediaHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class UserFactory extends Factory
 {
@@ -20,13 +21,16 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $name = $this->faker->name;
+        $firstName = $this->faker->firstName;
+        $lastName = $this->faker->lastName;
+        $name = $firstName . ' ' . $lastName;
+        $email = Str::lower($firstName . '.' . $lastName . '@example.com');
+
         return [
             'name' => $name,
-            'email' => $this->faker->safeEmail,
+            'email' => $email,
             'password' => bcrypt('123456'),
             'photo_url' => MediaHelper::GetUserPhoto($name),
-            //'photo_url' => '',
         ];
     }
 }

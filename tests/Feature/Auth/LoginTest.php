@@ -13,9 +13,7 @@ class LoginTest extends TestCase
 
     public function test_users_can_login(): void
     {
-        $user = User::factory()->create([
-            'photo_url' => null,
-        ]);
+        $user = User::factory()->create();
 
         $hasUser = $user ? true : false;
 
@@ -28,9 +26,7 @@ class LoginTest extends TestCase
 
     public function test_users_can_logout(): void
     {
-        $user = User::factory()->create([
-            'photo_url' => null,
-        ]);
+        $user = User::factory()->create();
 
         Sanctum::actingAs($user);
 
