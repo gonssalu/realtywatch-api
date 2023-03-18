@@ -25,7 +25,22 @@ class PropertyFactory extends Factory
         $all_types = ['house' => 30, 'apartment' => 30, 'office' => 6, 'shop' => 6, 'warehouse' => 3, 'garage' => 10, 'land' => 10, 'other' => 5];
         $all_listing = ['sale' => 45, 'rent' => 40, 'both' => 15];
 
-        $useful_area = $this->faker->biasedNumberBetween(100, 480);
+        $listing_type = RandomHelper::RandomWeightedElement($all_listing);
+        $type = RandomHelper::RandomWeightedElement($all_types);
+        $status = RandomHelper::RandomWeightedElement($all_status);
+
+        $useful_area = $this->faker->biasedNumberBetween(100, 680);
+        $gross_area = $useful_area + $this->faker->biasedNumberBetween(40, 400);
+        // wc, typology
+        $typology = null;
+        $wc = null;
+        if ($type != 'land') {
+            $typology = $this->faker->biasedNumberBetween(1, 20, function ($x) {
+                return pow($x, 3);
+            });
+            $wc = round($typology / 3) + $this->faker->numberBetween(0, 2);
+            if ($wc = 0) $wc = 1;
+        }
 
         return [
             'user_id' => User::factory(),
@@ -37,21 +52,19 @@ class PropertyFactory extends Factory
                         return pow($x, 2);
                     }
                 ) : 1),
-            'listing_type' => RandomHelper::RandomWeightedElement($all_listing),
+            'listing_type' => $listing_type,
             'title' => 'Something went wrong while seeding the database',
             'description' => $this->faker->text,
             /*'cover_url' => $this->faker->text,*/
             'useful_area' => $useful_area,
-            'gross_area' => $useful_area + $this->faker->biasedNumberBetween(80, 140),
-            'type' => RandomHelper::RandomWeightedElement($all_types),
-            'typology' => $this->faker->word,
-            'wc' => $this->faker->biasedNumberBetween(1, 4, function ($x) {
-                return pow($x, 2);
-            }),
+            'gross_area' => $gross_area,
+            'type' => $type,
+            'typology' => $typology,
+            'wc' => $wc,
             'rating' => $this->faker->numberBetween(1, 10),
             /*'current_price_sale' => $this->faker->randomFloat(0, 0, 10000000),*/
             /*'current_price_rent' => $this->faker->randomFloat(0, 0, 10000000),*/
-            'status' => RandomHelper::RandomWeightedElement($all_status),
+            'status' => $status,
         ];
     }
 }

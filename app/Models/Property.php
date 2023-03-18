@@ -96,9 +96,4 @@ class Property extends Model
     {
         return $this->hasManyThrough(PropertyOfferPriceHistory::class, PropertyOffer::class);
     }
-
-    public function numberOfRooms()
-    {
-        return substr($this->tipology, 0, 1);
-    }
 }
