@@ -36,13 +36,33 @@ class PropertyFactory extends Factory
         $wc = null;
         if ($type != 'land') {
             $typology = $this->faker->biasedNumberBetween(1, 20, function ($x) {
-                return pow($x, 3);
+                return pow($x, 2.322);
             });
             $wc = round($typology / 3) + $this->faker->numberBetween(0, 2);
             if ($wc = 0) $wc = 1;
         }
 
-        return [
+        $extraArray = [];
+        $rndSale = $this->faker->biasedNumberBetween(20000, 10000000, function ($x) {
+            return pow($x, 4.595);
+        });
+        $rndRent = $this->faker->biasedNumberBetween(550, 10000, function ($x) {
+            return pow($x, 3.585);
+        });
+        switch ($listing_type) {
+            case 'sale':
+                $extraArray['current_price_sale'] = $rndSale;
+                break;
+            case 'rent':
+                $extraArray['current_price_rent'] = $rndRent;
+                break;
+            default:
+                $extraArray['current_price_sale'] = $rndSale;
+                $extraArray['current_price_rent'] = $rndRent;
+                break;
+        }
+
+        return array_merge([
             'user_id' => User::factory(),
             'quantity' => ($this->faker->numberBetween(1, 30) == 8 ?
                 $this->faker->biasedNumberBetween(
@@ -62,9 +82,7 @@ class PropertyFactory extends Factory
             'typology' => $typology,
             'wc' => $wc,
             'rating' => $this->faker->numberBetween(1, 10),
-            /*'current_price_sale' => $this->faker->randomFloat(0, 0, 10000000),*/
-            /*'current_price_rent' => $this->faker->randomFloat(0, 0, 10000000),*/
             'status' => $status,
-        ];
+        ], $extraArray);
     }
 }
