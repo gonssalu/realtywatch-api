@@ -38,7 +38,7 @@ class PropertyFactory extends Factory
             $typology = $this->faker->biasedNumberBetween(1, 20, function ($x) {
                 return pow($x, 2.322);
             });
-            $wc = round($typology / 3) + $this->faker->numberBetween(0, 2);
+            $wc = intval(round($typology / 3)) + $this->faker->numberBetween(0, 2);
             if ($wc == 0) $wc = 1;
         }
 
