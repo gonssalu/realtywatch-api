@@ -29,25 +29,26 @@ class PropertyFactory extends Factory
         $type = RandomHelper::RandomWeightedElement($all_types);
         $status = RandomHelper::RandomWeightedElement($all_status);
 
-        $useful_area = $this->faker->biasedNumberBetween(100, 680);
-        $gross_area = $useful_area + $this->faker->biasedNumberBetween(40, 400);
+        $useful_area = $this->faker->numberBetween(100, 680);
+        $gross_area = $useful_area + $this->faker->numberBetween(40, 400);
         // wc, typology
         $typology = null;
         $wc = null;
         if ($type != 'land') {
-            $typology = $this->faker->biasedNumberBetween(1, 20, function ($x) {
-                return pow($x, 2.322);
-            });
+            $typology = $this->faker->numberBetween(1, 10) == 8 ? $this->faker->numberBetween(4, 10) : $this->faker->numberBetween(0, 4);
+
             $wc = intval(round($typology / 3)) + $this->faker->numberBetween(0, 2);
             if ($wc == 0) $wc = 1;
+
+            $typology = 'T' . $typology;
         }
 
         $extraArray = [];
         $rndSale = $this->faker->biasedNumberBetween(20000, 10000000, function ($x) {
-            return pow($x, 4.595);
+            return 1 / ($x + 1);
         });
         $rndRent = $this->faker->biasedNumberBetween(550, 10000, function ($x) {
-            return pow($x, 3.585);
+            return 1 / ($x + 1);
         });
         switch ($listing_type) {
             case 'sale':

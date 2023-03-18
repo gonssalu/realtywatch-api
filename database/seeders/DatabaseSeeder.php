@@ -23,7 +23,9 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         // Testing Property Factory
-        $user = resolve(PropertyFactory::class)->make();
-        dd($user->toArray());
+        for ($i = 0; $i < 20; $i++) {
+            $user = resolve(PropertyFactory::class)->make();
+            dump($user->toArray());
+        }
     }
 }
