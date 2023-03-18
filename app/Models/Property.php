@@ -49,11 +49,8 @@ class Property extends Model
         'id' => 'integer',
         'user_id' => 'integer',
         'quantity' => 'integer',
-        'gross_area' => 'decimal',
-        'useful_area' => 'decimal',
         'rating' => 'integer',
-        'current_price_sale' => 'decimal',
-        'current_price_rent' => 'decimal',
+        //TODO: ADD DECIMALS
     ];
 
     public function user(): BelongsTo
