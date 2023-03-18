@@ -38,7 +38,9 @@ class PropertyFactory extends Factory
             $typology = $this->faker->numberBetween(1, 10) == 8 ? $this->faker->numberBetween(4, 10) : $this->faker->numberBetween(0, 4);
 
             $wc = intval(round($typology / 3)) + $this->faker->numberBetween(0, 2);
-            if ($wc == 0) $wc = 1;
+            if ($wc == 0) {
+                $wc = 1;
+            }
 
             $typology = 'T' . $typology;
         }
