@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Factories\PropertyFactory;
 use Illuminate\Database\Seeder;
 
 class PropertySeeder extends Seeder
@@ -11,5 +12,8 @@ class PropertySeeder extends Seeder
      */
     public function run($user): void
     {
+        /*for ($i = 0; $i < 100; $i++) {
+            PropertyFactory
+        }*/
     }
 }

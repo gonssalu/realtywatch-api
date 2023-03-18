@@ -39,7 +39,7 @@ class PropertyFactory extends Factory
                 return pow($x, 2.322);
             });
             $wc = round($typology / 3) + $this->faker->numberBetween(0, 2);
-            if ($wc = 0) $wc = 1;
+            if ($wc == 0) $wc = 1;
         }
 
         $extraArray = [];
@@ -63,7 +63,7 @@ class PropertyFactory extends Factory
         }
 
         return array_merge([
-            'user_id' => User::factory(),
+            /*'user_id' => User::factory(),*/
             'quantity' => ($this->faker->numberBetween(1, 30) == 8 ?
                 $this->faker->biasedNumberBetween(
                     2,
