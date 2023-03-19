@@ -11,6 +11,70 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\Property
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $listing_type
+ * @property int|null $quantity
+ * @property string $title
+ * @property string|null $description
+ * @property string|null $cover_url
+ * @property string|null $gross_area
+ * @property string|null $useful_area
+ * @property string|null $type
+ * @property string|null $typology
+ * @property int|null $wc
+ * @property int|null $rating
+ * @property string|null $current_price_sale
+ * @property string|null $current_price_rent
+ * @property string $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\PropertyAddress|null $address
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyCharacteristic> $characteristics
+ * @property-read int|null $characteristics_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyList> $lists
+ * @property-read int|null $lists_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyMedia> $media
+ * @property-read int|null $media_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyOffer> $offers
+ * @property-read int|null $offers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyOfferPriceHistory> $priceHistories
+ * @property-read int|null $price_histories_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
+ * @property-read int|null $tags_count
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\PropertyFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Property newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Property newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Property onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Property query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereCoverUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereCurrentPriceRent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereCurrentPriceSale($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereGrossArea($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereListingType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereRating($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereTypology($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereUsefulArea($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereWc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Property withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Property extends Model
 {
     use HasFactory, SoftDeletes;
