@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -42,10 +43,21 @@ class AdministrativeDivision extends Model
     protected $casts = [
         'id' => 'integer',
         'level' => 'integer',
+        'parent_id' => 'integer',
     ];
 
     public function addresses(): HasMany
     {
         return $this->hasMany(Address::class, 'adm_' . $this->level);
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(AdministrativeDivision::class, 'parent_id');
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(AdministrativeDivision::class, 'parent_id');
     }
 }
