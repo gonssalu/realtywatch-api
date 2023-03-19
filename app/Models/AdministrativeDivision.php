@@ -6,6 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * App\Models\AdministrativeDivision
+ *
+ * @property int $id
+ * @property string $name
+ * @property int $level
+ * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision whereLevel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision whereName($value)
+ * @mixin \Eloquent
+ */
 class AdministrativeDivision extends Model
 {
     use HasFactory;

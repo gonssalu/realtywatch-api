@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Checks if it's not Windows
+if [ "$OS" != "Windows_NT" ]; then
+    npm run lint-staged
+fi

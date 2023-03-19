@@ -10,20 +10,20 @@ class UserSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): User
+    public function run(): void
     {
+        $numUsers = DatabaseSeeder::$seedType === 'small' ? 1 : 25;
+
         // Create a regular user
-        $user = User::factory()->create();
+        User::factory($numUsers)->create();
 
         // Create a user with no profile picture
-        User::factory()->create(['photo_url' => null]);
+        User::factory($numUsers)->create(['photo_url' => null]);
 
         // Create a user with a blocked account
-        User::factory()->create(['blocked' => true]);
+        User::factory($numUsers)->create(['blocked' => true]);
 
         // Create a soft deleted user
-        User::factory()->trashed()->create();
-
-        return $user;
+        User::factory($numUsers)->trashed()->create();
     }
 }

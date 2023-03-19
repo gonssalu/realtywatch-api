@@ -7,6 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * App\Models\Characteristic
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $name
+ * @property string $type
+ * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyCharacteristic> $valuesForProperties
+ * @property-read int|null $values_for_properties_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Characteristic newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Characteristic newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Characteristic query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Characteristic whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Characteristic whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Characteristic whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Characteristic whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Characteristic extends Model
 {
     use HasFactory;

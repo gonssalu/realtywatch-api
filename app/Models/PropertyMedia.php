@@ -6,6 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * App\Models\PropertyMedia
+ *
+ * @property int $id
+ * @property int $property_id
+ * @property string $type
+ * @property string $url
+ * @property-read \App\Models\Property $property
+ * @method static \Database\Factories\PropertyMediaFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyMedia newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyMedia newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyMedia query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyMedia whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyMedia wherePropertyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyMedia whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyMedia whereUrl($value)
+ * @mixin \Eloquent
+ */
 class PropertyMedia extends Model
 {
     use HasFactory;

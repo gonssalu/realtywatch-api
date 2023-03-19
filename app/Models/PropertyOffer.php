@@ -7,6 +7,31 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * App\Models\PropertyOffer
+ *
+ * @property int $id
+ * @property int $property_id
+ * @property string $url
+ * @property string|null $description
+ * @property string $listing_type
+ * @property int|null $agency_id
+ * @property-read \App\Models\Agency|null $agency
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyOfferPriceHistory> $priceHistory
+ * @property-read int|null $price_history_count
+ * @property-read \App\Models\Property $property
+ * @method static \Database\Factories\PropertyOfferFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyOffer newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyOffer newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyOffer query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyOffer whereAgencyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyOffer whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyOffer whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyOffer whereListingType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyOffer wherePropertyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyOffer whereUrl($value)
+ * @mixin \Eloquent
+ */
 class PropertyOffer extends Model
 {
     use HasFactory;

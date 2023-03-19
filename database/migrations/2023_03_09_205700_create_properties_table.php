@@ -37,6 +37,8 @@ class CreatePropertiesTable extends Migration
             $table->index('description');
             $table->index('status');
             $table->index('listing_type');
+            $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::enableForeignKeyConstraints();

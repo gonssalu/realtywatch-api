@@ -4,7 +4,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 10.4.0.
+ * Generated for Laravel 10.4.1.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -1600,6 +1600,18 @@
      * @see \Illuminate\Foundation\Console\Kernel
      */ 
         class Artisan {
+                    /**
+         * Re-route the Symfony command events to their Laravel counterparts.
+         *
+         * @internal 
+         * @return \App\Console\Kernel 
+         * @static 
+         */ 
+        public static function rerouteSymfonyCommandEvents()
+        {            //Method inherited from \Illuminate\Foundation\Console\Kernel         
+                        /** @var \App\Console\Kernel $instance */
+                        return $instance->rerouteSymfonyCommandEvents();
+        }
                     /**
          * Run the console application.
          *

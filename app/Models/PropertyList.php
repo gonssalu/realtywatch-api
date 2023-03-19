@@ -7,6 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * App\Models\PropertyList
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Property> $properties
+ * @property-read int|null $properties_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
+ * @property-read int|null $tags_count
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\PropertyListFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyList newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyList newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyList query()
+ * @mixin \Eloquent
+ */
 class PropertyList extends Model
 {
     use HasFactory;

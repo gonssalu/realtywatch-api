@@ -40,7 +40,9 @@ class PropertyFactory extends Factory
             $typology = $is_highend ? $this->faker->numberBetween(4, 10) : $this->faker->numberBetween(0, 4);
 
             $wc = intval(round($typology / 3)) + $this->faker->numberBetween(0, 2);
-            if ($wc == 0) $wc = 1;
+            if ($wc == 0) {
+                $wc = 1;
+            }
 
             $typology = 'T' . $typology;
         }
