@@ -18,7 +18,7 @@ class PropertySeeder extends Seeder
         $faker = Factory::create();
         $wgArr = AddressHelper::GetWeightedCoordsArrayFromConfig();
         $curlHandle = curl_init();
-
+        dd('WIP FAIL SAFE');
         for ($i = 0; $i < 100; $i++) {
 
             $osm = AddressHelper::GetRandomAddress($curlHandle, $wgArr);
