@@ -42,4 +42,13 @@ class AddressHelper
         $coords = self::GenRndCoordsAroundPoint($cfgLoc['coords']['lat'], $cfgLoc['coords']['lon'], $cfgLoc['radius']);
         return $coords;
     }
+
+    public static function GetAddressFromCoords($coords)
+    {
+        $url = config('factory.address.api.url');
+        $url .= '&lat=' . $coords['lat'] . '&lon=' . $coords['lon'];
+        $json = file_get_contents($url);
+        $data = json_decode($json, true);
+        return $data;
+    }
 }
