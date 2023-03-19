@@ -82,7 +82,7 @@ class PropertyFactory extends Factory
                     }
                 ) : 1),
             'listing_type' => $listing_type,
-            'title' => 'Something went wrong while seeding the database',
+            'title' => 'Something went wrong while seeding this property',
             'description' => $this->faker->text,
             /*'cover_url' => */
             'useful_area' => $useful_area,

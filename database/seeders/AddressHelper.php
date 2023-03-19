@@ -91,26 +91,29 @@ class AddressHelper
         $removed = false;
 
         $admArr = [];
-
+        $addressTitle = $full_address;
         foreach ($removableAttr as $raKey => $attr) {
             foreach ($attr as $a) {
                 if (!array_key_exists($a, $address))
                     continue;
 
+                $thisAdm = $address[$a];
+
                 // If nothing has been removed yet, substring the full address
                 if (!$removed) {
-                    $matchTxt = ', ' . $address[$a];
+                    $matchTxt = ', ' . $thisAdm;
                     if (Str::contains($full_address, $matchTxt)) {
                         $pos = strpos($full_address, $matchTxt);
                         if ($pos !== false)
                             $full_address = substr($full_address, 0, $pos);
                     }
+                    $addressTitle = $thisAdm;
                     $removed = true;
                 }
 
                 // Get administrative division id
                 $adm = AdministrativeDivision::query()
-                    ->whereName($address[$a])
+                    ->whereName($thisAdm)
                     ->whereLevel($raKey)->first('id');
                 if ($adm != null)
                     $admArr['adm' . $raKey . '_id'] = $adm->id;
@@ -130,7 +133,8 @@ class AddressHelper
             'full_address' => $full_address,
             'coordinates' => [
                 $osm['lat'], $osm['lon'],
-            ]
+            ],
+            'address_title' => $addressTitle
         ], $admArr);
 
         return $osm;

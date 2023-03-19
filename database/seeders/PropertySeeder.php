@@ -30,13 +30,18 @@ class PropertySeeder extends Seeder
 
             $address = AddressHelper::GetRandomAddress($curlHandle, $wgArr);
 
+            //MEDIA NOW
+
             $prop = Property::factory()->create(
                 [
                     'user_id' => $user->id,
-                    'title' => 'TITULO',
                     'cover_url' => 'aaa'
                 ]
             );
+
+            //TODO: translate
+            $prop->title = $prop->tipology . ' ' . $prop->type . ' ' . $faker->word() . ' in ' . $address['address_title'];
+            $prop->save();
 
             $bar->advance();
 
