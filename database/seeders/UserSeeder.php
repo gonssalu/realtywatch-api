@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $numUsers = DatabaseSeeder::$seedType === 'small' ? 1 : 25;
+        $numUsers = DatabaseSeeder::$seedType === 'small' ? 1 : 5;
 
         // Create a regular user
         User::factory($numUsers)->create();

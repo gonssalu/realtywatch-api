@@ -18,14 +18,14 @@ class DatabaseSeeder extends Seeder
         $this->command->info('Starting database seeder');
         $this->command->info('-----------------------------------------------');
 
-        DatabaseSeeder::$seedType = $this->command->choice('What type of seed do you want to run?', ['small', 'large'], 0);
+        /*DatabaseSeeder::$seedType = $this->command->choice('What type of seed do you want to run?', ['small', 'large'], 0);
 
         if ($this->shouldWipeRecords()) {
             $this->truncateAllTables();
         }
 
-        $this->call(UserSeeder::class);
-
+        $this->call(UserSeeder::class);*/
+        $this->call(AdministrativeDivisonSeeder::class);
         // TODO: Testing Property Factory
         // for ($i = 0; $i < 20; $i++) {
         //     $user = resolve(PropertyFactory::class)->make();
