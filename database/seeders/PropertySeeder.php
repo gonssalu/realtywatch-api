@@ -14,6 +14,7 @@ class PropertySeeder extends Seeder
      */
     public function run($user): void
     {
+        dd('DO NOT RUN, WIP');
         $timeout = intval(config('factory.address.api.timeout'));
         $num_props = 2;
 
@@ -30,7 +31,9 @@ class PropertySeeder extends Seeder
 
             $address = AddressHelper::GetRandomAddress($curlHandle, $wgArr);
 
-            //MEDIA NOW
+            //MEDIA
+            //Characteristics
+            //Offer Price & History
 
             $prop = Property::factory()->create(
                 [
