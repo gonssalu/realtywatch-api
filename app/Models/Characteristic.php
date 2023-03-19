@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -59,5 +60,10 @@ class Characteristic extends Model
     public function valuesForProperties(): HasMany
     {
         return $this->hasMany(PropertyCharacteristic::class);
+    }
+
+    public function properties(): BelongsToMany
+    {
+        return $this->belongsToMany(Property::class, 'property_characteristics', 'characteristic_id', 'property_id')->withPivot('value');
     }
 }

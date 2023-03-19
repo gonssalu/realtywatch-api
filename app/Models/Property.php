@@ -142,11 +142,6 @@ class Property extends Model
         return $this->hasOne(PropertyAddress::class);
     }
 
-    public function characteristics(): HasMany
-    {
-        return $this->hasMany(PropertyCharacteristic::class);
-    }
-
     public function offers(): HasMany
     {
         return $this->hasMany(PropertyOffer::class);
@@ -156,5 +151,10 @@ class Property extends Model
     public function priceHistories(): HasManyThrough
     {
         return $this->hasManyThrough(PropertyOfferPriceHistory::class, PropertyOffer::class);
+    }
+
+    public function characteristics(): BelongsToMany
+    {
+        return $this->belongsToMany(Characteristic::class, 'property_characteristics', 'property_id', 'characteristic_id')->withPivot('value');
     }
 }

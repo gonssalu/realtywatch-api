@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Characteristic;
 use App\Models\User;
+use Database\Seeders\RandomHelper;
 
 class CharacteristicFactory extends Factory
 {
@@ -21,10 +22,13 @@ class CharacteristicFactory extends Factory
      */
     public function definition(): array
     {
+        $lstType = ['numerical' => 30, 'textual' => 50, 'other' => 5];
+        $type = RandomHelper::RandomWeightedElement($lstType);
+        $wrd = $this->faker->word;
+
         return [
-            'user_id' => User::factory(),
-            'name' => $this->faker->name,
-            'type' => $this->faker->randomElement(/** enum_attributes **/),
+            'name' => $this->faker->numberBetween(1, 10) == 8 ? $wrd : ucfirst($wrd),
+            'type' => $type,
         ];
     }
 }

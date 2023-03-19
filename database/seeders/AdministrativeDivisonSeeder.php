@@ -41,7 +41,7 @@ class AdministrativeDivisonSeeder extends Seeder
         $freguesias = $this->getAllFreguesias();
 
         if (empty($freguesias)) {
-            $this->command->warn('No administrative divisions were created.');
+            $this->command->warn('No administrative divisions were created');
             return;
         }
 
@@ -93,8 +93,8 @@ class AdministrativeDivisonSeeder extends Seeder
         }
 
         $bar->finish();
-        $this->command->info("\n" . sizeof($distritos) . ' distritos created.');
-        $this->command->info(sizeof($concelhos) . ' concelhos created.');
-        $this->command->info(sizeof($freguesias) . ' freguesias created.');
+        $this->command->info("\n" . sizeof($distritos) . ' distritos created');
+        $this->command->info(sizeof($concelhos) . ' concelhos created');
+        $this->command->info(sizeof($freguesias) . ' freguesias created');
     }
 }
