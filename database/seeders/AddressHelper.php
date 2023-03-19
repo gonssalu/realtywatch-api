@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use Str;
+
 class AddressHelper
 {
     private static function GenRndCoordsAroundPoint($latitude, $longitude, $radius_in_meters)
@@ -43,12 +45,36 @@ class AddressHelper
         return $coords;
     }
 
-    public static function GetAddressFromCoords($coords)
+    private static function GetOSMData($coords)
     {
         $url = config('factory.address.api.url');
         $url .= '&lat=' . $coords['lat'] . '&lon=' . $coords['lon'];
         $json = file_get_contents($url);
         $data = json_decode($json, true);
         return $data;
+    }
+
+    public static function GetRandomAddress($weightedArray)
+    {
+        $coords = self::GetRandomCoords($weightedArray);
+        $osm = self::GetOSMData($coords);
+
+        $countryName = $osm['address']['country'];
+        $address = [
+            'country' => $countryName,
+            'full_address' => Str::replace(
+                ', ' . $countryName,
+                '',
+                $osm['display_name']
+            ),
+            'coordinates' => [
+                $osm['lat'], $osm['lon'],
+            ],
+        ];
+
+        //city_district - adm3
+        //city - adm2
+        //rem country. put postal code?
+        return $osm;
     }
 }

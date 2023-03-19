@@ -20,7 +20,7 @@ class PropertySeeder extends Seeder
 
         for ($i = 0; $i < 100; $i++) {
 
-            $coords = AddressHelper::GetRandomCoords($wgArr);
+            $osm = AddressHelper::GetRandomAddress($wgArr);
 
             $prop = Property::factory()->create(
                 [
