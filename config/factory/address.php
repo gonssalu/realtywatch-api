@@ -10,7 +10,7 @@ return [
                 'lat' => 39.4071,
                 'lon' => -9.13458,
             ],
-            'quantity' => 35,
+            'weight' => 35,
             'radius' => 2000,
         ],
         'leiria' => [
@@ -18,7 +18,7 @@ return [
                 'lat' => 39.7443,
                 'lon' => -8.80725,
             ],
-            'quantity' => 55,
+            'weight' => 55,
             'radius' => 3000,
         ],
         'nazare' => [
@@ -26,7 +26,7 @@ return [
                 'lat' => 39.600423,
                 'lon' => -9.064975,
             ],
-            'quantity' => 6,
+            'weight' => 6,
             'radius' => 500,
         ],
         'near_batalha_pm' => [
@@ -34,7 +34,7 @@ return [
                 'lat' => 39.636585,
                 'lon' => -8.822160,
             ],
-            'quantity' => 10,
+            'weight' => 10,
             'radius' => 2500,
         ],
         'near_alcobaca' => [
@@ -42,7 +42,7 @@ return [
                 'lat' => 39.533924,
                 'lon' => -9.013047,
             ],
-            'quantity' => 15,
+            'weight' => 15,
             'radius' => 3250,
         ],
         'torres_vedras' => [
@@ -50,7 +50,7 @@ return [
                 'lat' => 39.091580,
                 'lon' => -9.259140,
             ],
-            'quantity' => 4,
+            'weight' => 4,
             'radius' => 400,
         ],
     ],

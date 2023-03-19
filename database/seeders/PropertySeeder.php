@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Property;
 use Database\Factories\PropertyFactory;
+use Faker\Factory;
+use Faker\Generator;
 use Illuminate\Database\Seeder;
 
 class PropertySeeder extends Seeder
@@ -12,8 +15,20 @@ class PropertySeeder extends Seeder
      */
     public function run($user): void
     {
-        /*for ($i = 0; $i < 100; $i++) {
-            PropertyFactory
-        }*/
+        $faker = Factory::create();
+        $wgArr = AddressHelper::GetWeightedCoordsArrayFromConfig();
+
+        for ($i = 0; $i < 100; $i++) {
+
+            $coords = AddressHelper::GetRandomCoords($wgArr);
+
+            $prop = Property::factory()->create(
+                [
+                    'user_id' => $user->id,
+                    'title' => 'TITULO',
+                    'cover_url' => 'aaa'
+                ]
+            );
+        }
     }
 }
