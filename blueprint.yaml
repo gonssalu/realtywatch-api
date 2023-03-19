@@ -4,6 +4,8 @@ models:
     name: string
     level: smallInteger
     parent_id: bigInteger unsigned nullable foreign:administrative_divisions.id
+    indexes:
+      - index: name
   PropertyAddress:
     id: false
     property_id: bigIncrements foreign:properties.id

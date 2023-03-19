@@ -59,9 +59,16 @@ class AddressHelper
         $coords = self::GetRandomCoords($weightedArray);
         $osm = self::GetOSMData($coords);
 
-        $countryName = $osm['address']['country'];
+        $address = $osm['address'];
+
+        $countryName = $address['country'];
+
+        $postalCode = null;
+        if (array_key_exists('postcode', $address))
+            $postalCode = $address['postcode'];
+
         $address = [
-            'country' => $countryName,
+            'postal_code' => $postalCode,
             'full_address' => Str::replace(
                 ', ' . $countryName,
                 '',

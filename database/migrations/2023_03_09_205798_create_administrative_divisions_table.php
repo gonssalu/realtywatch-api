@@ -19,6 +19,7 @@ class CreateAdministrativeDivisionsTable extends Migration
             $table->smallInteger('level');
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->foreign('parent_id')->references('id')->on('administrative_divisions');
+            $table->index('name');
         });
     }
 
