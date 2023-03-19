@@ -74,7 +74,6 @@ class AddressHelper
 
         //city_district - adm3
         //city - adm2
-        //rem country. put postal code?
         return $osm;
     }
 }

@@ -7,7 +7,7 @@ models:
   PropertyAddress:
     id: false
     property_id: bigIncrements foreign:properties.id
-    country: string nullable
+    postal_code: string nullable
     adm1_id: bigInteger unsigned nullable foreign:administrative_divisions.id
     adm2_id: bigInteger unsigned nullable foreign:administrative_divisions.id
     adm3_id: bigInteger unsigned nullable foreign:administrative_divisions.id

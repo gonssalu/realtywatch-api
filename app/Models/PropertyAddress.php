@@ -30,7 +30,7 @@ class PropertyAddress extends Model
      */
     protected $fillable = [
         'property_id',
-        'country',
+        'postal_code',
         'adm1_id',
         'adm2_id',
         'adm3_id',
