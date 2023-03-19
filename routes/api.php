@@ -26,6 +26,8 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/properties', [PropertyController::class, 'index']);
-    Route::post('/properties', [PropertyController::class, 'store']);
+    Route::controller(PropertyController::class)->group(function () {
+        Route::get('/properties', 'index');
+        Route::post('/properties', 'store');
+    });
 });

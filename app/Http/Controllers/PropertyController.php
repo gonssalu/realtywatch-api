@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PropertyResource;
 use App\Models\Property;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class PropertyController extends Controller
         $user = $request->user();
         $properties = $user->properties()->paginate(10);
 
-        return response($properties);
+        return PropertyResource::collection($properties);
     }
 
     /**
@@ -26,7 +27,13 @@ class PropertyController extends Controller
         $user = $request->user();
         $property = $user->properties()->create($request->all());
 
-        return response($property, 201);
+        return response(
+            [
+                'message' => 'Property created',
+                'property' => new PropertyResource($property)
+            ],
+            201
+        );
     }
 
     /**
