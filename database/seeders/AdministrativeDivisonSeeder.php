@@ -20,7 +20,9 @@ class AdministrativeDivisonSeeder extends Seeder
         if (($handle = fopen($filename, 'r')) !== false) {
             while (($row = fgetcsv($handle, null, $delimiter)) !== false) {
                 if (!$header) {
-                    $header = $row;
+                    $header = array_map(function ($value) {
+                        return ltrim($value, "\xef\xbb\xbf");
+                    }, $row);
                 } else {
                     $data[] = array_combine($header, $row);
                 }
@@ -49,7 +51,7 @@ class AdministrativeDivisonSeeder extends Seeder
         foreach ($freguesias as $freg) {
 
             // Create Distrito if it doesn't exist yet
-            $nomeDis = trim($freg['Distrito']);
+            $nomeDis = trim($freg['distrito']);
             if (!array_key_exists($nomeDis, $distritos)) {
 
                 $distritos[$nomeDis] =
@@ -59,7 +61,7 @@ class AdministrativeDivisonSeeder extends Seeder
                     ]);;
 
                 // Log district creation
-                $this->command->info('\tSeeding ' . $nomeDis . ' district...');
+                $this->command->info('  Seeding ' . $nomeDis . ' district...');
             }
 
             // Create Concelho if it doesn't exist yet
@@ -67,8 +69,8 @@ class AdministrativeDivisonSeeder extends Seeder
             $conKey = $nomeDis . $nomeCon;
             if (!array_key_exists($conKey, $concelhos)) {
                 if ($count > 0)
-                    $this->command->info('\t\t\t' . $count . ' freguesias created.');
-                $concelho[$conKey] =
+                    $this->command->info('          ' . $count . ' freguesias created.');
+                $concelhos[$conKey] =
                     AdministrativeDivision::create([
                         'name' => $nomeCon,
                         'level' => '2',
@@ -76,7 +78,7 @@ class AdministrativeDivisonSeeder extends Seeder
                     ]);
 
                 // Log district creation
-                $this->command->info('\t\t[+] Concelho ' . $nomeCon);
+                $this->command->info('      [+] Concelho ' . $nomeCon);
                 $count = 0;
             }
 
@@ -86,7 +88,7 @@ class AdministrativeDivisonSeeder extends Seeder
                 'level' => '3',
                 'parent_id' => $concelhos[$conKey]->id
             ]);
-            $count[1]++;
+            $count++;
         }
 
         $this->command->info(sizeof($distritos) . ' distritos created.');
