@@ -31,11 +31,13 @@ class PropertyFactory extends Factory
 
         $useful_area = $this->faker->numberBetween(100, 680);
         $gross_area = $useful_area + $this->faker->numberBetween(40, 400);
-        // wc, typology
+
+        $is_highend = $this->faker->numberBetween(1, 10) == 8;
+
         $typology = null;
         $wc = null;
         if ($type != 'land') {
-            $typology = $this->faker->numberBetween(1, 10) == 8 ? $this->faker->numberBetween(4, 10) : $this->faker->numberBetween(0, 4);
+            $typology = $is_highend ? $this->faker->numberBetween(4, 10) : $this->faker->numberBetween(0, 4);
 
             $wc = intval(round($typology / 3)) + $this->faker->numberBetween(0, 2);
             if ($wc == 0) $wc = 1;
@@ -44,12 +46,16 @@ class PropertyFactory extends Factory
         }
 
         $extraArray = [];
-        $rndSale = $this->faker->biasedNumberBetween(20000, 10000000, function ($x) {
-            return 1 / ($x + 1);
-        });
-        $rndRent = $this->faker->biasedNumberBetween(550, 10000, function ($x) {
-            return 1 / ($x + 1);
-        });
+        $rndFloat = $this->faker->randomFloat(5, 0, 1);
+        if ($is_highend) {
+            $rndSale = 750000 + round($rndFloat * 9250000);
+            $rndRent = 1400 + round($rndFloat * 8600);
+        } else {
+            $rndSale = 25000 + round($rndFloat * 625000);
+            $rndRent = 550 + round($rndFloat * 850);
+        }
+
+
         switch ($listing_type) {
             case 'sale':
                 $extraArray['current_price_sale'] = $rndSale;
@@ -76,13 +82,13 @@ class PropertyFactory extends Factory
             'listing_type' => $listing_type,
             'title' => 'Something went wrong while seeding the database',
             'description' => $this->faker->text,
-            /*'cover_url' => $this->faker->text,*/
+            /*'cover_url' => */
             'useful_area' => $useful_area,
             'gross_area' => $gross_area,
             'type' => $type,
             'typology' => $typology,
             'wc' => $wc,
-            'rating' => $this->faker->numberBetween(1, 10),
+            'rating' => $this->faker->numberBetween(1, 4) == 4 ? null : $this->faker->numberBetween(1, 10),
             'status' => $status,
         ], $extraArray);
     }
