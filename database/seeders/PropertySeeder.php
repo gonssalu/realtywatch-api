@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Property;
-use Database\Factories\PropertyFactory;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Database\Seeder;
@@ -15,13 +14,21 @@ class PropertySeeder extends Seeder
      */
     public function run($user): void
     {
+        $timeout = intval(config('factory.address.api.timeout'));
+        $num_props = 2;
+
+        $this->command->warn("A $timeout second timeout will be applied between each address request to respect OpenStreetMap's API usage policy.");
+        $this->command->info("Generating $num_props properties for user $user->name please wait...");
+        $this->command->warn("This will take at least " . $timeout * $num_props . " seconds to complete.");
+        $bar = $this->command->getOutput()->createProgressBar($num_props);
+
         $faker = Factory::create();
         $wgArr = AddressHelper::GetWeightedCoordsArrayFromConfig();
         $curlHandle = curl_init();
-        dd('WIP FAIL SAFE');
-        for ($i = 0; $i < 100; $i++) {
 
-            $osm = AddressHelper::GetRandomAddress($curlHandle, $wgArr);
+        for ($i = 0; $i < $num_props; $i++) {
+
+            $address = AddressHelper::GetRandomAddress($curlHandle, $wgArr);
 
             $prop = Property::factory()->create(
                 [
@@ -31,10 +38,14 @@ class PropertySeeder extends Seeder
                 ]
             );
 
-            // Sleep for the defined timeout to comply with OSM API usage policy.
-            sleep(intval(config('factory.address.api.timeout')));
-        }
+            $bar->advance();
 
+            if ($i != $num_props - 1)
+                sleep($timeout);
+        }
+        $bar->finish();
         curl_close($curlHandle);
+
+        $this->command->info("\n$num_props properties have been generated.");
     }
 }

@@ -45,6 +45,8 @@ class AdministrativeDivisonSeeder extends Seeder
             return;
         }
 
+        $bar = $this->command->getOutput()->createProgressBar(sizeof($freguesias));
+
         $distritos = [];
         $concelhos = [];
 
@@ -72,7 +74,7 @@ class AdministrativeDivisonSeeder extends Seeder
                         'parent_id' => $distritos[$nomeDis]->id
                     ]);
             }
-            //TODO: some logs
+
             $fregName = trim(
                 Str::replace(
                     ['União das freguesias de ', $nomeCon . ' - '],
@@ -87,9 +89,11 @@ class AdministrativeDivisonSeeder extends Seeder
                 'level' => '3',
                 'parent_id' => $concelhos[$conKey]->id
             ]);
+            $bar->advance();
         }
 
-        $this->command->info(sizeof($distritos) . ' distritos created.');
+        $bar->finish();
+        $this->command->info("\n" . sizeof($distritos) . ' distritos created.');
         $this->command->info(sizeof($concelhos) . ' concelhos created.');
         $this->command->info(sizeof($freguesias) . ' freguesias created.');
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use DB;
 use Illuminate\Database\Seeder;
 
@@ -24,9 +25,10 @@ class DatabaseSeeder extends Seeder
             $this->truncateAllTables();
         }
 
-        $this->call(UserSeeder::class);*/
-        $this->callWith(PropertySeeder::class, ['user' => 1]);
-        //$this->call(AdministrativeDivisonSeeder::class);
+        $this->call(UserSeeder::class);
+        */
+        //$this->callWith(PropertySeeder::class, ['user' => User::first()]);
+        $this->call(AdministrativeDivisonSeeder::class);
         // TODO: Testing Property Factory
         // for ($i = 0; $i < 20; $i++) {
         //     $user = resolve(PropertyFactory::class)->make();
