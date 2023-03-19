@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\AdministrativeDivision;
 use Illuminate\Database\Seeder;
+use Str;
 
 class AdministrativeDivisonSeeder extends Seeder
 {
@@ -71,10 +72,18 @@ class AdministrativeDivisonSeeder extends Seeder
                         'parent_id' => $distritos[$nomeDis]->id
                     ]);
             }
+            //TODO: some logs
+            $fregName = trim(
+                Str::replace(
+                    ['União das freguesias de ', $nomeCon . ' - '],
+                    '',
+                    $freg['freguesia']
+                )
+            );
 
             // Create Freguesia
             AdministrativeDivision::create([
-                'name' => trim($freg['freguesia']),
+                'name' => $fregName,
                 'level' => '3',
                 'parent_id' => $concelhos[$conKey]->id
             ]);
