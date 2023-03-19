@@ -3,6 +3,8 @@
 return [
     'api' => [
         'url' => 'https://nominatim.openstreetmap.org/reverse?format=json',
+        'user_agent' => 'RealtyWatchAPI/1.0 (Academic Project - ESTG IPLeiria)',
+        'timeout' => 5,
     ],
     'locations' => [
         'caldas' => [

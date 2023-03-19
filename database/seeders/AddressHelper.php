@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\AdministrativeDivision;
+use Arr;
 use Str;
 
 class AddressHelper
@@ -31,56 +33,106 @@ class AddressHelper
     public static function GetWeightedCoordsArrayFromConfig()
     {
         $locations = config('factory.address.locations');
-        $weightedArray = [];
-        foreach ($locations as $loc) {
-            $weightedArray[$loc] = $loc['weight'];
+        $weightedArray = ['locs' => [], 'weights' => []];
+        foreach ($locations as $lockey => $loc) {
+            $weightedArray['locs'][$lockey] = $loc;
+            $weightedArray['weights'][$lockey] = $loc['weight'];
         }
         return $weightedArray;
     }
 
     public static function GetRandomCoords($weightedArray)
     {
-        $cfgLoc = RandomHelper::RandomWeightedElement($weightedArray);
+        $locKey = RandomHelper::RandomWeightedElement($weightedArray['weights']);
+        $cfgLoc = $weightedArray['locs'][$locKey];
         $coords = self::GenRndCoordsAroundPoint($cfgLoc['coords']['lat'], $cfgLoc['coords']['lon'], $cfgLoc['radius']);
         return $coords;
     }
 
-    private static function GetOSMData($coords)
+    private static function GetOSMData($curlHandle, $coords)
     {
         $url = config('factory.address.api.url');
         $url .= '&lat=' . $coords['lat'] . '&lon=' . $coords['lon'];
-        $json = file_get_contents($url);
+
+        curl_setopt($curlHandle, CURLOPT_URL, $url);
+        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt(
+            $curlHandle,
+            CURLOPT_HTTPHEADER,
+            array('User-Agent: ' . config('factory.address.api.user_agent'))
+        );
+        $json = curl_exec($curlHandle);
+
         $data = json_decode($json, true);
         return $data;
     }
 
-    public static function GetRandomAddress($weightedArray)
+    public static function GetRandomAddress($curlHandle, $weightedArray)
     {
         $coords = self::GetRandomCoords($weightedArray);
-        $osm = self::GetOSMData($coords);
+        $osm = self::GetOSMData($curlHandle, $coords);
 
         $address = $osm['address'];
 
+        // Remove country name from full address.
         $countryName = $address['country'];
+        $full_address = Str::replace(
+            ', ' . $countryName,
+            '',
+            $osm['display_name']
+        );
 
+        // Remove city district & others from full address.
+        $removableAttr = [
+            3 => ['city_district'],
+            2 => ['township', 'town', 'city'],
+            1 => ['county']
+        ];
+        $removed = false;
+
+        $admArr = [];
+
+        foreach ($removableAttr as $raKey => $attr) {
+            foreach ($attr as $a) {
+                if (!array_key_exists($a, $address))
+                    continue;
+
+                // If nothing has been removed yet, substring the full address
+                if (!$removed) {
+                    $matchTxt = ', ' . $address[$a];
+                    if (Str::contains($full_address, $matchTxt)) {
+                        $pos = strpos($full_address, $matchTxt);
+                        if ($pos !== false)
+                            $full_address = substr($full_address, 0, $pos);
+                    }
+                    $removed = true;
+                }
+
+                // Get administrative division id
+                $adm = AdministrativeDivision::query()
+                    ->whereName($address[$a])
+                    ->whereLevel($raKey)->first('id');
+                if ($adm != null)
+                    $admArr['adm' . $raKey . '_id'] = $adm->id;
+                break;
+            }
+        }
+
+        // Extract postal code
         $postalCode = null;
         if (array_key_exists('postcode', $address))
             $postalCode = $address['postcode'];
 
-        $address = [
+
+        // Join address info together
+        $address = array_merge([
             'postal_code' => $postalCode,
-            'full_address' => Str::replace(
-                ', ' . $countryName,
-                '',
-                $osm['display_name']
-            ),
+            'full_address' => $full_address,
             'coordinates' => [
                 $osm['lat'], $osm['lon'],
-            ],
-        ];
+            ]
+        ], $admArr);
 
-        //city_district - adm3
-        //city - adm2
         return $osm;
     }
 }

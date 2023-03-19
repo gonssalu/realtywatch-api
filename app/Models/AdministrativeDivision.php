@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision whereLevel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision whereParentId($value)
  * @mixin \Eloquent
  */
 class AdministrativeDivision extends Model

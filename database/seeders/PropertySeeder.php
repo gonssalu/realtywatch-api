@@ -17,10 +17,11 @@ class PropertySeeder extends Seeder
     {
         $faker = Factory::create();
         $wgArr = AddressHelper::GetWeightedCoordsArrayFromConfig();
+        $curlHandle = curl_init();
 
         for ($i = 0; $i < 100; $i++) {
 
-            $osm = AddressHelper::GetRandomAddress($wgArr);
+            $osm = AddressHelper::GetRandomAddress($curlHandle, $wgArr);
 
             $prop = Property::factory()->create(
                 [
@@ -29,6 +30,11 @@ class PropertySeeder extends Seeder
                     'cover_url' => 'aaa'
                 ]
             );
+
+            // Sleep for the defined timeout to comply with OSM API usage policy.
+            sleep(intval(config('factory.address.api.timeout')));
         }
+
+        curl_close($curlHandle);
     }
 }

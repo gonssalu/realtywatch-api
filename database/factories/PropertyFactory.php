@@ -29,7 +29,7 @@ class PropertyFactory extends Factory
         $type = RandomHelper::RandomWeightedElement($all_types);
         $status = RandomHelper::RandomWeightedElement($all_status);
 
-        $useful_area = $this->faker->numberBetween(100, 680);
+        $useful_area = $this->faker->numberBetween(80, 680);
         $gross_area = $useful_area + $this->faker->numberBetween(40, 400);
 
         $is_highend = $this->faker->numberBetween(1, 10) == 8;
