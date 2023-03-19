@@ -66,4 +66,16 @@ class Characteristic extends Model
     {
         return $this->belongsToMany(Property::class, 'property_characteristics', 'characteristic_id', 'property_id')->withPivot('value');
     }
+
+    public function genRandomValue($faker)
+    {
+        switch ($this->type) {
+            case 'numerical':
+                return $faker->boolean() ? $faker->numberBetween(1, 10000) : $faker->randomFloat(2, 1, 10000);
+            case 'textual':
+                return $faker->words($faker->numberBetween(2, 6));
+            case 'other':
+                return $faker->dateTime();;
+        }
+    }
 }
