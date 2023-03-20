@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Characteristic;
 use App\Models\User;
-use Database\Seeders\RandomHelper;
+use Database\Seeders\SeederHelper;
 
 class CharacteristicFactory extends Factory
 {
@@ -23,7 +23,7 @@ class CharacteristicFactory extends Factory
     public function definition(): array
     {
         $lstType = ['numerical' => 30, 'textual' => 50, 'other' => 5];
-        $type = RandomHelper::RandomWeightedElement($lstType);
+        $type = SeederHelper::RandomWeightedElement($lstType);
         $wrd = $this->faker->word;
 
         return [

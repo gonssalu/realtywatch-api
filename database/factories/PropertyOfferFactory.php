@@ -22,9 +22,8 @@ class PropertyOfferFactory extends Factory
     public function definition(): array
     {
         return [
-            'property_id' => Property::factory(),
             'url' => $this->faker->url,
-            'description' => $this->faker->text,
+            'description' => $this->faker->boolean ? $this->faker->text : null,
             'agency_id' => Agency::factory(),
             'listing_type' => 'sale',
         ];

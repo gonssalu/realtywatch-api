@@ -43,7 +43,7 @@ class AddressHelper
 
     public static function GetRandomCoords($weightedArray)
     {
-        $locKey = RandomHelper::RandomWeightedElement($weightedArray['weights']);
+        $locKey = SeederHelper::RandomWeightedElement($weightedArray['weights']);
         $cfgLoc = $weightedArray['locs'][$locKey];
         $coords = self::GenRndCoordsAroundPoint($cfgLoc['coords']['lat'], $cfgLoc['coords']['lon'], $cfgLoc['radius']);
         return $coords;

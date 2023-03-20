@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Agency;
 use App\Models\Characteristic;
 use App\Models\Property;
 use Faker\Factory;
@@ -10,6 +11,20 @@ use Illuminate\Database\Seeder;
 
 class PropertySeeder extends Seeder
 {
+    public function generateAgencies($userId)
+    {
+        $agencies_to_create = ['iad Portugal', 'Veigas Imobiliária', 'Rainhavip', 'Century 21', 'Engel & Völkers', 'ERA Imobiliária', 'RE/MAX Portugal'];
+        $agencies = [];
+        foreach ($agencies_to_create as $agtc) {
+            $agencies[] = Agency::create(
+                [
+                    'name' => $agtc,
+                    'user_id' => $userId,
+                ]
+            );
+        }
+        return $agencies;
+    }
 
     public function generateCharacteristics($userId)
     {
@@ -36,6 +51,7 @@ class PropertySeeder extends Seeder
         $faker = Factory::create();
         dd('DO NOT RUN, WIP');
 
+        $agencies = $this->generateAgencies($user->id);
         $characteristics = $this->generateCharacteristics($user->id);
 
         $timeout = intval(config('factory.address.api.timeout'));

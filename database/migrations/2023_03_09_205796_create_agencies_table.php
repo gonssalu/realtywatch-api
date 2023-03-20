@@ -21,6 +21,7 @@ class CreateAgenciesTable extends Migration
             $table->text('logo_url');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->unique(['name', 'user_id']);
         });
 
         Schema::enableForeignKeyConstraints();

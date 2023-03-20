@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Property;
 use App\Models\User;
-use Database\Seeders\RandomHelper;
+use Database\Seeders\SeederHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PropertyFactory extends Factory
@@ -25,9 +25,9 @@ class PropertyFactory extends Factory
         $all_types = ['house' => 30, 'apartment' => 30, 'office' => 6, 'shop' => 6, 'warehouse' => 3, 'garage' => 10, 'land' => 10, 'other' => 5];
         $all_listing = ['sale' => 45, 'rent' => 40, 'both' => 15];
 
-        $listing_type = RandomHelper::RandomWeightedElement($all_listing);
-        $type = RandomHelper::RandomWeightedElement($all_types);
-        $status = RandomHelper::RandomWeightedElement($all_status);
+        $listing_type = SeederHelper::RandomWeightedElement($all_listing);
+        $type = SeederHelper::RandomWeightedElement($all_types);
+        $status = SeederHelper::RandomWeightedElement($all_status);
 
         $useful_area = $this->faker->numberBetween(80, 680);
         $gross_area = $useful_area + $this->faker->numberBetween(40, 400);

@@ -11,27 +11,9 @@ class AdministrativeDivisonSeeder extends Seeder
 
     private function getAllFreguesias(): array
     {
-        $filename = storage_path('app/data/freguesias_portugal.csv');
-        $delimiter = ';';
-        if (!file_exists($filename) || !is_readable($filename)) {
-            return [];
-        }
-        $header = null;
-        $data = array();
-        if (($handle = fopen($filename, 'r')) !== false) {
-            while (($row = fgetcsv($handle, null, $delimiter)) !== false) {
-                if (!$header) {
-                    $header = array_map(function ($value) {
-                        return ltrim($value, "\xef\xbb\xbf");
-                    }, $row);
-                } else {
-                    $data[] = array_combine($header, $row);
-                }
-            }
-            fclose($handle);
-        }
-        return $data;
+        return SeederHelper::ReadCsvData('app/data/freguesias_portugal.csv');
     }
+
     /**
      * Seed the application's database.
      */
