@@ -24,7 +24,7 @@ class CharacteristicFactory extends Factory
     {
         $lstType = ['numerical' => 30, 'textual' => 50, 'other' => 5];
         $type = SeederHelper::RandomWeightedElement($lstType);
-        $wrd = $this->faker->word;
+        $wrd = $this->faker->words(3, true);
 
         return [
             'name' => $this->faker->numberBetween(1, 10) == 8 ? $wrd : ucfirst($wrd),

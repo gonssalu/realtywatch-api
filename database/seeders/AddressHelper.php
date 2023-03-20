@@ -137,6 +137,6 @@ class AddressHelper
             'address_title' => $addressTitle
         ], $admArr);
 
-        return $osm;
+        return $address;
     }
 }

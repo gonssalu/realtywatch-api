@@ -31,6 +31,9 @@ class Characteristic extends Model
 {
     use HasFactory;
 
+
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -73,7 +76,7 @@ class Characteristic extends Model
             case 'numerical':
                 return $faker->boolean() ? $faker->numberBetween(1, 10000) : $faker->randomFloat(2, 1, 10000);
             case 'textual':
-                return $faker->words($faker->numberBetween(2, 6));
+                return $faker->words($faker->numberBetween(2, 6), true);
             case 'other':
                 return $faker->dateTime();;
         }

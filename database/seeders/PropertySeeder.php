@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Agency;
 use App\Models\Characteristic;
 use App\Models\Property;
+use App\Models\PropertyAddress;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Database\Seeder;
@@ -20,6 +21,7 @@ class PropertySeeder extends Seeder
                 [
                     'name' => $agtc,
                     'user_id' => $userId,
+                    'logo_url' => 'dwadada'
                 ]
             );
         }
@@ -51,7 +53,7 @@ class PropertySeeder extends Seeder
         $faker = Factory::create();
         // dd('DO NOT RUN, WIP');
 
-        $agencies = $this->generateAgencies($user->id);
+        // $agencies = $this->generateAgencies($user->id);
         $characteristics = $this->generateCharacteristics($user->id);
 
         $timeout = intval(config('factory.address.api.timeout'));
@@ -77,9 +79,12 @@ class PropertySeeder extends Seeder
                     'cover_url' => 'aaa'
                 ]
             );
+            dd($address);
+            $address['property_id'] = $prop->id;
+            PropertyAddress::create($address);
 
             //TODO: translate
-            $prop->title = $prop->tipology . ' ' . $prop->type . ' ' . $faker->word() . ' in ' . $address['address_title'];
+            $prop->title = $prop->typology . ' ' . $prop->type . ' ' . $faker->word() . ' in ' . $address['address_title'];
             $prop->save();
 
             // Add characteristics to property
