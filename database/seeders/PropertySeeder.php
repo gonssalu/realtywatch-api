@@ -49,13 +49,13 @@ class PropertySeeder extends Seeder
     public function run($user): void
     {
         $faker = Factory::create();
-        dd('DO NOT RUN, WIP');
+        // dd('DO NOT RUN, WIP');
 
         $agencies = $this->generateAgencies($user->id);
         $characteristics = $this->generateCharacteristics($user->id);
 
         $timeout = intval(config('factory.address.api.timeout'));
-        $num_props = 2;
+        $num_props = 10;
 
         $this->command->warn("A $timeout second timeout will be applied between each address request to respect OpenStreetMap's API usage policy");
         $this->command->info("Generating $num_props properties for user $user->name please wait...");
