@@ -79,12 +79,13 @@ class PropertySeeder extends Seeder
                     'cover_url' => 'aaa'
                 ]
             );
-            dd($address);
+            //dd($address);
+            unset($address['address_title']);
             $address['property_id'] = $prop->id;
             PropertyAddress::create($address);
 
             //TODO: translate
-            $prop->title = $prop->typology . ' ' . $prop->type . ' ' . $faker->word() . ' in ' . $address['address_title'];
+            $prop->title = $prop->typology . ' ' . $prop->type . ' ' . $faker->word() . ' em ' . $address['address_title'];
             $prop->save();
 
             // Add characteristics to property
@@ -95,7 +96,7 @@ class PropertySeeder extends Seeder
                         'value' => $cr->genRandomValue($faker)
                     ]);
             }
-
+            dd('aasdas');
             $bar->advance();
 
             if ($i != $num_props - 1)

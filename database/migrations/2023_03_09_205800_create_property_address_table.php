@@ -15,7 +15,7 @@ class CreatePropertyAddressTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('property_address', function (Blueprint $table) {
+        Schema::create('property_addresses', function (Blueprint $table) {
             $table->unsignedBigInteger('property_id')->primary();
             $table->foreign('property_id')->references('id')->on('properties');
             $table->unsignedBigInteger('adm1_id')->nullable();
@@ -26,7 +26,7 @@ class CreatePropertyAddressTable extends Migration
             $table->foreign('adm3_id')->references('id')->on('administrative_divisions')->where('level', '=', 3);
             $table->string('postal_code')->nullable();
             $table->text('full_address')->nullable();
-            $table->point('coordinates')->nullable();
+            $table->point('coordinates', '4326')->nullable();
             $table->index('postal_code');
             $table->index('full_address');
             $table->index('coordinates');

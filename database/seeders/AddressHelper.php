@@ -131,9 +131,13 @@ class AddressHelper
         $address = array_merge([
             'postal_code' => $postalCode,
             'full_address' => $full_address,
-            'coordinates' => [
-                $osm['lat'], $osm['lon'],
-            ],
+            'coordinates' => implode(
+                ';',
+                [
+                    $osm['lat'],
+                    $osm['lon'],
+                ]
+            ),
             'address_title' => $addressTitle
         ], $admArr);
 
