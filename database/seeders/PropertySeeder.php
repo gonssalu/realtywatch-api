@@ -6,6 +6,7 @@ use App\Models\Agency;
 use App\Models\Characteristic;
 use App\Models\Property;
 use App\Models\PropertyAddress;
+use DB;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Database\Seeder;
@@ -79,14 +80,16 @@ class PropertySeeder extends Seeder
                     'cover_url' => 'aaa'
                 ]
             );
-            //dd($address);
-            unset($address['address_title']);
-            $address['property_id'] = $prop->id;
-            PropertyAddress::create($address);
 
             //TODO: translate
             $prop->title = $prop->typology . ' ' . $prop->type . ' ' . $faker->word() . ' em ' . $address['address_title'];
             $prop->save();
+
+            unset($address['address_title']);
+            $address['property_id'] = $prop->id;
+            $address['coordinates'] = DB::raw('POINT(' . $address['coordinates'][0] . ', ' . $address['coordinates'][1] . ')');
+            DB::table('property_addresses')->insert($address);
+
 
             // Add characteristics to property
             if ($faker->numberBetween(1, 5) != 3) {
@@ -96,7 +99,7 @@ class PropertySeeder extends Seeder
                         'value' => $cr->genRandomValue($faker)
                     ]);
             }
-            dd('aasdas');
+
             $bar->advance();
 
             if ($i != $num_props - 1)
