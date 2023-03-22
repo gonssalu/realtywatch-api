@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \App\Models\User $user
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyCharacteristic> $valuesForProperties
  * @property-read int|null $values_for_properties_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Characteristic newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Characteristic newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Characteristic query()
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Characteristic whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Characteristic whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Characteristic whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Characteristic extends Model

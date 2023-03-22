@@ -45,7 +45,7 @@ class AdministrativeDivisionSeeder extends Seeder
 
             // Create Concelho if it doesn't exist yet
             $nomeCon = trim($freg['concelho']);
-            $conKey = $nomeDis.$nomeCon;
+            $conKey = $nomeDis . $nomeCon;
             if (!array_key_exists($conKey, $concelhos)) {
                 $concelhos[$conKey] =
                     AdministrativeDivision::create([
@@ -57,7 +57,7 @@ class AdministrativeDivisionSeeder extends Seeder
 
             $fregName = trim(
                 Str::replace(
-                    ['União das freguesias de ', $nomeCon.' - '],
+                    ['União das freguesias de ', $nomeCon . ' - '],
                     '',
                     $freg['freguesia']
                 )
@@ -73,8 +73,8 @@ class AdministrativeDivisionSeeder extends Seeder
         }
 
         $bar->finish();
-        $this->command->info("\n".count($distritos).' distritos created');
-        $this->command->info(count($concelhos).' concelhos created');
-        $this->command->info(count($freguesias).' freguesias created');
+        $this->command->info("\n" . count($distritos) . ' distritos created');
+        $this->command->info(count($concelhos) . ' concelhos created');
+        $this->command->info(count($freguesias) . ' freguesias created');
     }
 }

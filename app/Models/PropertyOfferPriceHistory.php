@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool $online
  * @property bool $latest
  * @property-read \App\Models\PropertyOffer $offer
+ *
  * @method static \Database\Factories\PropertyOfferPriceHistoryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyOfferPriceHistory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyOfferPriceHistory newQuery()
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyOfferPriceHistory whereOfferId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyOfferPriceHistory whereOnline($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyOfferPriceHistory wherePrice($value)
+ *
  * @mixin \Eloquent
  */
 class PropertyOfferPriceHistory extends Model

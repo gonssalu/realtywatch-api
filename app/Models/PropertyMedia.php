@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $type
  * @property string $url
  * @property-read \App\Models\Property $property
+ *
  * @method static \Database\Factories\PropertyMediaFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyMedia newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyMedia newQuery()
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyMedia wherePropertyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyMedia whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyMedia whereUrl($value)
+ *
  * @mixin \Eloquent
  */
 class PropertyMedia extends Model

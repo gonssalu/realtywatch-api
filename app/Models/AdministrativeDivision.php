@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $id
  * @property string $name
  * @property int $level
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision query()
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision whereLevel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AdministrativeDivision whereParentId($value)
+ *
  * @mixin \Eloquent
  */
 class AdministrativeDivision extends Model

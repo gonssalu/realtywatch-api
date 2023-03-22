@@ -47,6 +47,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @property-read int|null $tags_count
  * @property-read \App\Models\User $user
+ *
  * @method static \Database\Factories\PropertyFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Property newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Property newQuery()
@@ -73,6 +74,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereWc($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Property withoutTrashed()
+ *
  * @mixin \Eloquent
  */
 class Property extends Model

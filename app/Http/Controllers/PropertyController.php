@@ -30,7 +30,7 @@ class PropertyController extends Controller
         return response(
             [
                 'message' => 'Property created',
-                'property' => new PropertyResource($property)
+                'property' => new PropertyResource($property),
             ],
             201
         );
