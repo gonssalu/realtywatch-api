@@ -36,7 +36,7 @@ class PropertySeeder extends Seeder
 
         $this->command->info('Generating some characteristics...');
         for ($i = 0; $i < $num_characteristics; $i++)
-            $characteristics[] = Characteristic::factory()->create(
+            $characteristics[] = Characteristic::create(
                 [
                     'user_id' => $userId,
                 ]
@@ -54,7 +54,7 @@ class PropertySeeder extends Seeder
         $faker = Factory::create();
         // dd('DO NOT RUN, WIP');
 
-        // $agencies = $this->generateAgencies($user->id);
+        $agencies = $this->generateAgencies($user->id);
         $characteristics = $this->generateCharacteristics($user->id);
 
         $timeout = intval(config('factory.address.api.timeout'));
@@ -85,26 +85,47 @@ class PropertySeeder extends Seeder
             $prop->title = $prop->typology . ' ' . $prop->type . ' ' . $faker->word() . ' em ' . $address['address_title'];
             $prop->save();
 
+            // Add address to property
             unset($address['address_title']);
             $address['property_id'] = $prop->id;
             $address['coordinates'] = DB::raw('POINT(' . $address['coordinates'][0] . ', ' . $address['coordinates'][1] . ')');
             DB::table('property_addresses')->insert($address);
 
-
             // Add characteristics to property
             if ($faker->numberBetween(1, 5) != 3) {
                 $crc = $faker->randomElements($characteristics, $faker->numberBetween(1, 5), false);
-                foreach ($crc as $cr)
+                foreach ($crc as $cr) {
                     $cr->properties()->attach($prop->id, [
                         'value' => $cr->genRandomValue($faker)
                     ]);
+                    $cr->save();
+                }
             }
+
+            // Add offers to property
+
+            /*$offerTypes = ['sale', 'rent'];
+            for ($j = 0; $j < $faker->numberBetween(1, 3); $j++) {
+                $ofrTp = $faker->randomElement($offerTypes);
+                $prop->offers()->create(
+                    [
+                        'url' => $faker->url,
+                        'description' => $faker->boolean ? $faker->text : null,
+                        'listing_type' => $ofrTp,
+                        'price' => $ofrTp == 'sale' ?
+                            $faker->numberBetween(100000, 1000000) :
+                            $faker->numberBetween(500, 5000),
+                    ]
+                );
+            }*/
+
 
             $bar->advance();
 
             if ($i != $num_props - 1)
                 sleep($timeout);
         }
+
         $bar->finish();
         curl_close($curlHandle);
 
