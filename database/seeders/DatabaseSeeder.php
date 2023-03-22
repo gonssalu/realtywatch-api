@@ -25,9 +25,11 @@ class DatabaseSeeder extends Seeder
             $this->truncateAllTables();
         }
 
-        $this->call(UserSeeder::class);
+        /*$this->call(UserSeeder::class);
         $this->call(AdministrativeDivisionSeeder::class);
-        $this->callWith(PropertySeeder::class, ['user' => User::first()]);
+        $this->callWith(PropertySeeder::class, ['user' => User::first()]);*/
+
+        $this->call(MediaSeeder::class);
 
         // TODO: Testing Property Factory
         // for ($i = 0; $i < 20; $i++) {
