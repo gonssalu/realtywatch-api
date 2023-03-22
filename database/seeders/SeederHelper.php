@@ -24,7 +24,7 @@ class SeederHelper
             return [];
         }
         $header = null;
-        $data = array();
+        $data = [];
         if (($handle = fopen($filename, 'r')) !== false) {
             while (($row = fgetcsv($handle, null, $delimiter)) !== false) {
                 if (!$header) {
@@ -37,6 +37,7 @@ class SeederHelper
             }
             fclose($handle);
         }
+
         return $data;
     }
 }

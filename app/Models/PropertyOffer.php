@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyOfferPriceHistory> $priceHistory
  * @property-read int|null $price_history_count
  * @property-read \App\Models\Property $property
+ *
  * @method static \Database\Factories\PropertyOfferFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyOffer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyOffer newQuery()
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyOffer whereListingType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyOffer wherePropertyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyOffer whereUrl($value)
+ *
  * @mixin \Eloquent
  */
 class PropertyOffer extends Model

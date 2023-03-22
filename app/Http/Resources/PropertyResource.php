@@ -30,7 +30,7 @@ class PropertyResource extends JsonResource
             'rating' => $this->rating,
             'current_price_sale' => $this->email,
             'current_price_rent' => $this->photo_url,
-            'status' => $this->status
+            'status' => $this->status,
         ];
     }
 }

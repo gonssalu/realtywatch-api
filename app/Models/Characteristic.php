@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \App\Models\User $user
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyCharacteristic> $valuesForProperties
  * @property-read int|null $values_for_properties_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Characteristic newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Characteristic newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Characteristic query()
@@ -25,12 +26,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Characteristic whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Characteristic whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Characteristic whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Characteristic extends Model
 {
     use HasFactory;
-
 
     public $timestamps = false;
 
@@ -72,13 +73,11 @@ class Characteristic extends Model
 
     public function genRandomValue($faker)
     {
-        switch ($this->type) {
-            case 'numerical':
-                return $faker->boolean() ? $faker->numberBetween(1, 10000) : $faker->randomFloat(2, 1, 10000);
-            case 'textual':
-                return $faker->words($faker->numberBetween(2, 6), true);
-            case 'other':
-                return $faker->dateTime();;
-        }
+        return match ($this->type) {
+            'numerical' => $faker->boolean() ? $faker->numberBetween(1, 10000) : $faker->randomFloat(2, 1, 10000),
+            'textual' => $faker->words($faker->numberBetween(2, 6), true),
+            'other' => $faker->dateTime(),
+            default => null,
+        };
     }
 }

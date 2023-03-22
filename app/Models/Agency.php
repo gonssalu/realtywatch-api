@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyOffer> $propertyOffers
  * @property-read int|null $property_offers_count
  * @property-read \App\Models\User $user
+ *
  * @method static \Database\Factories\AgencyFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Agency newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Agency newQuery()
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Agency whereLogoUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Agency whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Agency whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Agency extends Model

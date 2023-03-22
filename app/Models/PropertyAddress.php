@@ -13,10 +13,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read \App\Models\AdministrativeDivision|null $adm2
  * @property-read \App\Models\AdministrativeDivision|null $adm3
  * @property-read \App\Models\Property|null $property
+ *
  * @method static \Database\Factories\PropertyAddressFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyAddress newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyAddress newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyAddress query()
+ *
  * @mixin \Eloquent
  */
 class PropertyAddress extends Model

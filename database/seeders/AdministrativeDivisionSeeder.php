@@ -6,9 +6,8 @@ use App\Models\AdministrativeDivision;
 use Illuminate\Database\Seeder;
 use Str;
 
-class AdministrativeDivisonSeeder extends Seeder
+class AdministrativeDivisionSeeder extends Seeder
 {
-
     private function getAllFreguesias(): array
     {
         return SeederHelper::ReadCsvData('app/data/freguesias_portugal.csv');
@@ -24,25 +23,24 @@ class AdministrativeDivisonSeeder extends Seeder
 
         if (empty($freguesias)) {
             $this->command->warn('No administrative divisions were created');
+
             return;
         }
 
-        $bar = $this->command->getOutput()->createProgressBar(sizeof($freguesias));
+        $bar = $this->command->getOutput()->createProgressBar(count($freguesias));
 
         $distritos = [];
         $concelhos = [];
 
         foreach ($freguesias as $freg) {
-
             // Create Distrito if it doesn't exist yet
             $nomeDis = trim($freg['distrito']);
             if (!array_key_exists($nomeDis, $distritos)) {
-
                 $distritos[$nomeDis] =
                     AdministrativeDivision::create([
                         'name' => $nomeDis,
                         'level' => '1',
-                    ]);;
+                    ]);
             }
 
             // Create Concelho if it doesn't exist yet
@@ -53,7 +51,7 @@ class AdministrativeDivisonSeeder extends Seeder
                     AdministrativeDivision::create([
                         'name' => $nomeCon,
                         'level' => '2',
-                        'parent_id' => $distritos[$nomeDis]->id
+                        'parent_id' => $distritos[$nomeDis]->id,
                     ]);
             }
 
@@ -69,14 +67,14 @@ class AdministrativeDivisonSeeder extends Seeder
             AdministrativeDivision::create([
                 'name' => $fregName,
                 'level' => '3',
-                'parent_id' => $concelhos[$conKey]->id
+                'parent_id' => $concelhos[$conKey]->id,
             ]);
             $bar->advance();
         }
 
         $bar->finish();
-        $this->command->info("\n" . sizeof($distritos) . ' distritos created');
-        $this->command->info(sizeof($concelhos) . ' concelhos created');
-        $this->command->info(sizeof($freguesias) . ' freguesias created');
+        $this->command->info("\n" . count($distritos) . ' distritos created');
+        $this->command->info(count($concelhos) . ' concelhos created');
+        $this->command->info(count($freguesias) . ' freguesias created');
     }
 }

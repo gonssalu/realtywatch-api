@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Agency;
-use App\Models\Property;
 use App\Models\PropertyOffer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

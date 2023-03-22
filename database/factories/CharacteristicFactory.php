@@ -2,11 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Characteristic;
-use App\Models\User;
 use Database\Seeders\SeederHelper;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CharacteristicFactory extends Factory
 {
@@ -24,7 +22,7 @@ class CharacteristicFactory extends Factory
     {
         $lstType = ['numerical' => 30, 'textual' => 50, 'other' => 5];
         $type = SeederHelper::RandomWeightedElement($lstType);
-        $wrd = $this->faker->words(3, true);
+        $wrd = $this->faker->unique()->words(3, true);
 
         return [
             'name' => $this->faker->numberBetween(1, 10) == 8 ? $wrd : ucfirst($wrd),

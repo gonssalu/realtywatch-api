@@ -57,7 +57,6 @@ class PropertyFactory extends Factory
             $rndRent = 550 + round($rndFloat * 850);
         }
 
-
         switch ($listing_type) {
             case 'sale':
                 $extraArray['current_price_sale'] = $rndSale;
