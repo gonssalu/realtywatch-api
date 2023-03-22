@@ -18,7 +18,7 @@ class AdministrativeDivisionSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->command->info('Starting Administrative Divison Seeder...');
+        $this->command->info('Starting Administrative Division Seeder...');
         $freguesias = $this->getAllFreguesias();
 
         if (empty($freguesias)) {
