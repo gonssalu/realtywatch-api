@@ -134,8 +134,7 @@ class AddressHelper
         return array_merge([
             'postal_code' => $postalCode,
             'full_address' => $full_address,
-            'coordinates' =>
-            [
+            'coordinates' => [
                 $osm['lat'],
                 $osm['lon'],
             ],

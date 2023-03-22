@@ -26,11 +26,9 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->call(UserSeeder::class);
-
-
         $this->call(AdministrativeDivisionSeeder::class);
-
         $this->callWith(PropertySeeder::class, ['user' => User::first()]);
+
         // TODO: Testing Property Factory
         // for ($i = 0; $i < 20; $i++) {
         //     $user = resolve(PropertyFactory::class)->make();

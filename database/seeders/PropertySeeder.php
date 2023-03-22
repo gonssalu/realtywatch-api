@@ -5,10 +5,8 @@ namespace Database\Seeders;
 use App\Models\Agency;
 use App\Models\Characteristic;
 use App\Models\Property;
-use App\Models\PropertyAddress;
 use DB;
 use Faker\Factory;
-use Faker\Generator;
 use Illuminate\Database\Seeder;
 
 class PropertySeeder extends Seeder
@@ -22,10 +20,11 @@ class PropertySeeder extends Seeder
                 [
                     'name' => $agtc,
                     'user_id' => $userId,
-                    'logo_url' => 'dwadada'
+                    'logo_url' => 'dwadada',
                 ]
             );
         }
+
         return $agencies;
     }
 
@@ -35,14 +34,16 @@ class PropertySeeder extends Seeder
         $characteristics = [];
 
         $this->command->info('Generating some characteristics...');
-        for ($i = 0; $i < $num_characteristics; $i++)
+        for ($i = 0; $i < $num_characteristics; $i++) {
             $characteristics[] = Characteristic::factory()->create(
                 [
                     'user_id' => $userId,
                 ]
             );
+        }
 
         $this->command->info("$num_characteristics characteristics were generated\n");
+
         return $characteristics;
     }
 
@@ -62,7 +63,7 @@ class PropertySeeder extends Seeder
 
         $this->command->warn("A $timeout second timeout will be applied between each address request to respect OpenStreetMap's API usage policy");
         $this->command->info("Generating $num_props properties for user $user->name please wait...");
-        $this->command->warn("This will take at least " . $timeout * $num_props . " seconds to complete");
+        $this->command->warn('This will take at least ' . $timeout * $num_props . ' seconds to complete');
         $bar = $this->command->getOutput()->createProgressBar($num_props);
 
         $wgArr = AddressHelper::GetWeightedCoordsArrayFromConfig();
@@ -77,7 +78,7 @@ class PropertySeeder extends Seeder
             $prop = Property::factory()->create(
                 [
                     'user_id' => $user->id,
-                    'cover_url' => 'aaa'
+                    'cover_url' => 'aaa',
                 ]
             );
 
@@ -96,7 +97,7 @@ class PropertySeeder extends Seeder
                 $crc = $faker->randomElements($characteristics, $faker->numberBetween(1, 5), false);
                 foreach ($crc as $cr) {
                     $cr->properties()->attach($prop->id, [
-                        'value' => $cr->genRandomValue($faker)
+                        'value' => $cr->genRandomValue($faker),
                     ]);
                     $cr->save();
                 }
@@ -119,11 +120,11 @@ class PropertySeeder extends Seeder
                 );
             }*/
 
-
             $bar->advance();
 
-            if ($i != $num_props - 1)
+            if ($i != $num_props - 1) {
                 sleep($timeout);
+            }
         }
 
         $bar->finish();
