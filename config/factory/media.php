@@ -1,7 +1,14 @@
 <?php
 
 return [
-    'api' => [
-        'url' => 'https://api.dicebear.com/5.x/avataaars/png?seed=',
+    'user' => [
+        'avatar' => [
+            'api' => 'https://api.dicebear.com/5.x/avataaars/png?seed=',
+        ],
     ],
+    /*'property' => [
+        'image' => [
+            'api' => 'https://api.dicebear.com/5.x/avataaars/png?seed=',
+        ],
+    ],*/
 ];

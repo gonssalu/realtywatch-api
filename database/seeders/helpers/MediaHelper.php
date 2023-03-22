@@ -25,7 +25,7 @@ class MediaHelper
      */
     public static function GetUserPhoto($name): string
     {
-        $photoContents = file_get_contents(config('factory.media.api.url') . urlencode($name));
+        $photoContents = file_get_contents(config('factory.media.user.avatar.api') . urlencode($name));
         $photoPath = 'public/users/' . uniqid() . '.png';
         Storage::put($photoPath, $photoContents);
 

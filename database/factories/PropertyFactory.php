@@ -26,7 +26,7 @@ class PropertyFactory extends Factory
         ];
         $all_listing = ['sale' => 45, 'rent' => 40, 'both' => 15];
 
-        $listing_type = SeederHelper::RandomWeightedElement($all_listing);
+        $listing_type = SeedersSeederHelper::RandomWeightedElement($all_listing);
         $type = SeederHelper::RandomWeightedElement($all_types);
         $status = SeederHelper::RandomWeightedElement($all_status);
 
