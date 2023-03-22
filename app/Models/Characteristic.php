@@ -31,6 +31,8 @@ class Characteristic extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -69,13 +71,11 @@ class Characteristic extends Model
 
     public function genRandomValue($faker)
     {
-        switch ($this->type) {
-            case 'numerical':
-                return $faker->boolean() ? $faker->numberBetween(1, 10000) : $faker->randomFloat(2, 1, 10000);
-            case 'textual':
-                return $faker->words($faker->numberBetween(2, 6));
-            case 'other':
-                return $faker->dateTime();;
-        }
+        return match ($this->type) {
+            'numerical' => $faker->boolean() ? $faker->numberBetween(1, 10000) : $faker->randomFloat(2, 1, 10000),
+            'textual' => implode(' ', $faker->words($faker->numberBetween(2, 6))),
+            'other' => $faker->dateTime(),
+            default => null,
+        };
     }
 }
