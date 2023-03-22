@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\helpers;
 
 use App\Models\AdministrativeDivision;
 use Str;

@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use Database\Seeders\MediaHelper;
+use Database\Seeders\helpers\MediaHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 

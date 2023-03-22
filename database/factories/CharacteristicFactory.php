@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Characteristic;
-use Database\Seeders\SeederHelper;
+use Database\Seeders\helpers\SeederHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CharacteristicFactory extends Factory

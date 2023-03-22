@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Agency;
 use App\Models\Characteristic;
 use App\Models\Property;
+use Database\Seeders\helpers\AddressHelper;
 use DB;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
@@ -13,7 +14,9 @@ class PropertySeeder extends Seeder
 {
     public function generateAgencies($userId)
     {
-        $agencies_to_create = ['iad Portugal', 'Veigas Imobiliária', 'Rainhavip', 'Century 21', 'Engel & Völkers', 'ERA Imobiliária', 'RE/MAX Portugal'];
+        $agencies_to_create = [
+            'iad Portugal', 'Veigas Imobiliária', 'Rainhavip', 'Century 21', 'Engel & Völkers', 'ERA Imobiliária', 'RE/MAX Portugal',
+        ];
         $agencies = [];
         foreach ($agencies_to_create as $agtc) {
             $agencies[] = Agency::create(
