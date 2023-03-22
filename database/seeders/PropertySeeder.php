@@ -36,7 +36,7 @@ class PropertySeeder extends Seeder
 
         $this->command->info('Generating some characteristics...');
         for ($i = 0; $i < $num_characteristics; $i++)
-            $characteristics[] = Characteristic::create(
+            $characteristics[] = Characteristic::factory()->create(
                 [
                     'user_id' => $userId,
                 ]
