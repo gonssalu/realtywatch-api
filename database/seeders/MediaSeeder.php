@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Http;
 
 class MediaSeeder extends Seeder
 {
+
+    // Progress bar
+    private $bar;
+
     /**
      * Seed the application's database.
      */
@@ -39,10 +43,57 @@ class MediaSeeder extends Seeder
                 'real estate',
             ];
 
-        $this->saveMediaFromApi($PHOTO_API_URL, $API_KEY, 'photos', $photoQueries);
-        $this->saveMediaFromApi($VIDEO_API_URL, $API_KEY, 'videos', $videoQueries);
+        $this->command->info('Fetching photos from API...');
+        $this->fetchKeywordsFromApi($PHOTO_API_URL, $API_KEY, 'photos', $photoQueries);
+        $this->command->info('-----------------------------------------------');
+        $this->command->info('Fetching videos from API...');
+        $this->fetchKeywordsFromApi($VIDEO_API_URL, $API_KEY, 'videos', $videoQueries);
     }
 
+    // Fetch multiple keywords from the API
+    private function fetchKeywordsFromApi($theApiUrl, $apiKey, $mediaType, $keywords)
+    {
+        $this->bar = $this->command->getOutput()->createProgressBar(count($keywords) * 80);
+        foreach ($keywords as $keyword) {
+            $this->saveMediaFromApi($theApiUrl, $apiKey, $mediaType, $keyword);
+        }
+        $this->bar->finish();
+    }
+
+    // Fetch media of a certain keyword from the API and save it to the disk
+    private function saveMediaFromApi($theApiUrl, $apiKey, $mediaType, $keyword)
+    {
+        $apiUrl = "$theApiUrl?query={$keyword}&per_page=80&page=1";
+
+        // Fetch response from the API
+        $response = Http::withHeaders(['Authorization' => $apiKey])->get($apiUrl);
+
+        if ($response->ok()) {
+            $media = $response->json()[$mediaType];
+
+            // Create a directory for the current keyword's media
+            $directory = public_path("$mediaType/{$keyword}");
+            if (!is_dir($directory)) {
+                mkdir($directory, 0755, true);
+            }
+
+            $count = 0;
+            // Loop through each media and download it
+            foreach ($media as $mediaRecord) {
+                $srcUrl = $this->getMediaUrlFromRecord($mediaType, $mediaRecord);
+                $filename = basename($srcUrl);
+                $filepath = "{$directory}/{$filename}";
+
+                Http::withOptions(['sink' => $filepath])->get($srcUrl);
+
+                $count++;
+                $this->bar->advance();
+                $this->command->getOutput()->write(' - ' . $keyword . '/' . $count);
+            }
+        }
+    }
+
+    // Process media record and return the URL of the media
     private function getMediaUrlFromRecord($mediaType, $mediaRecord)
     {
         switch ($mediaType) {
@@ -52,37 +103,6 @@ class MediaSeeder extends Seeder
                 return $mediaRecord['video_files'][0]['link'];
             default:
                 return null;
-        }
-    }
-
-    private function saveMediaFromApi($theApiUrl, $apiKey, $mediaType, $keywords)
-    {
-        $headers = ['Authorization' => $apiKey];
-
-        foreach ($keywords as $keyword) {
-            $apiUrl = "$theApiUrl?query={$keyword}&per_page=80&page=1";
-
-            // Fetch response from the API
-            $response = Http::withHeaders($headers)->get($apiUrl);
-
-            if ($response->ok()) {
-                $media = $response->json()[$mediaType];
-
-                // Create a directory for the current keyword's media
-                $directory = public_path("$mediaType/{$keyword}");
-                if (!is_dir($directory)) {
-                    mkdir($directory, 0755, true);
-                }
-
-                // Loop through each media and download it
-                foreach ($media as $mediaRecord) {
-                    $srcUrl = $this->getMediaUrlFromRecord($mediaType, $mediaRecord);
-                    $filename = basename($srcUrl);
-                    $filepath = "{$directory}/{$filename}";
-
-                    Http::withOptions(['sink' => $filepath])->get($srcUrl);
-                }
-            }
         }
     }
 }
