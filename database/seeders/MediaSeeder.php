@@ -56,6 +56,7 @@ class MediaSeeder extends Seeder
         $this->bar = $this->command->getOutput()->createProgressBar(count($keywords) * 80);
         foreach ($keywords as $keyword) {
             $this->saveMediaFromApi($theApiUrl, $apiKey, $mediaType, $keyword);
+            $this->command->warn(" - $keyword");
         }
         $this->bar->finish();
     }
@@ -81,14 +82,13 @@ class MediaSeeder extends Seeder
             // Loop through each media and download it
             foreach ($media as $mediaRecord) {
                 $srcUrl = $this->getMediaUrlFromRecord($mediaType, $mediaRecord);
-                $filename = basename($srcUrl);
+                $filename = basename(parse_url($srcUrl, PHP_URL_PATH));
                 $filepath = "{$directory}/{$filename}";
 
                 Http::withOptions(['sink' => $filepath])->get($srcUrl);
 
                 $count++;
                 $this->bar->advance();
-                $this->command->getOutput()->write(' - ' . $keyword . '/' . $count);
             }
         }
     }
