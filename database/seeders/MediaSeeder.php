@@ -47,7 +47,7 @@ class MediaSeeder extends Seeder
         $this->fetchKeywordsFromApi($PHOTO_API_URL, $API_KEY, 'photos', $photoQueries);
         $this->command->info('-----------------------------------------------');
         $this->command->info('Fetching videos from API...');
-        $this->fetchKeywordsFromApi($VIDEO_API_URL, $API_KEY, 'videos', $videoQueries);
+        //$this->fetchKeywordsFromApi($VIDEO_API_URL, $API_KEY, 'videos', $videoQueries);
     }
 
     // Fetch multiple keywords from the API
@@ -78,7 +78,6 @@ class MediaSeeder extends Seeder
                 mkdir($directory, 0755, true);
             }
 
-            $count = 0;
             // Loop through each media and download it
             foreach ($media as $mediaRecord) {
                 $srcUrl = $this->getMediaUrlFromRecord($mediaType, $mediaRecord);
@@ -87,7 +86,6 @@ class MediaSeeder extends Seeder
 
                 Http::withOptions(['sink' => $filepath])->get($srcUrl);
 
-                $count++;
                 $this->bar->advance();
             }
         }
@@ -98,7 +96,7 @@ class MediaSeeder extends Seeder
     {
         switch ($mediaType) {
             case 'photos':
-                return $mediaRecord['src']['original'];
+                return $mediaRecord['src']['large2x'];
             case 'videos':
                 return $mediaRecord['video_files'][0]['link'];
             default:
