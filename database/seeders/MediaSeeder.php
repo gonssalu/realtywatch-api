@@ -47,7 +47,7 @@ class MediaSeeder extends Seeder
         $this->fetchKeywordsFromApi($PHOTO_API_URL, $API_KEY, 'photos', $photoQueries);
         $this->command->info('-----------------------------------------------');
         $this->command->info('Fetching videos from API...');
-        //$this->fetchKeywordsFromApi($VIDEO_API_URL, $API_KEY, 'videos', $videoQueries);
+        $this->fetchKeywordsFromApi($VIDEO_API_URL, $API_KEY, 'videos', $videoQueries);
     }
 
     // Fetch multiple keywords from the API

@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AdministrativeDivisionSeeder::class);
         $this->callWith(PropertySeeder::class, ['user' => User::first()]);*/
 
-        $this->call(MediaSeeder::class);
+        //$this->call(MediaSeeder::class);
 
         // TODO: Testing Property Factory
         // for ($i = 0; $i < 20; $i++) {
