@@ -102,10 +102,12 @@ class PropertySeeder extends Seeder
         $filename = 'S_' . uniqid();
         $ext = pathinfo($path, PATHINFO_EXTENSION);
 
-        $new_path = "$this->PUBLIC_STORAGE_PATH/$filename.$ext";
+        $simplePath = $filename . $ext;
+
+        $new_path = "$this->PUBLIC_STORAGE_PATH/$simplePath";
         Storage::put($new_path, $file);
 
-        return $new_path;
+        return $simplePath;
     }
 
     /**
