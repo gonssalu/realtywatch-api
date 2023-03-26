@@ -29,7 +29,7 @@ class MediaSeeder extends Seeder
                 'bedroom',
                 'interior design',
                 'office',
-                'luxury apartment',
+                'apartment',
                 'luxury house',
                 'blueprint',
                 'garage building',
