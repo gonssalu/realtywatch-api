@@ -16,6 +16,8 @@ class PropertySeeder extends Seeder
     private $STORAGE_DIR_PATH = 'app/media/properties';
     private $PUBLIC_STORAGE_PATH = 'public/properties';
 
+    private $PREFIX = 'S';
+
 
     public function generateAgencies($userId)
     {
@@ -28,7 +30,6 @@ class PropertySeeder extends Seeder
                 [
                     'name' => $agtc,
                     'user_id' => $userId,
-                    'logo_url' => 'dwadada',
                 ]
             );
         }
@@ -99,7 +100,7 @@ class PropertySeeder extends Seeder
     public function saveMediaInPublicStorage($path)
     {
         $file = file_get_contents($path);
-        $filename = 'S_' . uniqid();
+        $filename = $this->PREFIX . '_' . uniqid();
         $ext = pathinfo($path, PATHINFO_EXTENSION);
 
         $simplePath = $filename . $ext;
@@ -108,6 +109,26 @@ class PropertySeeder extends Seeder
         Storage::put($new_path, $file);
 
         return $simplePath;
+    }
+
+    public function generateOffers($faker, $prop, $type, $initial_price, $perc_change, $min_num_offers, $max_num_offers)
+    {
+        $num_offers = $faker->numberBetween($min_num_offers, $max_num_offers) + 1;
+        $min_price = $initial_price + 1 /*$initial_price * (1 - $perc_change)*/;
+        $max_price = $initial_price * (1 + $perc_change);
+        $price = $initial_price;
+
+        for ($i = 0; $i < $num_offers; $i++) {
+            $prop->offers()->create(
+                [
+                    'url' => $faker->url,
+                    'description' => $faker->boolean ? $faker->text : null,
+                    'listing_type' => $type,
+                    'price' => $price,
+                ]
+            );
+            $price = $faker->numberBetween($min_price, $max_price);
+        }
     }
 
     /**
@@ -145,6 +166,8 @@ class PropertySeeder extends Seeder
                     'user_id' => $user->id,
                 ]
             );
+
+            $this->PREFIX = $prop->id;
 
             //TODO: translate
             $prop->title = $prop->typology . ' ' . $prop->type . ' ' . $faker->word() . ' em ' . $address['address_title'];
@@ -220,21 +243,11 @@ class PropertySeeder extends Seeder
             }
 
             // Add offers to property
-
-            /*$offerTypes = ['sale', 'rent'];
-            for ($j = 0; $j < $faker->numberBetween(1, 3); $j++) {
-                $ofrTp = $faker->randomElement($offerTypes);
-                $prop->offers()->create(
-                    [
-                        'url' => $faker->url,
-                        'description' => $faker->boolean ? $faker->text : null,
-                        'listing_type' => $ofrTp,
-                        'price' => $ofrTp == 'sale' ?
-                            $faker->numberBetween(100000, 1000000) :
-                            $faker->numberBetween(500, 5000),
-                    ]
-                );
-            }*/
+            $offerTypes = ['sale' => $prop->current_price_sale, 'rent' => $prop->current_price_rent];
+            foreach ($offerTypes as $ot => $offer_listing_price) {
+                if ($offer_listing_price != null)
+                    $this->generateOffers($faker, $prop, $ot, $offer_listing_price, 0.0625, 0, 3);
+            }
 
             $bar->advance();
 
