@@ -41,7 +41,6 @@ class PropertyOfferPriceHistory extends Model
         'offer_id',
         'datetime',
         'price',
-        'online',
         'latest',
     ];
 

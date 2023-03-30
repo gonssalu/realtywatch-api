@@ -111,23 +111,47 @@ class PropertySeeder extends Seeder
         return $simplePath;
     }
 
-    public function generateOffers($faker, $prop, $type, $initial_price, $perc_change, $min_num_offers, $max_num_offers)
+    public function generateOfferPrice($faker, $initial_price, $perc_change, $min_num_offers, $max_num_offers)
     {
         $num_offers = $faker->numberBetween($min_num_offers, $max_num_offers) + 1;
         $min_price = $initial_price + 1 /*$initial_price * (1 - $perc_change)*/;
         $max_price = $initial_price * (1 + $perc_change);
         $price = $initial_price;
 
+        $offers = [];
         for ($i = 0; $i < $num_offers; $i++) {
-            $prop->offers()->create(
+            $offer[] = $price;
+            $price = $faker->numberBetween($min_price, $max_price);
+        }
+
+        return $offers;
+    }
+
+    public function generateOffers($faker, $prop, $type, $initial_price, $perc_change)
+    {
+        $offerPrices = $this->generateOfferPrice($faker, $initial_price, $perc_change, 0, 3);
+        foreach ($offerPrices as $offerPrice) {
+            $propOffer = $prop->offers()->create(
                 [
                     'url' => $faker->url,
                     'description' => $faker->boolean ? $faker->text : null,
                     'listing_type' => $type,
-                    'price' => $price,
+                    'price' => $offerPrice,
                 ]
             );
-            $price = $faker->numberBetween($min_price, $max_price);
+
+            $histPrices = $this->generateOfferPrice($faker, $offerPrice, $perc_change, 0, 6);
+            $first = true;
+            foreach ($histPrices as $histPrice) {
+                $propOffer->priceHistory()->create(
+                    [
+                        'datetime' => ($first ? now() : $faker->dateTimeBetween('-1 year', 'now'))->toDateTimeString('Y-m-d H:i:s'),
+                        'price' => $histPrice,
+                        'latest' => $first,
+                    ]
+                );
+                $first = false;
+            }
         }
     }
 
@@ -228,7 +252,7 @@ class PropertySeeder extends Seeder
                         );
                 }
 
-                if (count($media) > 0)
+                if (count($media) > 0) {
                     $prop->media()->createMany(
                         array_map(
                             function ($url) {
@@ -240,13 +264,16 @@ class PropertySeeder extends Seeder
                             $media
                         )
                     );
+
+                    $prop->cover_url = $prop->media()->first()->url;
+                }
             }
 
             // Add offers to property
             $offerTypes = ['sale' => $prop->current_price_sale, 'rent' => $prop->current_price_rent];
             foreach ($offerTypes as $ot => $offer_listing_price) {
                 if ($offer_listing_price != null)
-                    $this->generateOffers($faker, $prop, $ot, $offer_listing_price, 0.0625, 0, 3);
+                    $this->generateOffers($faker, $prop, $ot, $offer_listing_price, 0.0625);
             }
 
             $bar->advance();
