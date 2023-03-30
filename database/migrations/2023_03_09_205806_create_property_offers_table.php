@@ -25,6 +25,7 @@ class CreatePropertyOffersTable extends Migration
             $table->unsignedBigInteger('agency_id')->nullable();
             $table->foreign('agency_id')->references('id')->on('agency');
             $table->index(['property_id', 'listing_type']);
+            $table->timestamps();
         });
 
         Schema::enableForeignKeyConstraints();

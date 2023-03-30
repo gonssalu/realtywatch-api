@@ -22,6 +22,7 @@ class CreatePropertyOfferPriceHistoriesTable extends Migration
             $table->decimal('price', 9, 2)->nullable();
             $table->boolean('latest');
             $table->primary(['offer_id', 'datetime']);
+            $table->timestamps();
         });
 
         Schema::enableForeignKeyConstraints();
