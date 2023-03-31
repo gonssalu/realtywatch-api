@@ -40,6 +40,7 @@ class PropertyMedia extends Model
     protected $fillable = [
         'property_id',
         'type',
+        'order',
         'url',
     ];
 

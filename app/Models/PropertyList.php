@@ -35,6 +35,7 @@ class PropertyList extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'description'
     ];
 
     /**
@@ -59,6 +60,6 @@ class PropertyList extends Model
 
     public function properties(): BelongsToMany
     {
-        return $this->belongsToMany(Property::class);
+        return $this->belongsToMany(Property::class)->withPivot('order');
     }
 }
