@@ -23,10 +23,16 @@ class PropertySeeder extends Seeder
 
     private $PREFIX = 'S';
 
-    public function generateAgencies($userId)
+    public function generateAgencies($userId): array
     {
         $agencies_to_create = [
-            'iad Portugal' => 'iadportugal.jpg', 'Veigas Imobiliária' => 'veigas.jpg', 'Rainhavip' => null, 'Century 21' => 'century21.jpg', 'Engel & Völkers' => 'engelsandvolkers.jpg', 'ERA Imobiliária' => 'era.jpg', 'RE/MAX Portugal' => 'remax.jpg',
+            'iad Portugal' => 'iadportugal.jpg',
+            'Veigas Imobiliária' => 'veigas.jpg',
+            'Rainhavip' => null,
+            'Century 21' => 'century21.jpg',
+            'Engel & Völkers' => 'engelsandvolkers.jpg',
+            'ERA Imobiliária' => 'era.jpg',
+            'RE/MAX Portugal' => 'remax.jpg',
         ];
 
         $agencies = [];
@@ -51,7 +57,7 @@ class PropertySeeder extends Seeder
         return $agencies;
     }
 
-    public function generateCharacteristics($userId)
+    public function generateCharacteristics($userId): array
     {
         $num_characteristics = 20;
         $characteristics = [];
@@ -70,7 +76,7 @@ class PropertySeeder extends Seeder
         return $characteristics;
     }
 
-    public function gatherPhotosInArray()
+    public function gatherPhotosInArray(): array
     {
         $photos_dir = storage_path("$this->PROPERTY_STORAGE_DIR_PATH/photos");
         $photos = [];
@@ -95,7 +101,7 @@ class PropertySeeder extends Seeder
         return $photos;
     }
 
-    public function gatherVideosInArray()
+    public function gatherVideosInArray(): array
     {
         $videos_dir = storage_path("$this->PROPERTY_STORAGE_DIR_PATH/videos");
         $videos = [];
@@ -112,7 +118,14 @@ class PropertySeeder extends Seeder
         return $videos;
     }
 
-    public function saveMediaInPublicStorage($path_to_save, $path)
+    /**
+     * Saves a media file to the public storage directory and returns its filename.
+     *
+     * @param  string  $path_to_save The path to the directory in which to save the media file.
+     * @param  string  $path The path to the media file to save.
+     * @return string The filename of the saved media file.
+     */
+    public function saveMediaInPublicStorage($path_to_save, $path): string
     {
         $file = file_get_contents($path);
         $filename = $this->PREFIX . '_' . uniqid();
@@ -126,17 +139,17 @@ class PropertySeeder extends Seeder
         return $simplePath;
     }
 
-    public function savePropertyMediaInPublicStorage($path)
+    public function savePropertyMediaInPublicStorage($path): string
     {
         return $this->saveMediaInPublicStorage($this->PROPERTY_PUBLIC_STORAGE_PATH, $path);
     }
 
-    public function saveAgencyMediaInPublicStorage($path)
+    public function saveAgencyMediaInPublicStorage($path): string
     {
         return $this->saveMediaInPublicStorage($this->AGENCY_PUBLIC_STORAGE_PATH, storage_path($path));
     }
 
-    public function generateOfferPrice($faker, $initial_price, $perc_change, $min_num_offers, $max_num_offers, $allowLess = false)
+    public function generateOfferPrice($faker, $initial_price, $perc_change, $min_num_offers, $max_num_offers, $allowLess = false): array
     {
         $num_offers = $faker->numberBetween($min_num_offers, $max_num_offers) + 1;
         $min_price = $allowLess ? $initial_price * (1 - $perc_change) : $initial_price + 1;
@@ -152,7 +165,17 @@ class PropertySeeder extends Seeder
         return $offers;
     }
 
-    public function generateOffers($faker, $agencies, $prop, $type, $initial_price, $perc_change)
+    /**
+     * Generates offers for a given property with randomized data.
+     *
+     * @param  Faker  $faker The Faker instance to use for generating randomized data.
+     * @param  Collection  $agencies The collection of agencies to use for generating offers.
+     * @param  Property  $prop The property to generate offers for.
+     * @param  string  $type The type of listing to generate offers for.
+     * @param  float  $initial_price The initial price to use for generating offer prices.
+     * @param  float  $perc_change The percentage change to use for generating offer prices.
+     */
+    public function generateOffers($faker, $agencies, $prop, $type, $initial_price, $perc_change): void
     {
         $offerPrices = $this->generateOfferPrice($faker, $initial_price, $perc_change, 0, 3);
         foreach ($offerPrices as $offerPrice) {
@@ -181,7 +204,7 @@ class PropertySeeder extends Seeder
     }
 
     /**
-     * Seed properties
+     * Run the Property Seeder.
      */
     public function run($user, $num_props): void
     {
@@ -190,7 +213,6 @@ class PropertySeeder extends Seeder
         $agencies = $this->generateAgencies($user->id);
         $characteristics = $this->generateCharacteristics($user->id);
         $photos = $this->gatherPhotosInArray();
-
         $videos = $this->gatherVideosInArray();
 
         $timeout = intval(config('factory.address.api.timeout'));
@@ -198,6 +220,7 @@ class PropertySeeder extends Seeder
         $this->command->warn("A $timeout second timeout will be applied between each address request to respect OpenStreetMap's API usage policy");
         $this->command->info("Generating $num_props properties for user $user->name please wait...");
         $this->command->warn('This will take at least ' . $timeout * $num_props . ' seconds to complete');
+
         $bar = $this->command->getOutput()->createProgressBar($num_props);
 
         $wgArr = AddressHelper::GetWeightedCoordsArrayFromConfig();

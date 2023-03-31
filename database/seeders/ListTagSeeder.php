@@ -10,7 +10,15 @@ use Illuminate\Database\Seeder;
 class ListTagSeeder extends Seeder
 {
     /**
-     * Run Lists and Tags seeder.
+     * Run the Lists and Tags seeder.
+     *
+     * @param  mixed  $user The user for which to generate the lists and tags.
+     * @param  array  $qty The number of lists and tags to generate, as an array of integers in the following format:
+     *                   [$num_lists, $prop_per_list, $num_tags, $tag_per_prop], where:
+     *                   - $num_lists: the number of lists to generate.
+     *                   - $prop_per_list: an array with two integers, the minimum and maximum number of properties to assign to each list.
+     *                   - $num_tags: the number of tags to generate.
+     *                   - $tag_per_prop: an array with two integers, the minimum and maximum number of tags to assign to each property.
      */
     public function run($user, $qty): void
     {

@@ -8,7 +8,9 @@ use Illuminate\Database\Seeder;
 class UserSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the User Seeder.
+     *
+     * @param  mixed  $seedType
      */
     public function run($seedType): void
     {

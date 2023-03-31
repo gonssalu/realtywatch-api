@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         $this->callWith(PropertySeeder::class, ['user' => $users[1], 'num_props' => $seedType === 'small' ? 2 : 10]);
         $this->callWith(ListTagSeeder::class, ['user' => $users[1], 'qty' => [1, [1, 2], 2, [1, 2]]]);
 
-        // DO NOT RUN // $this->call(MediaSeeder::class);
+        // WARNING: DO NOT RUN // $this->call(MediaSeeder::class);
 
         $this->command->info('-----------------------------------------------');
         $this->command->info('Database seeder finished');
