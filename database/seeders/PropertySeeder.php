@@ -37,8 +37,10 @@ class PropertySeeder extends Seeder
 
             $this->PREFIX = $agency->id;
 
-            if ($agency_logo != null)
-                $this->saveAgencyMediaInPublicStorage("$this->AGENCY_STORAGE_DIR_PATH/$agency_logo");
+            if ($agency_logo != null) {
+                $agency->logo_url = $this->saveAgencyMediaInPublicStorage("$this->AGENCY_STORAGE_DIR_PATH/$agency_logo");
+                $agency->save();
+            }
 
             $agencies[] = $agency;
         }
@@ -146,12 +148,13 @@ class PropertySeeder extends Seeder
         return $offers;
     }
 
-    public function generateOffers($faker, $prop, $type, $initial_price, $perc_change)
+    public function generateOffers($faker, $agencies, $prop, $type, $initial_price, $perc_change)
     {
         $offerPrices = $this->generateOfferPrice($faker, $initial_price, $perc_change, 0, 3);
         foreach ($offerPrices as $offerPrice) {
             $propOffer = $prop->offers()->create(
                 [
+                    'agency_id' => ($faker->boolean(5) ? null : $faker->randomElement($agencies)->id),
                     'url' => $faker->url,
                     'description' => $faker->boolean ? $faker->text : null,
                     'listing_type' => $type
@@ -228,6 +231,7 @@ class PropertySeeder extends Seeder
                     $cr->save();
                 }
             }
+
             // Add media to property
             if ($prop->type != 'other') {
                 $media = [];
@@ -289,7 +293,7 @@ class PropertySeeder extends Seeder
 
             foreach ($offerTypes as $ot => $offer_listing_price) {
                 if ($offer_listing_price != null)
-                    $this->generateOffers($faker, $prop, $ot, $offer_listing_price, 0.0625);
+                    $this->generateOffers($faker, $agencies, $prop, $ot, $offer_listing_price, 0.0625);
             }
 
             $bar->advance();
@@ -300,6 +304,7 @@ class PropertySeeder extends Seeder
         }
 
         $bar->finish();
+
         curl_close($curlHandle);
 
         $this->command->info("\n$num_props properties have been generated");
