@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
 
         $this->callWith(UserSeeder::class, ['seedType' => $seedType]);
         $this->callWith(PropertySeeder::class, ['user' => User::first()]);
+        $this->callWith(ListTagSeeder::class, ['user' => User::first(), 'seedType' => $seedType]);
 
         // DO NOT RUN // $this->call(MediaSeeder::class);
 
