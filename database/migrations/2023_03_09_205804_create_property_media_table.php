@@ -19,7 +19,7 @@ class CreatePropertyMediaTable extends Migration
             $table->id();
             $table->unsignedBigInteger('property_id')->foreign('properties.id');
             $table->enum('type', ['image', 'video', 'blueprint', 'other']);
-            $table->tinyInteger('order');
+            $table->integer('order');
             $table->text('url');
             $table->index(['property_id', 'type']);
         });
