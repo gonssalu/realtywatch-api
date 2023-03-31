@@ -23,7 +23,7 @@ class PropertySeeder extends Seeder
     public function generateAgencies($userId)
     {
         $agencies_to_create = [
-            'iad Portugal' => 'iadportugal', 'Veigas Imobiliária' => 'veigas', 'Rainhavip' => null, 'Century 21' => 'century21', 'Engel & Völkers' => 'engelsandvolkers', 'ERA Imobiliária' => 'era', 'RE/MAX Portugal' => 'remax',
+            'iad Portugal' => 'iadportugal.jpg', 'Veigas Imobiliária' => 'veigas.jpg', 'Rainhavip' => null, 'Century 21' => 'century21.jpg', 'Engel & Völkers' => 'engelsandvolkers.jpg', 'ERA Imobiliária' => 'era.jpg', 'RE/MAX Portugal' => 'remax.jpg',
         ];
 
         $agencies = [];
