@@ -25,7 +25,7 @@ class CreatePropertyMediaTable extends Migration
         });
 
         DB::unprepared('
-            CREATE TRIGGER set_default_order
+            CREATE TRIGGER property_media_set_default_order
             BEFORE INSERT ON property_media
             FOR EACH ROW
             BEGIN

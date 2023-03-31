@@ -22,9 +22,10 @@ class CreateListPropertyTable extends Migration
             $table->integer('order');
             $table->foreign('property_id')->references('id')->on('properties');
             $table->primary(['list_id', 'property_id']);
+        });
 
-            DB::unprepared('
-                CREATE TRIGGER set_default_order
+        DB::unprepared('
+                CREATE TRIGGER list_property_set_default_order
                 BEFORE INSERT ON list_property
                 FOR EACH ROW
                 BEGIN
@@ -37,7 +38,6 @@ class CreateListPropertyTable extends Migration
                 SET NEW.`order` = last_order;
                 END;
             ');
-        });
 
         Schema::enableForeignKeyConstraints();
     }
