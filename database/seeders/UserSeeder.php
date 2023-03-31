@@ -14,6 +14,8 @@ class UserSeeder extends Seeder
     {
         $numUsers = $seedType === 'small' ? 1 : 5;
 
+        $this->command->info('Creating ' . $numUsers * 4 . ' users...');
+
         // Create a regular user
         User::factory($numUsers + 1)->create();
 

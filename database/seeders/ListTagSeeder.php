@@ -22,6 +22,7 @@ class ListTagSeeder extends Seeder
         $faker = Factory::create();
         $userId = $user->id;
 
+        $this->command->info("Generating $num_lists lists for user $user->name please wait...");
         // Generate lists
         $lists = [];
         for ($i = 0; $i < $num_lists; $i++) {
@@ -32,6 +33,7 @@ class ListTagSeeder extends Seeder
             ]);
         }
 
+        $this->command->info("Generating $num_tags tags for user $user->name please wait...");
         // Generate tags
         $tags = [];
         for ($i = 0; $i < $num_tags; $i++) {
@@ -43,6 +45,8 @@ class ListTagSeeder extends Seeder
 
         $properties = $user->properties()->get();
 
+        $this->command->info("Assigning the generated tags & lists to random properties...");
+
         // Assign tags to properties
         foreach ($properties as $prop) {
             if ($faker->boolean(85))
@@ -53,6 +57,8 @@ class ListTagSeeder extends Seeder
         foreach ($lists as $list) {
             $list->properties()->attach($faker->randomElements($properties, $faker->numberBetween($prop_per_list[0], $prop_per_list[1])));
         }
+
+        $this->command->info("Creating an empty list and tag...");
 
         // Create an empty list
         PropertyList::create([
