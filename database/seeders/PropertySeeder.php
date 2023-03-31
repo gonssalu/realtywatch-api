@@ -13,25 +13,34 @@ use Storage;
 
 class PropertySeeder extends Seeder
 {
-    private $STORAGE_DIR_PATH = 'app/media/properties';
-    private $PUBLIC_STORAGE_PATH = 'public/properties';
+    private $PROPERTY_STORAGE_DIR_PATH = 'app/media/properties';
+    private $PROPERTY_PUBLIC_STORAGE_PATH = 'public/properties';
+    private $AGENCY_STORAGE_DIR_PATH = 'app/media/agencies';
+    private $AGENCY_PUBLIC_STORAGE_PATH = 'public/agencies';
 
     private $PREFIX = 'S';
-
 
     public function generateAgencies($userId)
     {
         $agencies_to_create = [
-            'iad Portugal', 'Veigas Imobiliária', 'Rainhavip', 'Century 21', 'Engel & Völkers', 'ERA Imobiliária', 'RE/MAX Portugal',
+            'iad Portugal' => 'iadportugal', 'Veigas Imobiliária' => 'veigas', 'Rainhavip' => null, 'Century 21' => 'century21', 'Engel & Völkers' => 'engelsandvolkers', 'ERA Imobiliária' => 'era', 'RE/MAX Portugal' => 'remax',
         ];
+
         $agencies = [];
-        foreach ($agencies_to_create as $agtc) {
-            $agencies[] = Agency::create(
+        foreach ($agencies_to_create as $agency_name => $agency_logo) {
+            $agency = Agency::create(
                 [
-                    'name' => $agtc,
+                    'name' => $agency_name,
                     'user_id' => $userId,
                 ]
             );
+
+            $this->PREFIX = $agency->id;
+
+            if ($agency_logo != null)
+                $this->saveAgencyMediaInPublicStorage("$this->AGENCY_STORAGE_DIR_PATH/$agency_logo");
+
+            $agencies[] = $agency;
         }
 
         return $agencies;
@@ -58,7 +67,7 @@ class PropertySeeder extends Seeder
 
     public function gatherPhotosInArray()
     {
-        $photos_dir = storage_path("$this->STORAGE_DIR_PATH/photos");
+        $photos_dir = storage_path("$this->PROPERTY_STORAGE_DIR_PATH/photos");
         $photos = [];
 
         //Scan photos_dir for subdirectories and then scan each subdirectory for files
@@ -82,7 +91,7 @@ class PropertySeeder extends Seeder
 
     public function gatherVideosInArray()
     {
-        $videos_dir = storage_path("$this->STORAGE_DIR_PATH/videos");
+        $videos_dir = storage_path("$this->PROPERTY_STORAGE_DIR_PATH/videos");
         $videos = [];
 
         //Scan videos_dir for files
@@ -97,7 +106,7 @@ class PropertySeeder extends Seeder
         return $videos;
     }
 
-    public function saveMediaInPublicStorage($path)
+    public function saveMediaInPublicStorage($path_to_save, $path)
     {
         $file = file_get_contents($path);
         $filename = $this->PREFIX . '_' . uniqid();
@@ -105,10 +114,20 @@ class PropertySeeder extends Seeder
 
         $simplePath = $filename . $ext;
 
-        $new_path = "$this->PUBLIC_STORAGE_PATH/$simplePath";
+        $new_path = "$path_to_save/$simplePath";
         Storage::put($new_path, $file);
 
         return $simplePath;
+    }
+
+    public function savePropertyMediaInPublicStorage($path)
+    {
+        return $this->saveMediaInPublicStorage($this->PROPERTY_PUBLIC_STORAGE_PATH, $path);
+    }
+
+    public function saveAgencyMediaInPublicStorage($path)
+    {
+        return $this->saveMediaInPublicStorage($this->AGENCY_PUBLIC_STORAGE_PATH, $path);
     }
 
     public function generateOfferPrice($faker, $initial_price, $perc_change, $min_num_offers, $max_num_offers, $allowLess = false)
@@ -155,13 +174,13 @@ class PropertySeeder extends Seeder
     }
 
     /**
-     * Seed the application's database.
+     * Seed properties
      */
     public function run($user): void
     {
         $faker = Factory::create();
 
-        //$agencies = $this->generateAgencies($user->id);
+        $agencies = $this->generateAgencies($user->id);
         $characteristics = $this->generateCharacteristics($user->id);
         $photos = $this->gatherPhotosInArray();
 
@@ -181,9 +200,6 @@ class PropertySeeder extends Seeder
         for ($i = 0; $i < $num_props; $i++) {
             $address = AddressHelper::GetRandomAddress($curlHandle, $wgArr);
 
-            //MEDIA
-            //Offer Price & History
-
             $prop = Property::factory()->create(
                 [
                     'user_id' => $user->id,
@@ -192,7 +208,7 @@ class PropertySeeder extends Seeder
 
             $this->PREFIX = $prop->id;
 
-            //TODO: translate
+            // Change title
             $prop->title = $prop->typology . ' ' . $prop->type . ' ' . $faker->word() . ' em ' . $address['address_title'];
             $prop->save();
 
@@ -234,7 +250,7 @@ class PropertySeeder extends Seeder
                     if (count($photos['blueprint']) > 0) {
                         $prop->media()->create(
                             [
-                                'url' => $this->saveMediaInPublicStorage(array_pop($photos['blueprint'])),
+                                'url' => $this->savePropertyMediaInPublicStorage(array_pop($photos['blueprint'])),
                                 'type' => 'blueprint',
                                 'order' => 0,
                             ]
@@ -244,7 +260,7 @@ class PropertySeeder extends Seeder
                     if (count($videos) > 0)
                         $prop->media()->create(
                             [
-                                'url' => $this->saveMediaInPublicStorage(array_pop($videos)),
+                                'url' => $this->savePropertyMediaInPublicStorage(array_pop($videos)),
                                 'type' => 'video',
                                 'order' => 0,
                             ]
@@ -256,7 +272,7 @@ class PropertySeeder extends Seeder
                         array_map(
                             function ($url) {
                                 return [
-                                    'url' => $this->saveMediaInPublicStorage($url),
+                                    'url' => $this->savePropertyMediaInPublicStorage($url),
                                     'type' => 'image',
                                 ];
                             },
