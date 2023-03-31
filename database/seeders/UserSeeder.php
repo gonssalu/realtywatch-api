@@ -10,9 +10,9 @@ class UserSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
+    public function run($seedType): void
     {
-        $numUsers = DatabaseSeeder::$seedType === 'small' ? 1 : 5;
+        $numUsers = $seedType === 'small' ? 1 : 5;
 
         // Create a regular user
         User::factory($numUsers)->create();
