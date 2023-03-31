@@ -49,13 +49,22 @@ class ListTagSeeder extends Seeder
 
         // Assign tags to properties
         foreach ($properties as $prop) {
-            if ($faker->boolean(85))
-                $prop->tags()->attach($faker->randomElements($tags, $faker->numberBetween($tag_per_prop[0], $tag_per_prop[1])));
+            if ($faker->boolean(85)) {
+                $tags_for = $faker->randomElements($tags, $faker->numberBetween($tag_per_prop[0], $tag_per_prop[1]));
+                $tagIds = array_map(function ($tag) {
+                    return $tag->id;
+                }, $tags_for);
+                $prop->tags()->attach($tagIds);
+            }
         }
 
         // Assign properties to lists
         foreach ($lists as $list) {
-            $list->properties()->attach($faker->randomElements($properties, $faker->numberBetween($prop_per_list[0], $prop_per_list[1])));
+            $props_for = $faker->randomElements($properties, $faker->numberBetween($prop_per_list[0], $prop_per_list[1]));
+            $propIds = array_map(function ($prop) {
+                return $prop->id;
+            }, $props_for);
+            $list->properties()->attach($propIds);
         }
 
         $this->command->info("Creating an empty list and tag...");

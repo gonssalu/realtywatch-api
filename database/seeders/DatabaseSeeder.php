@@ -27,11 +27,11 @@ class DatabaseSeeder extends Seeder
         // Get the first two users
         $users = User::query()->take(2)->get();
 
-        $this->callWith(PropertySeeder::class, ['user' => $users[0], 'num_props' => $seedType === 'small' ? 10 : 100]);
-        $this->callWith(ListTagSeeder::class, ['user' => $users[0], 'qty' => $seedType === 'small' ? [1, [1, 2], 1, [1, 2]] : [7, [8, 16], 15, [1, 5]]]);
+        $this->callWith(PropertySeeder::class, ['user' => $users[0], 'num_props' => $seedType === 'small' ? 3 : 100]);
+        $this->callWith(ListTagSeeder::class, ['user' => $users[0], 'qty' => $seedType === 'small' ? [1, [1, 2], 2, [1, 2]] : [7, [8, 16], 15, [1, 5]]]);
 
         $this->callWith(PropertySeeder::class, ['user' => $users[1], 'num_props' => $seedType === 'small' ? 2 : 10]);
-        $this->callWith(ListTagSeeder::class, ['user' => $users[1], 'qty' => [1, [1, 2], 1, [1, 2]]]);
+        $this->callWith(ListTagSeeder::class, ['user' => $users[1], 'qty' => [1, [1, 2], 2, [1, 2]]]);
 
         // DO NOT RUN // $this->call(MediaSeeder::class);
 

@@ -27,6 +27,10 @@ class PropertyList extends Model
 {
     use HasFactory;
 
+    protected $table = 'lists';
+
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -60,6 +64,6 @@ class PropertyList extends Model
 
     public function properties(): BelongsToMany
     {
-        return $this->belongsToMany(Property::class)->withPivot('order');
+        return $this->belongsToMany(Property::class, 'list_property', 'list_id', 'property_id')->withPivot('order');
     }
 }

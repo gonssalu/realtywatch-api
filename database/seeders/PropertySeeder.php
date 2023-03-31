@@ -114,7 +114,7 @@ class PropertySeeder extends Seeder
         $filename = $this->PREFIX . '_' . uniqid();
         $ext = pathinfo($path, PATHINFO_EXTENSION);
 
-        $simplePath = $filename . $ext;
+        $simplePath = $filename . '.' . $ext;
 
         $new_path = "$path_to_save/$simplePath";
         Storage::put($new_path, $file);
@@ -129,7 +129,7 @@ class PropertySeeder extends Seeder
 
     public function saveAgencyMediaInPublicStorage($path)
     {
-        return $this->saveMediaInPublicStorage($this->AGENCY_PUBLIC_STORAGE_PATH, $path);
+        return $this->saveMediaInPublicStorage($this->AGENCY_PUBLIC_STORAGE_PATH, storage_path($path));
     }
 
     public function generateOfferPrice($faker, $initial_price, $perc_change, $min_num_offers, $max_num_offers, $allowLess = false)
