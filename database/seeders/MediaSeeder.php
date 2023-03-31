@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Http;
 
 class MediaSeeder extends Seeder
 {
-
     // Progress bar
     private $bar;
 
@@ -35,7 +34,7 @@ class MediaSeeder extends Seeder
                 'garage building',
                 'warehouse building',
                 'land',
-                'retail shop interior design'
+                'retail shop interior design',
             ];
 
         $videoQueries =

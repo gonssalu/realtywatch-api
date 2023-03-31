@@ -14,8 +14,11 @@ use Storage;
 class PropertySeeder extends Seeder
 {
     private $PROPERTY_STORAGE_DIR_PATH = 'app/media/properties';
+
     private $PROPERTY_PUBLIC_STORAGE_PATH = 'public/properties';
+
     private $AGENCY_STORAGE_DIR_PATH = 'app/media/agencies';
+
     private $AGENCY_PUBLIC_STORAGE_PATH = 'public/agencies';
 
     private $PREFIX = 'S';
@@ -80,8 +83,9 @@ class PropertySeeder extends Seeder
 
                 //Scan each subdir for photos
                 foreach (scandir("$photos_dir/$photo_subdir") as $photo) {
-                    if ($photo != '.' && $photo != '..')
+                    if ($photo != '.' && $photo != '..') {
                         $photos[$photo_subdir][] = "$photos_dir/$photo_subdir/" . $photo;
+                    }
                 }
 
                 shuffle($photos[$photo_subdir]);
@@ -157,7 +161,7 @@ class PropertySeeder extends Seeder
                     'agency_id' => ($faker->boolean(5) ? null : $faker->randomElement($agencies)->id),
                     'url' => $faker->url,
                     'description' => $faker->boolean ? $faker->text : null,
-                    'listing_type' => $type
+                    'listing_type' => $type,
                 ]
             );
 
@@ -236,19 +240,23 @@ class PropertySeeder extends Seeder
                 $media = [];
 
                 // Add main photo
-                if (count($photos[$prop->type]) > 0)
+                if (count($photos[$prop->type]) > 0) {
                     $media[] = array_pop($photos[$prop->type]);
+                }
 
                 // If property is a house / apartment
                 if ($prop->type == 'house' || $prop->type == 'apartment') {
                     $photoCategories = ['bedroom', 'bathroom', 'kitchen',  'living room',  'interior'];
 
-                    foreach ($photoCategories as $photoCategory)
-                        if (count($photos[$photoCategory]) > 0)
+                    foreach ($photoCategories as $photoCategory) {
+                        if (count($photos[$photoCategory]) > 0) {
                             $media[] = array_pop($photos[$photoCategory]);
+                        }
+                    }
 
-                    if (count($photos['other rooms']) > 0 && $faker->boolean(15))
+                    if (count($photos['other rooms']) > 0 && $faker->boolean(15)) {
                         $media[] = array_pop($photos['other rooms']);
+                    }
 
                     if (count($photos['blueprint']) > 0) {
                         $prop->media()->create(
@@ -260,7 +268,7 @@ class PropertySeeder extends Seeder
                         );
                     }
 
-                    if (count($videos) > 0)
+                    if (count($videos) > 0) {
                         $prop->media()->create(
                             [
                                 'url' => $this->savePropertyMediaInPublicStorage(array_pop($videos)),
@@ -268,6 +276,7 @@ class PropertySeeder extends Seeder
                                 'order' => 0,
                             ]
                         );
+                    }
                 }
 
                 if (count($media) > 0) {
@@ -291,8 +300,9 @@ class PropertySeeder extends Seeder
             $offerTypes = ['sale' => $prop->current_price_sale, 'rent' => $prop->current_price_rent];
 
             foreach ($offerTypes as $ot => $offer_listing_price) {
-                if ($offer_listing_price != null)
+                if ($offer_listing_price != null) {
                     $this->generateOffers($faker, $agencies, $prop, $ot, $offer_listing_price, 0.0625);
+                }
             }
 
             $bar->advance();

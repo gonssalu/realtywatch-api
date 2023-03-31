@@ -20,7 +20,6 @@ class MediaHelper
      * Retrieve user photo by name and store it to disk.
      *
      * @param  string  $name  The name to generate the user photo.
-     *
      * @return string The URL of the stored user photo.
      */
     public static function GetUserPhoto($name): string

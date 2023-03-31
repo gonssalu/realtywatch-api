@@ -45,7 +45,7 @@ class ListTagSeeder extends Seeder
 
         $properties = $user->properties()->get();
 
-        $this->command->info("Assigning the generated tags & lists to random properties...");
+        $this->command->info('Assigning the generated tags & lists to random properties...');
 
         // Assign tags to properties
         foreach ($properties as $prop) {
@@ -67,7 +67,7 @@ class ListTagSeeder extends Seeder
             $list->properties()->attach($propIds);
         }
 
-        $this->command->info("Creating an empty list and tag...");
+        $this->command->info('Creating an empty list and tag...');
 
         // Create an empty list
         PropertyList::create([
