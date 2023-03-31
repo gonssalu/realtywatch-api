@@ -12,12 +12,12 @@ class ListTagSeeder extends Seeder
     /**
      * Run Lists and Tags seeder.
      */
-    public function run($user): void
+    public function run($user, $qty): void
     {
-        $num_lists = 7;
-        $prop_per_list = [8, 16];
-        $num_tags = 15;
-        $tag_per_prop = [1, 5];
+        $num_lists = $qty[0];
+        $prop_per_list = $qty[1];
+        $num_tags = $qty[2];
+        $tag_per_prop = $qty[3];
 
         $faker = Factory::create();
         $userId = $user->id;

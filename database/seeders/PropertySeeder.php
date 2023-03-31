@@ -179,7 +179,7 @@ class PropertySeeder extends Seeder
     /**
      * Seed properties
      */
-    public function run($user): void
+    public function run($user, $num_props): void
     {
         $faker = Factory::create();
 
@@ -190,7 +190,6 @@ class PropertySeeder extends Seeder
         $videos = $this->gatherVideosInArray();
 
         $timeout = intval(config('factory.address.api.timeout'));
-        $num_props = 1;
 
         $this->command->warn("A $timeout second timeout will be applied between each address request to respect OpenStreetMap's API usage policy");
         $this->command->info("Generating $num_props properties for user $user->name please wait...");

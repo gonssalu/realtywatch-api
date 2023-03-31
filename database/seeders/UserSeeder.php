@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
         $numUsers = $seedType === 'small' ? 1 : 5;
 
         // Create a regular user
-        User::factory($numUsers)->create();
+        User::factory($numUsers + 1)->create();
 
         // Create a user with no profile picture
         User::factory($numUsers)->create(['photo_url' => null]);
