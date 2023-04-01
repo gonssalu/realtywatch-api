@@ -211,7 +211,11 @@ class PropertySeeder extends Seeder
             $this->PREFIX = $prop->id;
 
             // Change title
-            $prop->title = $prop->typology . ' ' . $prop->type . ' ' . $faker->word() . ' em ' . $address['address_title'];
+            $prop->title =
+                ($prop->type != 'land' ?
+                    $prop->typology . ' ' . $prop->type :
+                    ucfirst($prop->type)
+                ) . ' ' . $faker->word() . ' em ' . $address['address_title'];
             $prop->save();
 
             // Add address to property

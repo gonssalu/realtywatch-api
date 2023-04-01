@@ -32,7 +32,7 @@ class PropertyOfferPriceHistory extends Model
 {
     use HasFactory;
 
-    protected $dates = ['created_at', 'updated_at'];
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
