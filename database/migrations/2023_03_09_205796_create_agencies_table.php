@@ -18,7 +18,7 @@ class CreateAgenciesTable extends Migration
         Schema::create('agencies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('logo_url');
+            $table->text('logo_url')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->unique(['name', 'user_id']);

@@ -32,6 +32,7 @@ class PropertyOfferPriceHistory extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -41,7 +42,6 @@ class PropertyOfferPriceHistory extends Model
         'offer_id',
         'datetime',
         'price',
-        'online',
         'latest',
     ];
 
@@ -59,6 +59,6 @@ class PropertyOfferPriceHistory extends Model
 
     public function offer(): BelongsTo
     {
-        return $this->belongsTo(PropertyOffer::class);
+        return $this->belongsTo(PropertyOffer::class, 'offer_id');
     }
 }

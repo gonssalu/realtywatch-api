@@ -25,6 +25,8 @@ class PropertyAddress extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -49,6 +51,8 @@ class PropertyAddress extends Model
         'adm1_id' => 'integer',
         'adm2_id' => 'integer',
         'adm3_id' => 'integer',
+        'coordinates' => 'array',
+        'full_address' => 'string',
     ];
 
     public function property(): BelongsTo

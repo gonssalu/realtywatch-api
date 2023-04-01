@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\AdministrativeDivision;
+use Database\Seeders\helpers\SeederHelper;
 use Illuminate\Database\Seeder;
 use Str;
 
@@ -14,11 +15,11 @@ class AdministrativeDivisionSeeder extends Seeder
     }
 
     /**
-     * Seed the application's database.
+     * Run the Administrative Division seeder.
      */
     public function run(): void
     {
-        $this->command->info('Starting Administrative Divison Seeder...');
+        $this->command->info('Starting Administrative Division Seeder...');
         $freguesias = $this->getAllFreguesias();
 
         if (empty($freguesias)) {

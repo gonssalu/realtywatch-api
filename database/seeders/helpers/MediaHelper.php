@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\helpers;
 
 use Http;
 use Storage;
@@ -19,12 +19,12 @@ class MediaHelper
     /**
      * Retrieve user photo by name and store it to disk.
      *
-     * @param  string  $name The name to generate the user photo.
+     * @param  string  $name  The name to generate the user photo.
      * @return string The URL of the stored user photo.
      */
     public static function GetUserPhoto($name): string
     {
-        $photoContents = file_get_contents(config('factory.media.api.url') . urlencode($name));
+        $photoContents = file_get_contents(config('factory.media.user.avatar.api') . urlencode($name));
         $photoPath = 'public/users/' . uniqid() . '.png';
         Storage::put($photoPath, $photoContents);
 

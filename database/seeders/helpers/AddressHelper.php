@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\helpers;
 
 use App\Models\AdministrativeDivision;
 use Str;
@@ -135,9 +135,12 @@ class AddressHelper
             'postal_code' => $postalCode,
             'full_address' => $full_address,
             'coordinates' => [
-                $osm['lat'], $osm['lon'],
+                $osm['lat'],
+                $osm['lon'],
             ],
             'address_title' => $addressTitle,
         ], $admArr);
+
+        return $address;
     }
 }

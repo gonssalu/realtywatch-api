@@ -8,14 +8,18 @@ use Illuminate\Database\Seeder;
 class UserSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the User Seeder.
+     *
+     * @param  mixed  $seedType
      */
-    public function run(): void
+    public function run($seedType): void
     {
-        $numUsers = DatabaseSeeder::$seedType === 'small' ? 1 : 5;
+        $numUsers = $seedType === 'small' ? 1 : 5;
+
+        $this->command->info('Creating ' . $numUsers * 4 . ' users...');
 
         // Create a regular user
-        User::factory($numUsers)->create();
+        User::factory($numUsers + 1)->create();
 
         // Create a user with no profile picture
         User::factory($numUsers)->create(['photo_url' => null]);

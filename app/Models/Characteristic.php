@@ -75,7 +75,7 @@ class Characteristic extends Model
     {
         return match ($this->type) {
             'numerical' => $faker->boolean() ? $faker->numberBetween(1, 10000) : $faker->randomFloat(2, 1, 10000),
-            'textual' => implode(' ', $faker->words($faker->numberBetween(2, 6))),
+            'textual' => $faker->words($faker->numberBetween(2, 6), true),
             'other' => $faker->dateTime(),
             default => null,
         };

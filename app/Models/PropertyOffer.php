@@ -38,6 +38,8 @@ class PropertyOffer extends Model
 {
     use HasFactory;
 
+    protected $dates = ['created_at', 'updated_at'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -69,7 +71,7 @@ class PropertyOffer extends Model
 
     public function priceHistory(): HasMany
     {
-        return $this->hasMany(PropertyOfferPriceHistory::class);
+        return $this->hasMany(PropertyOfferPriceHistory::class, 'offer_id');
     }
 
     public function agency(): BelongsTo

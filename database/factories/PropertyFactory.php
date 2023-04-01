@@ -3,8 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Property;
-use App\Models\User;
-use Database\Seeders\SeederHelper;
+use Database\Seeders\helpers\SeederHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PropertyFactory extends Factory
@@ -22,7 +21,9 @@ class PropertyFactory extends Factory
     public function definition(): array
     {
         $all_status = ['available' => 85, 'unavailable' => 13, 'unknown' => 2];
-        $all_types = ['house' => 30, 'apartment' => 30, 'office' => 6, 'shop' => 6, 'warehouse' => 3, 'garage' => 10, 'land' => 10, 'other' => 5];
+        $all_types = [
+            'house' => 30, 'apartment' => 30, 'office' => 6, 'shop' => 6, 'warehouse' => 3, 'garage' => 10, 'land' => 10, 'other' => 5,
+        ];
         $all_listing = ['sale' => 45, 'rent' => 40, 'both' => 15];
 
         $listing_type = SeederHelper::RandomWeightedElement($all_listing);

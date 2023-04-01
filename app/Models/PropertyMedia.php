@@ -30,6 +30,8 @@ class PropertyMedia extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -38,6 +40,7 @@ class PropertyMedia extends Model
     protected $fillable = [
         'property_id',
         'type',
+        'order',
         'url',
     ];
 

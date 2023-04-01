@@ -131,7 +131,7 @@ class Property extends Model
 
     public function lists(): BelongsToMany
     {
-        return $this->belongsToMany(PropertyList::class);
+        return $this->belongsToMany(PropertyList::class, 'list_property', 'property_id', 'list_id')->withPivot('order');
     }
 
     public function media(): HasMany
