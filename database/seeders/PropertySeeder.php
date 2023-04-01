@@ -319,7 +319,8 @@ class PropertySeeder extends Seeder
                         )
                     );
 
-                    $prop->cover_url = $prop->media()->first()->url;
+                    $prop->cover_url = $prop->media()->where('type', 'image')->first()->url;
+                    $prop->save();
                 }
             }
 
