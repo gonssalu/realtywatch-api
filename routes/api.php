@@ -15,17 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    $user = $request->user();
-
-    if ($user->blocked) {
-        return response(['message' => 'Your account has been blocked'], 403);
-    }
-
-    return $user;
-});
-
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::prefix('me')->controller(UserController::class)->group(function () {
+        Route::get('/', 'show');
+        Route::put('/', 'update');
+    });
     Route::controller(PropertyController::class)->group(function () {
         Route::get('/properties', 'index');
         Route::post('/properties', 'store');
