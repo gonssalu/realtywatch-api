@@ -15,7 +15,7 @@ class AdministrativeDivisionSeeder extends Seeder
     }
 
     /**
-     * Seed the application's database.
+     * Run the Administrative Division seeder.
      */
     public function run(): void
     {

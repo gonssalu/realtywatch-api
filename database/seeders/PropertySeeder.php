@@ -14,16 +14,25 @@ use Storage;
 class PropertySeeder extends Seeder
 {
     private $PROPERTY_STORAGE_DIR_PATH = 'app/media/properties';
+
     private $PROPERTY_PUBLIC_STORAGE_PATH = 'public/properties';
+
     private $AGENCY_STORAGE_DIR_PATH = 'app/media/agencies';
+
     private $AGENCY_PUBLIC_STORAGE_PATH = 'public/agencies';
 
     private $PREFIX = 'S';
 
-    public function generateAgencies($userId)
+    public function generateAgencies($userId): array
     {
         $agencies_to_create = [
-            'iad Portugal' => 'iadportugal.jpg', 'Veigas Imobiliária' => 'veigas.jpg', 'Rainhavip' => null, 'Century 21' => 'century21.jpg', 'Engel & Völkers' => 'engelsandvolkers.jpg', 'ERA Imobiliária' => 'era.jpg', 'RE/MAX Portugal' => 'remax.jpg',
+            'iad Portugal' => 'iadportugal.jpg',
+            'Veigas Imobiliária' => 'veigas.jpg',
+            'Rainhavip' => null,
+            'Century 21' => 'century21.jpg',
+            'Engel & Völkers' => 'engelsandvolkers.jpg',
+            'ERA Imobiliária' => 'era.jpg',
+            'RE/MAX Portugal' => 'remax.jpg',
         ];
 
         $agencies = [];
@@ -48,7 +57,7 @@ class PropertySeeder extends Seeder
         return $agencies;
     }
 
-    public function generateCharacteristics($userId)
+    public function generateCharacteristics($userId): array
     {
         $num_characteristics = 20;
         $characteristics = [];
@@ -67,7 +76,7 @@ class PropertySeeder extends Seeder
         return $characteristics;
     }
 
-    public function gatherPhotosInArray()
+    public function gatherPhotosInArray(): array
     {
         $photos_dir = storage_path("$this->PROPERTY_STORAGE_DIR_PATH/photos");
         $photos = [];
@@ -80,8 +89,9 @@ class PropertySeeder extends Seeder
 
                 //Scan each subdir for photos
                 foreach (scandir("$photos_dir/$photo_subdir") as $photo) {
-                    if ($photo != '.' && $photo != '..')
+                    if ($photo != '.' && $photo != '..') {
                         $photos[$photo_subdir][] = "$photos_dir/$photo_subdir/" . $photo;
+                    }
                 }
 
                 shuffle($photos[$photo_subdir]);
@@ -91,7 +101,7 @@ class PropertySeeder extends Seeder
         return $photos;
     }
 
-    public function gatherVideosInArray()
+    public function gatherVideosInArray(): array
     {
         $videos_dir = storage_path("$this->PROPERTY_STORAGE_DIR_PATH/videos");
         $videos = [];
@@ -108,7 +118,14 @@ class PropertySeeder extends Seeder
         return $videos;
     }
 
-    public function saveMediaInPublicStorage($path_to_save, $path)
+    /**
+     * Saves a media file to the public storage directory and returns its filename.
+     *
+     * @param  string  $path_to_save The path to the directory in which to save the media file.
+     * @param  string  $path The path to the media file to save.
+     * @return string The filename of the saved media file.
+     */
+    public function saveMediaInPublicStorage($path_to_save, $path): string
     {
         $file = file_get_contents($path);
         $filename = $this->PREFIX . '_' . uniqid();
@@ -122,17 +139,17 @@ class PropertySeeder extends Seeder
         return $simplePath;
     }
 
-    public function savePropertyMediaInPublicStorage($path)
+    public function savePropertyMediaInPublicStorage($path): string
     {
         return $this->saveMediaInPublicStorage($this->PROPERTY_PUBLIC_STORAGE_PATH, $path);
     }
 
-    public function saveAgencyMediaInPublicStorage($path)
+    public function saveAgencyMediaInPublicStorage($path): string
     {
         return $this->saveMediaInPublicStorage($this->AGENCY_PUBLIC_STORAGE_PATH, storage_path($path));
     }
 
-    public function generateOfferPrice($faker, $initial_price, $perc_change, $min_num_offers, $max_num_offers, $allowLess = false)
+    public function generateOfferPrice($faker, $initial_price, $perc_change, $min_num_offers, $max_num_offers, $allowLess = false): array
     {
         $num_offers = $faker->numberBetween($min_num_offers, $max_num_offers) + 1;
         $min_price = $allowLess ? $initial_price * (1 - $perc_change) : $initial_price + 1;
@@ -148,7 +165,17 @@ class PropertySeeder extends Seeder
         return $offers;
     }
 
-    public function generateOffers($faker, $agencies, $prop, $type, $initial_price, $perc_change)
+    /**
+     * Generates offers for a given property with randomized data.
+     *
+     * @param  Faker  $faker The Faker instance to use for generating randomized data.
+     * @param  Collection  $agencies The collection of agencies to use for generating offers.
+     * @param  Property  $prop The property to generate offers for.
+     * @param  string  $type The type of listing to generate offers for.
+     * @param  float  $initial_price The initial price to use for generating offer prices.
+     * @param  float  $perc_change The percentage change to use for generating offer prices.
+     */
+    public function generateOffers($faker, $agencies, $prop, $type, $initial_price, $perc_change): void
     {
         $offerPrices = $this->generateOfferPrice($faker, $initial_price, $perc_change, 0, 3);
         foreach ($offerPrices as $offerPrice) {
@@ -157,7 +184,7 @@ class PropertySeeder extends Seeder
                     'agency_id' => ($faker->boolean(5) ? null : $faker->randomElement($agencies)->id),
                     'url' => $faker->url,
                     'description' => $faker->boolean ? $faker->text : null,
-                    'listing_type' => $type
+                    'listing_type' => $type,
                 ]
             );
 
@@ -177,7 +204,7 @@ class PropertySeeder extends Seeder
     }
 
     /**
-     * Seed properties
+     * Run the Property Seeder.
      */
     public function run($user, $num_props): void
     {
@@ -186,7 +213,6 @@ class PropertySeeder extends Seeder
         $agencies = $this->generateAgencies($user->id);
         $characteristics = $this->generateCharacteristics($user->id);
         $photos = $this->gatherPhotosInArray();
-
         $videos = $this->gatherVideosInArray();
 
         $timeout = intval(config('factory.address.api.timeout'));
@@ -194,6 +220,7 @@ class PropertySeeder extends Seeder
         $this->command->warn("A $timeout second timeout will be applied between each address request to respect OpenStreetMap's API usage policy");
         $this->command->info("Generating $num_props properties for user $user->name please wait...");
         $this->command->warn('This will take at least ' . $timeout * $num_props . ' seconds to complete');
+
         $bar = $this->command->getOutput()->createProgressBar($num_props);
 
         $wgArr = AddressHelper::GetWeightedCoordsArrayFromConfig();
@@ -240,19 +267,23 @@ class PropertySeeder extends Seeder
                 $media = [];
 
                 // Add main photo
-                if (count($photos[$prop->type]) > 0)
+                if (count($photos[$prop->type]) > 0) {
                     $media[] = array_pop($photos[$prop->type]);
+                }
 
                 // If property is a house / apartment
                 if ($prop->type == 'house' || $prop->type == 'apartment') {
                     $photoCategories = ['bedroom', 'bathroom', 'kitchen',  'living room',  'interior'];
 
-                    foreach ($photoCategories as $photoCategory)
-                        if (count($photos[$photoCategory]) > 0)
+                    foreach ($photoCategories as $photoCategory) {
+                        if (count($photos[$photoCategory]) > 0) {
                             $media[] = array_pop($photos[$photoCategory]);
+                        }
+                    }
 
-                    if (count($photos['other rooms']) > 0 && $faker->boolean(15))
+                    if (count($photos['other rooms']) > 0 && $faker->boolean(15)) {
                         $media[] = array_pop($photos['other rooms']);
+                    }
 
                     if (count($photos['blueprint']) > 0) {
                         $prop->media()->create(
@@ -264,7 +295,7 @@ class PropertySeeder extends Seeder
                         );
                     }
 
-                    if (count($videos) > 0)
+                    if (count($videos) > 0) {
                         $prop->media()->create(
                             [
                                 'url' => $this->savePropertyMediaInPublicStorage(array_pop($videos)),
@@ -272,6 +303,7 @@ class PropertySeeder extends Seeder
                                 'order' => 0,
                             ]
                         );
+                    }
                 }
 
                 if (count($media) > 0) {
@@ -295,8 +327,9 @@ class PropertySeeder extends Seeder
             $offerTypes = ['sale' => $prop->current_price_sale, 'rent' => $prop->current_price_rent];
 
             foreach ($offerTypes as $ot => $offer_listing_price) {
-                if ($offer_listing_price != null)
+                if ($offer_listing_price != null) {
                     $this->generateOffers($faker, $agencies, $prop, $ot, $offer_listing_price, 0.0625);
+                }
             }
 
             $bar->advance();

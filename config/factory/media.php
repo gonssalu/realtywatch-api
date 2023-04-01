@@ -11,6 +11,6 @@ return [
             'images' => 'https://api.pexels.com/v1/search',
             'videos' => 'https://api.pexels.com/videos/search',
             'key' => env('PEXELS_API_KEY'),
-        ]
+        ],
     ],
 ];
