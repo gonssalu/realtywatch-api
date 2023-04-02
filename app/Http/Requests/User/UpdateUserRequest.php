@@ -25,6 +25,7 @@ class UpdateUserRequest extends FormRequest
             'name' => 'required|string',
             'photo' => 'nullable|image|max:8192',
             'remove_photo' => 'nullable|boolean',
+            'email' => 'required|email|confirmed|unique:users,email,' . $this->user()->id,
         ];
     }
 }

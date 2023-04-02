@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\StorageLocation;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserResource;
+use Hash;
 use Illuminate\Http\Request;
 use Storage;
 
@@ -33,6 +34,8 @@ class UserController extends Controller
             $deleteUserPhoto = true;
         }
 
+        //TODO: Resend email verification?
+
         //Delete photo when true
         if (
             $deleteUserPhoto &&
@@ -43,5 +46,33 @@ class UserController extends Controller
         $user->update($newUser);
 
         return response(['message' => 'User updated', 'user' => new UserResource($user)]);
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required|string',
+            'new_password' => 'required|string|confirmed|between:6,128'
+        ]);
+
+        //Check if old password is correct
+        if (!Hash::check($request->old_password, $request->user()->password))
+            return response(['message' => 'Current password is incorrect'], 401);
+
+        $user = $request->user();
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        //TODO: Needs to test
+        $tokenName = $user->currentAccessToken()->name;
+
+        //Revoke tokens on pass change
+        foreach ($user->tokens as $token)
+            $token->revoke();
+
+        $newToken = $user->myCreateToken($tokenName);
+
+        return response(['message' => 'Password changed', "access_token" => $newToken]);
     }
 }

@@ -19,6 +19,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('me')->controller(UserController::class)->group(function () {
         Route::get('/', 'show');
         Route::put('/', 'update');
+        Route::patch('/password', 'changePassword');
     });
     Route::controller(PropertyController::class)->group(function () {
         Route::get('/properties', 'index');
