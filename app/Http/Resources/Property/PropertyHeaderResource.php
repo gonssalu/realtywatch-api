@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Property;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PropertyResource extends JsonResource
+class PropertyHeaderResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,14 +16,10 @@ class PropertyResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->user->id,
             'quantity' => $this->quantity,
             'listing_type' => $this->listing_type,
             'title' => $this->title,
-            'description' => $this->description,
             'cover_url' => $this->cover_url,
-            'useful_area' => $this->useful_area,
-            'gross_area' => $this->gross_area,
             'type' => $this->type,
             'typology' => $this->typology,
             'wc' => $this->wc,

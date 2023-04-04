@@ -20,9 +20,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', 'show');
         Route::put('/', 'update');
         Route::patch('/password', 'changePassword');
-    });
-    Route::controller(PropertyController::class)->group(function () {
-        Route::get('/properties', 'index');
-        //Route::post('/properties', 'store');
+        Route::controller(PropertyController::class)->group(function () {
+            Route::prefix('{property}')->middleware('property.owner')->group(function () {
+                Route::get('/', 'show');
+                Route::get('/details', 'showDetails');
+            });
+
+            Route::get('/properties', 'index');
+            //Route::post('/properties', 'store');
+        });
     });
 });

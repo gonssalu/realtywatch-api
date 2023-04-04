@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\PropertyResource;
+use App\Http\Resources\Property\PropertyDetailsResource;
+use App\Http\Resources\Property\PropertyFullResource;
+use App\Http\Resources\Property\PropertyHeaderResource;
+use App\Http\Resources\Property\PropertyResource;
 use App\Models\Property;
 use Illuminate\Http\Request;
 
@@ -16,7 +19,7 @@ class PropertyController extends Controller
         $user = $request->user();
         $properties = $user->properties()->paginate(10);
 
-        return PropertyResource::collection($properties);
+        return PropertyHeaderResource::collection($properties);
     }
 
     /**
@@ -42,7 +45,12 @@ class PropertyController extends Controller
      */
     public function show(Property $property)
     {
-        //
+        return new PropertyFullResource($property);
+    }
+
+    public function showDetails(Property $property)
+    {
+        return new PropertyDetailsResource($property);
     }
 
     /**
