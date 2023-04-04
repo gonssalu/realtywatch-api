@@ -23,6 +23,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::controller(PropertyController::class)->group(function () {
         Route::get('/properties', 'index');
-        Route::post('/properties', 'store');
+        //Route::post('/properties', 'store');
     });
 });

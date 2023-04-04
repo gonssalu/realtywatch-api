@@ -24,6 +24,7 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
+        /*TODO: Needs planning
         $user = $request->user();
         $property = $user->properties()->create($request->all());
 
@@ -33,7 +34,7 @@ class PropertyController extends Controller
                 'property' => new PropertyResource($property),
             ],
             201
-        );
+        );*/
     }
 
     /**
