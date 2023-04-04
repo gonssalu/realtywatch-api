@@ -27,8 +27,8 @@ class PropertyFullResource extends JsonResource
             'typology' => $this->typology,
             'wc' => $this->wc,
             'rating' => $this->rating,
-            'current_price_sale' => $this->email,
-            'current_price_rent' => $this->photo_url,
+            'current_price_sale' => $this->current_price_sale,
+            'current_price_rent' => $this->current_price_rent,
             'status' => $this->status,
         ];
     }
