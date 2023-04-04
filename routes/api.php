@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ListController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::patch('/password', 'changePassword');
 
         Route::prefix('properties')->controller(PropertyController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/', 'store');
+        });
+
+        Route::prefix('lists')->controller(ListController::class)->group(function () {
             Route::get('/', 'index');
             Route::post('/', 'store');
         });
