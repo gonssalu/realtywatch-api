@@ -14,6 +14,7 @@ class UserController extends Controller
     public function show(Request $request)
     {
         $user = $request->user();
+
         return new UserResource($user);
     }
 
@@ -29,7 +30,7 @@ class UserController extends Controller
             unset($newUser['photo']);
 
             $deleteUserPhoto = true;
-        } else if ($request->has('remove_photo') && $request->remove_photo) {
+        } elseif ($request->has('remove_photo') && $request->remove_photo) {
             $newUser['photo_url'] = null;
             $deleteUserPhoto = true;
         }
@@ -40,8 +41,9 @@ class UserController extends Controller
         if (
             $deleteUserPhoto &&
             $user->photo_url
-        )
+        ) {
             Storage::delete(StorageLocation::USER_PHOTOS . '/' . $user->photo_url);
+        }
 
         $user->update($newUser);
 
@@ -52,12 +54,13 @@ class UserController extends Controller
     {
         $request->validate([
             'old_password' => 'required|string',
-            'new_password' => 'required|string|confirmed|between:6,128'
+            'new_password' => 'required|string|confirmed|between:6,128',
         ]);
 
         //Check if old password is correct
-        if (!Hash::check($request->old_password, $request->user()->password))
+        if (!Hash::check($request->old_password, $request->user()->password)) {
             return response(['message' => 'Current password is incorrect'], 401);
+        }
 
         $user = $request->user();
 
@@ -68,11 +71,12 @@ class UserController extends Controller
         $tokenName = $user->currentAccessToken()->name;
 
         //Revoke tokens on pass change
-        foreach ($user->tokens as $token)
+        foreach ($user->tokens as $token) {
             $token->revoke();
+        }
 
         $newToken = $user->myCreateToken($tokenName);
 
-        return response(['message' => 'Password changed', "access_token" => $newToken]);
+        return response(['message' => 'Password changed', 'access_token' => $newToken]);
     }
 }
