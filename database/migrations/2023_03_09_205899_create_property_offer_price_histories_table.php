@@ -19,7 +19,7 @@ class CreatePropertyOfferPriceHistoriesTable extends Migration
             $table->unsignedBigInteger('offer_id');
             $table->foreign('offer_id')->references('id')->on('property_offers');
             $table->dateTime('datetime');
-            $table->decimal('price', 9, 2)->nullable();
+            $table->decimal('price', 11, 2)->nullable();
             $table->boolean('latest');
             $table->primary(['offer_id', 'datetime']);
         });

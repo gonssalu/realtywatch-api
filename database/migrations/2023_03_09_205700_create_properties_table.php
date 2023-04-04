@@ -30,8 +30,8 @@ class CreatePropertiesTable extends Migration
             $table->string('typology')->nullable();
             $table->tinyInteger('wc')->nullable();
             $table->tinyInteger('rating')->nullable();
-            $table->decimal('current_price_sale', 9, 2)->nullable();
-            $table->decimal('current_price_rent', 9, 2)->nullable();
+            $table->decimal('current_price_sale', 11, 2)->nullable();
+            $table->decimal('current_price_rent', 11, 2)->nullable();
             $table->enum('status', ['available', 'unavailable', 'unknown'])->default('unknown');
             $table->index('title');
             $table->index('description');
