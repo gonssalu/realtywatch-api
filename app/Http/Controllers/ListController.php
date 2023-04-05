@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePropertyListRequest;
-use App\Http\Requests\UpdatePropertyListRequest;
+use App\Http\Requests\List\StorePropertyListRequest;
+use App\Http\Requests\List\UpdatePropertyListRequest;
 use App\Http\Resources\ListResource;
 use App\Models\PropertyList;
 use Illuminate\Http\Request;
