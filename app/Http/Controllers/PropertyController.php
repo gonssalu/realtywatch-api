@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Property\SearchPropertyRequest;
 use App\Http\Resources\Property\PropertyDetailsResource;
 use App\Http\Resources\Property\PropertyFullResource;
 use App\Http\Resources\Property\PropertyHeaderResource;
@@ -51,6 +52,16 @@ class PropertyController extends Controller
     public function showDetails(Property $property)
     {
         return new PropertyDetailsResource($property);
+    }
+
+    public function search(SearchPropertyRequest $request)
+    {
+        $search = $request->validated();
+        $ui = $request->user()->id;
+
+        $properties = Property::whereUserId($ui)->where('title', 'like', '%' . $search['query'] . '%')->paginate(10);
+
+        return PropertyHeaderResource::collection($properties);
     }
 
     /**

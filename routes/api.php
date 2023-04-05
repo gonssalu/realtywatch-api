@@ -25,6 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('properties')->controller(PropertyController::class)->group(function () {
             Route::get('/', 'index');
             Route::post('/', 'store');
+            Route::get('/search', 'search');
         });
 
         Route::prefix('lists')->controller(ListController::class)->group(function () {
