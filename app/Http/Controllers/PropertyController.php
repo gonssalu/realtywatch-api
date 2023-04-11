@@ -8,7 +8,6 @@ use App\Http\Resources\Property\PropertyFullResource;
 use App\Http\Resources\Property\PropertyHeaderResource;
 use App\Http\Resources\Property\PropertyResource;
 use App\Models\Property;
-use DB;
 use Illuminate\Http\Request;
 
 class PropertyController extends Controller
@@ -63,8 +62,9 @@ class PropertyController extends Controller
         // Search for a property with the query
         $properties = Property::query()->whereUserId($ui);
 
-        if (isset($search['query']))
+        if (isset($search['query'])) {
             $properties->where('title', 'like', '%' . $search['query'] . '%');
+        }
 
         if (isset($search['tags'])) {
             $tags = json_decode($search['tags'], true);

@@ -25,7 +25,7 @@ class SearchPropertyRequest extends FormRequest
             'query' => 'string|required_without_all:tags,adm_id',
             'tags' => 'json|required_without_all:query,adm_id',
             'adm_level' => 'integer|between:1,3|required_with:adm_id',
-            'adm_id' => 'integer|required_without_all:query,tags'
+            'adm_id' => 'integer|required_without_all:query,tags',
         ];
     }
 }
