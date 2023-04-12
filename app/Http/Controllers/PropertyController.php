@@ -6,7 +6,6 @@ use App\Http\Requests\Property\SearchPropertyRequest;
 use App\Http\Resources\Property\PropertyDetailsResource;
 use App\Http\Resources\Property\PropertyFullResource;
 use App\Http\Resources\Property\PropertyHeaderResource;
-use App\Http\Resources\Property\PropertyResource;
 use App\Models\Property;
 use Illuminate\Http\Request;
 
@@ -28,7 +27,7 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-        /*TODO: Needs planning
+        /* TODO: Needs planning
         $user = $request->user();
         $property = $user->properties()->create($request->all());
 
@@ -38,7 +37,8 @@ class PropertyController extends Controller
                 'property' => new PropertyResource($property),
             ],
             201
-        );*/
+        );
+        */
     }
 
     /**
@@ -103,6 +103,6 @@ class PropertyController extends Controller
      */
     public function destroy(Property $property)
     {
-        //
+        $property->delete();
     }
 }

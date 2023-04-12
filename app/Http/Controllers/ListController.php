@@ -34,7 +34,7 @@ class ListController extends Controller
      */
     public function show(PropertyList $propertyList)
     {
-        // return new ListResource($propertyList);
+        return new ListResource($propertyList);
     }
 
     /**
@@ -50,6 +50,6 @@ class ListController extends Controller
      */
     public function destroy(PropertyList $propertyList)
     {
-        //
+        $propertyList->delete();
     }
 }
