@@ -56,6 +56,7 @@ class PropertyController extends Controller
 
     public function search(SearchPropertyRequest $request)
     {
+        //TODO: Isto ser algo geral para ser chamado dentro de cenas ooo NASTY THOU! IT WORK OM>G
         $search = $request->validated();
         $ui = $request->user()->id;
 
