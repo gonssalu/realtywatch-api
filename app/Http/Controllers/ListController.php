@@ -16,7 +16,7 @@ class ListController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $lists = $user->lists()->paginate(10);
+        $lists = $user->lists()->paginate(...$request->pagination)->appends(['per_page' => $request->pagination[0]]);
 
         return ListResource::collection($lists);
     }
@@ -32,8 +32,12 @@ class ListController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PropertyList $propertyList)
+    public function show(Request $request, PropertyList $propertyList)
     {
+        //get 'query' parameter from request
+
+
+        //'properties' => PropertyHeaderResource::collection($this->properties->paginate(10))
         return new ListResource($propertyList);
     }
 

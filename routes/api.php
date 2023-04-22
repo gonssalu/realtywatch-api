@@ -29,9 +29,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
 
         Route::prefix('lists')->controller(ListController::class)->group(function () {
-            Route::get('/', 'index');
+            Route::middleware('pagination')->group(function () {
+                Route::get('/', 'index');
+                Route::get('/{propertyList}', 'show');
+            });
             Route::post('/', 'store');
-            Route::get('/{propertyList}', 'show');
         });
     });
 
