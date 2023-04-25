@@ -20,6 +20,7 @@ class ListResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             /*'properties' => PropertyHeaderResource::collection($this->properties),*/
+            'num_properties' => $this->properties->count(),
         ];
     }
 }
