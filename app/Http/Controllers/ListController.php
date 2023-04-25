@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\List\StorePropertyListRequest;
 use App\Http\Requests\List\UpdatePropertyListRequest;
 use App\Http\Resources\ListResource;
+use App\Http\Resources\Property\PropertyHeaderResource;
 use App\Models\PropertyList;
 use Illuminate\Http\Request;
 
@@ -34,7 +35,15 @@ class ListController extends Controller
      */
     public function show(PropertyList $propertyList)
     {
-        return new ListResource($propertyList);
+        $propertyList->loadMissing('properties');
+        $properties = $propertyList->properties()->paginate(10);
+
+        $data = [
+            'list' => new ListResource($propertyList),
+            'properties' => PropertyHeaderResource::collection($properties),
+        ];
+
+        return $data;
     }
 
     /**
