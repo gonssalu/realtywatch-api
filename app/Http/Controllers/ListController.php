@@ -38,6 +38,7 @@ class ListController extends Controller
         $propertyList->loadMissing('properties');
         $properties = $propertyList->properties()->paginate(10);
 
+        // TODO: Fix pagination
         $data = [
             'list' => new ListResource($propertyList),
             'properties' => PropertyHeaderResource::collection($properties),
