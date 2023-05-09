@@ -14,6 +14,8 @@ class PropertyFullResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $characteristics = $this->characteristics;
+        $address = new PropertyAddressResource($this->address);
         return [
             'id' => $this->id,
             'quantity' => $this->quantity,
@@ -30,6 +32,8 @@ class PropertyFullResource extends JsonResource
             'current_price_sale' => $this->current_price_sale,
             'current_price_rent' => $this->current_price_rent,
             'status' => $this->status,
+            'address' => $address,
+            'characteristics' => $characteristics,
         ];
     }
 }

@@ -49,11 +49,6 @@ class PropertyController extends Controller
         return new PropertyFullResource($property);
     }
 
-    public function showDetails(Property $property)
-    {
-        return new PropertyDetailsResource($property);
-    }
-
     public function search(SearchPropertyRequest $request)
     {
         //TODO: Isto ser algo geral para ser chamado dentro de cenas ooo NASTY THOU! IT WORK OM>G

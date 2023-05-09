@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Grimzy\LaravelMysqlSpatial\Types\Point;
 
 /**
  * App\Models\PropertyAddress
@@ -39,7 +41,6 @@ class PropertyAddress extends Model
         'adm2_id',
         'adm3_id',
         'full_address',
-        'coordinates',
     ];
 
     /**
@@ -51,9 +52,46 @@ class PropertyAddress extends Model
         'adm1_id' => 'integer',
         'adm2_id' => 'integer',
         'adm3_id' => 'integer',
-        'coordinates' => 'array',
-        'full_address' => 'string',
+        'full_address' => 'string'
     ];
+
+    protected $geometry = ['coordinates'];
+
+    /**
+     * Select geometrical attributes as text from database.
+     *
+     * @var bool
+     */
+    protected $geometryAsText = true;
+
+    /**
+     * Get a new query builder for the model's table.
+     * Manipulate in case we need to convert geometrical fields to text.
+     *
+     * @param  bool $excludeDeleted
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function newQuery($excludeDeleted = true)
+    {
+        if (!empty($this->geometry) && $this->geometryAsText === true) {
+            $raw = '';
+            foreach ($this->geometry as $column) {
+                $raw .= 'ST_X(`' . $this->table . '`.`' . $column . '`) as `' . $column . '_lat`, ST_Y(`' . $this->table . '`.`' . $column . '`) as `' . $column . '_lon`, ';
+            }
+            $raw = substr($raw, 0, -2);
+
+            return parent::newQuery($excludeDeleted)->addSelect('*', DB::raw($raw));
+        }
+
+        return parent::newQuery($excludeDeleted);
+    }
+
+    // Override coordinates attribute
+    public function getCoordinatesAttribute()
+    {
+        return ['latitude' => $this->coordinates_lat, 'longitude' => $this->coordinates_lon];
+    }
 
     public function property(): BelongsTo
     {
