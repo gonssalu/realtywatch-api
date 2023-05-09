@@ -45,7 +45,7 @@ class PropertyFactory extends Factory
                 $wc = 1;
             }
 
-            $typology = 'T' . $typology;
+            $typology = $typology;
         }
 
         $extraArray = [];
