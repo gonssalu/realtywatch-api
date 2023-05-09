@@ -14,8 +14,15 @@ class PropertyFullResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $characteristics = $this->characteristics;
+        $media = [
+            "photos" => PropertyMediaResource::collection($this->photos()),
+            "videos" => PropertyMediaResource::collection(
+                $this->videos()
+            ),
+            "blueprints" => PropertyMediaResource::collection($this->blueprints()),
+        ];
         $address = new PropertyAddressResource($this->address);
+        $characteristics = PropertyCharacteristicResource::collection($this->characteristics);
         return [
             'id' => $this->id,
             'quantity' => $this->quantity,
@@ -34,6 +41,7 @@ class PropertyFullResource extends JsonResource
             'status' => $this->status,
             'address' => $address,
             'characteristics' => $characteristics,
+            'media' => $media,
         ];
     }
 }

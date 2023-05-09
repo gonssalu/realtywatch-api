@@ -139,6 +139,21 @@ class Property extends Model
         return $this->hasMany(PropertyMedia::class);
     }
 
+    public function photos()
+    {
+        return $this->media->where('type', 'image');
+    }
+
+    public function videos()
+    {
+        return $this->media->where('type', 'video');
+    }
+
+    public function blueprints()
+    {
+        return $this->media->where('type', 'blueprint');
+    }
+
     public function address(): HasOne
     {
         return $this->hasOne(PropertyAddress::class);
