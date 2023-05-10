@@ -16,13 +16,13 @@ class ListWithPropertiesResource extends JsonResource
     public function toArray(Request $request): array
     {
         $properties = $this->properties()->paginate(12);
-        PropertyHeaderResource::collection($properties); //This line is required
+        //This line is required
         return [
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
             'num_properties' => $this->properties->count(),
-            'properties' => $properties,
+            'properties' => PropertyHeaderResource::collection($properties)->response()->getData(true),
         ];
     }
 }
