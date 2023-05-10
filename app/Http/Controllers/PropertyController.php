@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Property\SearchPropertyRequest;
-use App\Http\Resources\Property\PropertyDetailsResource;
 use App\Http\Resources\Property\PropertyFullResource;
 use App\Http\Resources\Property\PropertyHeaderResource;
 use App\Models\Property;

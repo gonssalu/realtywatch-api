@@ -6,7 +6,6 @@ use DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Grimzy\LaravelMysqlSpatial\Types\Point;
 
 /**
  * App\Models\PropertyAddress
@@ -52,7 +51,7 @@ class PropertyAddress extends Model
         'adm1_id' => 'integer',
         'adm2_id' => 'integer',
         'adm3_id' => 'integer',
-        'full_address' => 'string'
+        'full_address' => 'string',
     ];
 
     protected $geometry = ['coordinates'];
@@ -68,8 +67,7 @@ class PropertyAddress extends Model
      * Get a new query builder for the model's table.
      * Manipulate in case we need to convert geometrical fields to text.
      *
-     * @param  bool $excludeDeleted
-     *
+     * @param  bool  $excludeDeleted
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function newQuery($excludeDeleted = true)
