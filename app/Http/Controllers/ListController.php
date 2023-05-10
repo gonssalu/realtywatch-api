@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Helpers\PaginationHelper;
 use App\Http\Requests\List\StorePropertyListRequest;
 use App\Http\Requests\List\UpdatePropertyListRequest;
-use App\Http\Resources\ListResource;
+use App\Http\Resources\List\ListResource;
+use App\Http\Resources\List\ListWithPropertiesResource;
 use App\Http\Resources\Property\PropertyHeaderResource;
 use App\Models\PropertyList;
 use Illuminate\Http\Request;
@@ -49,15 +50,7 @@ class ListController extends Controller
      */
     public function show(PropertyList $propertyList)
     {
-        $properties = $propertyList->properties()->paginate(12);
-        PropertyHeaderResource::collection($properties); //This line is required
-
-        $data = [
-            'list' => new ListResource($propertyList),
-            'properties' => $properties,
-        ];
-
-        return $data;
+        return new ListWithPropertiesResource($propertyList);
     }
 
     /**
