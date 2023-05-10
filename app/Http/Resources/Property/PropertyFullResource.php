@@ -21,6 +21,7 @@ class PropertyFullResource extends JsonResource
         ];
         $address = new PropertyAddressResource($this->address);
         $characteristics = PropertyCharacteristicResource::collection($this->characteristics);
+        $tags = PropertyTagResource::collection($this->tags);
 
         return [
             'id' => $this->id,
@@ -40,6 +41,7 @@ class PropertyFullResource extends JsonResource
             'status' => $this->status,
             'address' => $address,
             'characteristics' => $characteristics,
+            'tags' => $tags,
             'media' => $media,
         ];
     }
