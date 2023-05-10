@@ -24,14 +24,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::prefix('properties')->controller(PropertyController::class)->group(function () {
             Route::get('/', 'index');
-            Route::post('/', 'store');
             Route::get('/{property}', 'show');
-            Route::post('/search', 'search');
         });
 
         Route::prefix('lists')->controller(ListController::class)->group(function () {
             Route::get('/', 'index');
-            Route::post('/', 'store');
+            Route::get('/all', 'indexAll');
             Route::get('/{propertyList}', 'show');
         });
     });
