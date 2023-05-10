@@ -15,7 +15,7 @@ class PropertyMediaResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'order' => $this->order,
+            /*'order' => $this->order,*/
             'url' => $this->full_url,
         ];
     }

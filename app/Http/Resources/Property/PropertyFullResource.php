@@ -15,9 +15,9 @@ class PropertyFullResource extends JsonResource
     public function toArray(Request $request): array
     {
         $media = [
-            'photos' => PropertyMediaResource::collection($this->photos()),
-            'videos' => PropertyMediaResource::collection($this->videos()),
-            'blueprints' => PropertyMediaResource::collection($this->blueprints()),
+            'photos' => PropertyMediaResource::collection($this->photos()->sortBy('order')),
+            'videos' => PropertyMediaResource::collection($this->videos()->sortBy('order')),
+            'blueprints' => PropertyMediaResource::collection($this->blueprints()->sortBy('order')),
         ];
         $address = new PropertyAddressResource($this->address);
         $characteristics = PropertyCharacteristicResource::collection($this->characteristics);
