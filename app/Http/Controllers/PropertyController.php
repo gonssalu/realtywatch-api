@@ -10,16 +10,6 @@ use Illuminate\Http\Request;
 
 class PropertyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
-    {
-        $user = $request->user();
-        $properties = $user->properties()->paginate(10);
-
-        return PropertyHeaderResource::collection($properties);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -48,26 +38,41 @@ class PropertyController extends Controller
         return new PropertyFullResource($property);
     }
 
-    public function search(SearchPropertyRequest $request)
+    public function index(SearchPropertyRequest $request)
     {
         //TODO: Isto ser algo geral para ser chamado dentro de cenas ooo NASTY THOU! IT WORK OM>G
         $search = $request->validated();
-        $ui = $request->user()->id;
+        $properties = $request->user()->properties();
 
         // Search for a property with the query
-        $properties = Property::query()->whereUserId($ui);
-
         if (isset($search['query'])) {
-            $properties->where('title', 'like', '%' . $search['query'] . '%');
+            $properties->where('title', 'like', '%' . $search['query'] . '%')->orWhere('description', 'like', '%' . $search['query'] . '%');
         }
 
-        if (isset($search['tags'])) {
-            $tags = json_decode($search['tags'], true);
+        // Check if property is in the specified list
+        if (isset($search['list_id'])) {
+            $listId = $search['list_id'];
+            $properties->whereHas('lists', function ($query) use ($listId) {
+                $query->where('id', $listId);
+            }, '=', 1);
+        }
 
-            // Check if property has all tags
+        // Check if property has all tags
+        if (isset($search['include_tags'])) {
+            $tags = json_decode($search['include_tags'], true);
+
             $properties->whereHas('tags', function ($query) use ($tags) {
-                $query->whereIn('name', $tags);
+                $query->whereIn('id', $tags);
             }, '=', count($tags));
+        }
+
+        //Check if property has none of the tags
+        if (isset($search['exclude_tags'])) {
+            $tags = json_decode($search['exclude_tags'], true);
+
+            $properties->whereHas('tags', function ($query) use ($tags) {
+                $query->whereIn('id', $tags);
+            }, '=', 0);
         }
 
         // Check if property is in the specified administrative area
@@ -81,7 +86,7 @@ class PropertyController extends Controller
         }
 
         return PropertyHeaderResource::collection(
-            $properties->paginate(10)
+            $properties->paginate(12)
         );
     }
 
