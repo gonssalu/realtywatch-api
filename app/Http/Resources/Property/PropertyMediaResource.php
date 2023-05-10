@@ -16,8 +16,7 @@ class PropertyMediaResource extends JsonResource
     {
         return [
             'order' => $this->order,
-            // TODO: é assim que se manda o url?
-            'url' => 'storage/properties/' . $this->url,
+            'url' => $this->full_url,
         ];
     }
 }

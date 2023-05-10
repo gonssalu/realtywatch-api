@@ -130,4 +130,9 @@ class User extends Authenticatable
     {
         return $this->createToken($deviceName)->plainTextToken;
     }
+
+    public function getFullPhotoUrlAttribute(): string
+    {
+        return asset('storage/users/' . $this->photo_url);
+    }
 }

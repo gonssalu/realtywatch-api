@@ -19,7 +19,7 @@ class PropertyHeaderResource extends JsonResource
             'quantity' => $this->quantity,
             'listing_type' => $this->listing_type,
             'title' => $this->title,
-            'cover_url' => $this->cover_url,
+            'cover_url' => $this->full_cover_url,
             'type' => $this->type,
             'typology' => $this->typology,
             'wc' => $this->wc,

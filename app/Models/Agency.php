@@ -65,4 +65,9 @@ class Agency extends Model
     {
         return $this->hasMany(PropertyOffer::class);
     }
+
+    public function getFullLogoUrlAttribute(): string
+    {
+        return asset('storage/agencies/' . $this->logo_url);
+    }
 }

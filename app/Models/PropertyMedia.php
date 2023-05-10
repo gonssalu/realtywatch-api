@@ -54,6 +54,11 @@ class PropertyMedia extends Model
         'property_id' => 'integer',
     ];
 
+    public function getFullUrlAttribute(): string
+    {
+        return asset('storage/properties/' . $this->url);
+    }
+
     public function property(): BelongsTo
     {
         return $this->belongsTo(Property::class);

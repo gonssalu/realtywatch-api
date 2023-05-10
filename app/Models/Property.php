@@ -119,6 +119,11 @@ class Property extends Model
         //TODO: ADD DECIMALS
     ];
 
+    public function getFullCoverUrlAttribute(): string
+    {
+        return asset('storage/properties/' . $this->cover_url);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

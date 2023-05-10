@@ -28,7 +28,7 @@ class PropertyFullResource extends JsonResource
             'listing_type' => $this->listing_type,
             'title' => $this->title,
             'description' => $this->description,
-            'cover_url' => $this->cover_url,
+            'cover_url' => $this->full_cover_url,
             'useful_area' => $this->useful_area,
             'gross_area' => $this->gross_area,
             'type' => $this->type,
