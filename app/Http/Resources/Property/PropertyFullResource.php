@@ -15,14 +15,13 @@ class PropertyFullResource extends JsonResource
     public function toArray(Request $request): array
     {
         $media = [
-            "photos" => PropertyMediaResource::collection($this->photos()),
-            "videos" => PropertyMediaResource::collection(
-                $this->videos()
-            ),
-            "blueprints" => PropertyMediaResource::collection($this->blueprints()),
+            'photos' => PropertyMediaResource::collection($this->photos()),
+            'videos' => PropertyMediaResource::collection($this->videos()),
+            'blueprints' => PropertyMediaResource::collection($this->blueprints()),
         ];
         $address = new PropertyAddressResource($this->address);
         $characteristics = PropertyCharacteristicResource::collection($this->characteristics);
+
         return [
             'id' => $this->id,
             'quantity' => $this->quantity,
