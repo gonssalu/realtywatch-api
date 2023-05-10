@@ -20,8 +20,7 @@ class ListController extends Controller
         $user = $request->user();
         $lists = $user->lists();
 
-        $lists =
-            PaginationHelper::paginate($lists, request(), 10);
+        $lists = $lists->paginate(12);
 
         return ListResource::collection($lists);
     }
@@ -50,15 +49,13 @@ class ListController extends Controller
      */
     public function show(PropertyList $propertyList)
     {
-        $properties = PaginationHelper::paginate($propertyList->properties(), request(), 12);
-        PropertyHeaderResource::collection($properties);
+        $properties = $propertyList->properties()->paginate(12);
+        PropertyHeaderResource::collection($properties); //This line is required
 
         $data = [
             'list' => new ListResource($propertyList),
-            'properties' => $properties->toArray(),
+            'properties' => $properties,
         ];
-
-        //$data = PropertyHeaderResource::collection($properties);
 
         return $data;
     }
