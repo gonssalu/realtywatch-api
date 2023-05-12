@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\PaginationHelper;
 use App\Http\Requests\List\StorePropertyListRequest;
 use App\Http\Requests\List\UpdatePropertyListRequest;
 use App\Http\Resources\List\ListResource;
 use App\Http\Resources\List\ListWithPropertiesResource;
-use App\Http\Resources\Property\PropertyHeaderResource;
 use App\Models\PropertyList;
 use Illuminate\Http\Request;
 
