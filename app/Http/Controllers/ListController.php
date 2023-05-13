@@ -30,7 +30,7 @@ class ListController extends Controller
     public function indexAll(Request $request)
     {
         $user = $request->user();
-        $lists = $user->lists();
+        $lists = $user->lists()->get();
 
         return ListResource::collection($lists);
     }
