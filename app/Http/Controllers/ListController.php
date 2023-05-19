@@ -25,6 +25,17 @@ class ListController extends Controller
     }
 
     /**
+     * Display a FULL listing of the resources that have properties.
+     */
+    public function indexSidebar(Request $request)
+    {
+        $user = $request->user();
+        $lists = $user->lists()->has('properties')->get();
+
+        return ["data" => ListResource::collection($lists), 'total' => $user->lists()->count()];
+    }
+
+    /**
      * Display a FULL listing of the resource.
      */
     public function indexAll(Request $request)
@@ -32,7 +43,7 @@ class ListController extends Controller
         $user = $request->user();
         $lists = $user->lists()->get();
 
-        return ListResource::collection($lists);
+        return ["data" => ListResource::collection($lists), 'total' => $user->lists()->count()];
     }
 
     /**

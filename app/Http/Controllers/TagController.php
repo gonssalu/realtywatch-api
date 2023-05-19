@@ -8,12 +8,25 @@ use Illuminate\Http\Request;
 class TagController extends Controller
 {
     /**
-     * Display a FULL listing of the resource.
+     * Display a paginated listing of the resource.
      */
-    public function indexAll(Request $request)
+    public function index(Request $request)
     {
         $user = $request->user();
-        $tags = $user->tags()->get();
+        $tags = $user->tags();
+
+        $tags = $tags->paginate(12);
+
+        return TagResource::collection($tags);
+    }
+
+    /**
+     * Display a FULL listing of the resources that have properties.
+     */
+    public function indexSidebar(Request $request)
+    {
+        $user = $request->user();
+        $tags = $user->tags()->has('properties')->get();
 
         return TagResource::collection($tags);
     }

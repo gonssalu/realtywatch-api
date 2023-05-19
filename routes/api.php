@@ -30,12 +30,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::prefix('lists')->controller(ListController::class)->group(function () {
             Route::get('/', 'index');
+            Route::get('/sidebar', 'indexSidebar');
             Route::get('/all', 'indexAll');
             Route::get('/{propertyList}', 'show');
         });
 
         Route::prefix('tags')->controller(TagController::class)->group(function () {
-            Route::get('/', 'indexAll');
+            Route::get('/', 'index');
+            Route::get('/sidebar', 'indexSidebar');
         });
     });
 
