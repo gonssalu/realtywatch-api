@@ -51,9 +51,31 @@ class AdministrativeDivision extends Model
         'parent_id' => 'integer',
     ];
 
-    public function addresses(): HasMany
+    public function addresses1(): HasMany
     {
-        return $this->hasMany(Address::class, 'adm_' . $this->level);
+        return $this->hasMany(PropertyAddress::class, 'adm1_id');
+    }
+
+    public function addresses2(): HasMany
+    {
+        return $this->hasMany(PropertyAddress::class, 'adm2_id');
+    }
+
+    public function addresses3(): HasMany
+    {
+        return $this->hasMany(PropertyAddress::class, 'adm3_id');
+    }
+
+    public function addresses()
+    {
+        switch ($this->level) {
+            case 1:
+                return $this->addresses1();
+            case 2:
+                return $this->addresses2();
+            case 3:
+                return $this->addresses3();
+        }
     }
 
     public function children(): HasMany

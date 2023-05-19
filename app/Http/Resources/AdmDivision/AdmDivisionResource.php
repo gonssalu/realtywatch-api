@@ -18,11 +18,15 @@ class AdmDivisionResource extends JsonResource
         $adm = [
             'id' => $this->id,
             'name' => $this->name,
+            'level' => $this->level,
             'has_children' => $has_children,
         ];
 
         if ($has_children) {
-            return array_merge($adm, ['children' => AdmDivisionResource::collection($this->children)]);
+            $children = $this->children()->whereHas('addresses' . ($this->level + 1), function ($query) use ($request) {
+                $query->where('user_id', $request->user()->id);
+            })->get();
+            return array_merge($adm, ['children' => AdmDivisionResource::collection($children)]);
         }
 
         return $adm;

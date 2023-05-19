@@ -13,7 +13,9 @@ class AdmDivisionController extends Controller
      */
     public function index(Request $request)
     {
-        $adm = AdministrativeDivision::whereLevel(1)->get();
+        $adm = AdministrativeDivision::whereLevel(1)->whereHas('addresses1', function ($query) use ($request) {
+            $query->where('user_id', $request->user()->id);
+        })->get();
 
         return AdmDivisionResource::collection($adm);
     }
