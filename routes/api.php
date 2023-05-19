@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdmDivisionController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\TagController;
@@ -47,4 +48,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/details', 'showDetails');
         });
     });
+
+    /*Route::prefix('administrative-divisions')->controller(AdmDivisionController::class)->group(function () {
+        Route::get('/', 'index');
+    });*/
 });
