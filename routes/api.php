@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/', 'index');
             Route::get('/all', 'indexAll');
             Route::get('/{propertyList}', 'show');
+        });
+
+        Route::prefix('tags')->controller(TagController::class)->group(function () {
+            Route::get('/', 'indexAll');
         });
     });
 
