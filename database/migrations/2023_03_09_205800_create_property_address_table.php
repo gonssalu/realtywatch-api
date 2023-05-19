@@ -18,6 +18,8 @@ class CreatePropertyAddressTable extends Migration
         Schema::create('property_addresses', function (Blueprint $table) {
             $table->unsignedBigInteger('property_id')->primary();
             $table->foreign('property_id')->references('id')->on('properties');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('adm1_id')->nullable();
             $table->foreign('adm1_id')->references('id')->on('administrative_divisions')->where('level', '=', 1);
             $table->unsignedBigInteger('adm2_id')->nullable();

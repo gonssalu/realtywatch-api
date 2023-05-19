@@ -126,6 +126,11 @@ class User extends Authenticatable
         return $this->hasMany(Agency::class);
     }
 
+    public function propertyAddresses(): HasMany
+    {
+        return $this->hasMany(PropertyAddress::class);
+    }
+
     public function myCreateToken($deviceName)
     {
         return $this->createToken($deviceName)->plainTextToken;

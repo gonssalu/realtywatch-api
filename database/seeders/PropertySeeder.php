@@ -249,6 +249,7 @@ class PropertySeeder extends Seeder
             unset($address['address_title']);
             $address['property_id'] = $prop->id;
             $address['coordinates'] = DB::raw('POINT(' . $address['coordinates'][0] . ', ' . $address['coordinates'][1] . ')');
+            $address['user_id'] = $user->id;
             DB::table('property_addresses')->insert($address);
 
             // Add characteristics to property

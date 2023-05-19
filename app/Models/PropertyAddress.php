@@ -40,6 +40,7 @@ class PropertyAddress extends Model
         'adm2_id',
         'adm3_id',
         'full_address',
+        'user_id',
     ];
 
     /**
@@ -109,5 +110,10 @@ class PropertyAddress extends Model
     public function adm3(): BelongsTo
     {
         return $this->belongsTo(AdministrativeDivision::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
