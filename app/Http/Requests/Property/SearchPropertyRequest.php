@@ -25,7 +25,6 @@ class SearchPropertyRequest extends FormRequest
             'query' => 'string',
             'include_tags' => 'json',
             'exclude_tags' => 'json',
-            'adm_level' => 'integer|required_with:adm_id',
             'adm_id' => 'integer',
             'list_id' => 'integer',
         ];

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Property\SearchPropertyRequest;
 use App\Http\Resources\Property\PropertyFullResource;
 use App\Http\Resources\Property\PropertyHeaderResource;
+use App\Models\AdministrativeDivision;
 use App\Models\Property;
 use Illuminate\Http\Request;
 
@@ -76,8 +77,9 @@ class PropertyController extends Controller
 
         // Check if property is in the specified administrative area
         if (isset($search['adm_id'])) {
-            $adm_level = $search['adm_level'];
             $adm_id = $search['adm_id'];
+            $adm = AdministrativeDivision::whereId($adm_id)->get();
+            $adm_level = $adm ? $adm->level : 1;
 
             $properties->whereHas('address', function ($query) use ($adm_id, $adm_level) {
                 $query->where('adm' . $adm_level . '_id', $adm_id);
