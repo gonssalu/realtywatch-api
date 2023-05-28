@@ -17,9 +17,7 @@ class ListController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $lists = $user->lists();
-
-        $lists = $lists->paginate(12);
+        $lists = $user->lists()->with('tags')->paginate(12);
 
         return ListResource::collection($lists);
     }
@@ -32,7 +30,7 @@ class ListController extends Controller
         $user = $request->user();
         $lists = $user->lists()->has('properties')->get();
 
-        return ["data" => ListResource::collection($lists), 'total' => $user->lists()->count()];
+        return ['data' => ListResource::collection($lists), 'total' => $user->lists()->count()];
     }
 
     /**
@@ -43,7 +41,7 @@ class ListController extends Controller
         $user = $request->user();
         $lists = $user->lists()->get();
 
-        return ["data" => ListResource::collection($lists), 'total' => $user->lists()->count()];
+        return ['data' => ListResource::collection($lists), 'total' => $user->lists()->count()];
     }
 
     /**

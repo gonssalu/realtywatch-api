@@ -62,7 +62,7 @@ class Tag extends Model
 
     public function lists(): BelongsToMany
     {
-        return $this->belongsToMany(PropertyList::class);
+        return $this->belongsToMany(PropertyList::class, 'list_tag');
     }
 
     public function properties(): BelongsToMany

@@ -19,6 +19,7 @@ class ListResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'num_properties' => $this->properties->count(),
+            'tags' => $this->tags->pluck('name'),
         ];
     }
 }
