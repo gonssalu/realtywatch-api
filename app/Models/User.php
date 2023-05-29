@@ -138,6 +138,6 @@ class User extends Authenticatable
 
     public function getFullPhotoUrlAttribute(): string
     {
-        return asset('storage/users/' . $this->photo_url);
+        return asset($this->photo_url);
     }
 }
