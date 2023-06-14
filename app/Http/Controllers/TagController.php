@@ -32,25 +32,45 @@ class TagController extends Controller
         return TagResource::collection($tags);
     }
 
+    private function createTag($user, $name)
+    {
+        $tag = $user->tags()->where('name', $name)->first();
+        if ($tag) {
+            return ['tag' => $tag, 'exists' => true];
+        }
+
+        $tag = $user->tags()->create(['name' => $name]);
+        return ['tag' => $tag, 'exists' => false];
+    }
+
     //Before creating a tag check if user already has a tag with the same toLower() name
     public function create(CreateTagRequest $request)
     {
         $user = $request->user();
 
-        $newTag = $request->validated();
+        $tagReq = $request->validated();
 
-        $tag = $user->tags()->where('name', $newTag['name'])->first();
-        if ($tag) {
+        if ($request->has('name')) {
+            $tag = $this->createTag($user, $tagReq['name']);
             return response()->json([
-                'message' => 'Tag already exists',
-                'data' => new TagResource($tag)
-            ]);
+                'message' => $tag['exists'] ? 'Tag already exists' : 'Tag created successfully',
+                'data' => new TagResource($tag['tag'])
+            ], $tag['exists'] ? 200 : 201);
         }
 
-        $tag = $user->tags()->create($newTag);
+        $newTags = [];
+        $new = 0;
+
+        foreach ($tagReq['names'] as $newTag) {
+            $tag = $this->createTag($user, $newTag);
+            $newTags[] = $tag['tag'];
+            if (!$tag['exists'])
+                $new++;
+        }
+
         return response()->json([
-            'message' => 'Tag created successfully',
-            'data' => new TagResource($tag)
-        ], 201);
+            'message' => $new > 0 ? 'New tags were created successfully' : 'All of the tags provided already existed',
+            'data' => TagResource::collection($newTags)
+        ], $new > 0 ? 201 : 200);
     }
 }
