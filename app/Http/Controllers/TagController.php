@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Tag\CreateTagRequest;
 use App\Http\Resources\TagResource;
 use Illuminate\Http\Request;
 
@@ -32,4 +33,24 @@ class TagController extends Controller
     }
 
     //Before creating a tag check if user already has a tag with the same toLower() name
+    public function create(CreateTagRequest $request)
+    {
+        $user = $request->user();
+
+        $newTag = $request->validated();
+
+        $tag = $user->tags()->where('name', $newTag['name'])->first();
+        if ($tag) {
+            return response()->json([
+                'message' => 'Tag already exists',
+                'data' => new TagResource($tag)
+            ]);
+        }
+
+        $tag = $user->tags()->create($newTag);
+        return response()->json([
+            'message' => 'Tag created successfully',
+            'data' => new TagResource($tag)
+        ], 201);
+    }
 }

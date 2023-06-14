@@ -39,6 +39,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('tags')->controller(TagController::class)->group(function () {
             Route::get('/', 'index');
             Route::get('/sidebar', 'indexSidebar');
+            Route::post('/', 'create');
         });
     });
 
