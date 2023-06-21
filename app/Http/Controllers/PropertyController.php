@@ -91,6 +91,29 @@ class PropertyController extends Controller
         );
     }
 
+    public function addTag(Request $request, Property $property)
+    {
+        $user = $request->user();
+        $request->validate([
+            'tag_id' => 'required',
+        ]);
+
+        $tag = $user->tags()->where('id', $request->tag_id)->first();
+
+        if (!$tag) {
+            return response()->json([
+                'message' => 'Tag not found',
+            ], 404);
+        }
+
+        $property->tags()->attach($tag);
+
+        return response()->json([
+            'message' => 'Tag added to property',
+            'data' => new PropertyFullResource($property),
+        ], 200);
+    }
+
     /**
      * Update the specified resource in storage.
      */
