@@ -32,7 +32,7 @@ class TagController extends Controller
         return TagResource::collection($tags);
     }
 
-    private function createTag($user, $name)
+    public static function createTag($user, $name)
     {
         $tag = $user->tags()->where('name', $name)->first();
         if ($tag) {
@@ -51,7 +51,7 @@ class TagController extends Controller
         $tagReq = $request->validated();
 
         if ($request->has('name')) {
-            $tag = $this->createTag($user, $tagReq['name']);
+            $tag = TagController::createTag($user, $tagReq['name']);
             return response()->json([
                 'message' => $tag['exists'] ? 'Tag already exists' : 'Tag created successfully',
                 'data' => new TagResource($tag['tag'])
@@ -62,7 +62,7 @@ class TagController extends Controller
         $new = 0;
 
         foreach ($tagReq['names'] as $newTag) {
-            $tag = $this->createTag($user, $newTag);
+            $tag = TagController::createTag($user, $newTag);
             $newTags[] = $tag['tag'];
             if (!$tag['exists'])
                 $new++;

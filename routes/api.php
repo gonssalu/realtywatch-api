@@ -47,6 +47,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('{property}')->middleware('property.owner')->group(function () {
             Route::get('/', 'show');
             Route::get('/details', 'showDetails');
+            Route::put('/tags', 'updateTags');
+            Route::delete('/tags/{tag}', 'removeTag');
         });
     });
 

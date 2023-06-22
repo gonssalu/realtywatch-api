@@ -6,8 +6,12 @@ use App\Http\Requests\Property\SearchPropertyRequest;
 use App\Http\Requests\Tag\CreateTagRequest;
 use App\Http\Resources\Property\PropertyFullResource;
 use App\Http\Resources\Property\PropertyHeaderResource;
+use App\Http\Resources\TagResource;
 use App\Models\AdministrativeDivision;
 use App\Models\Property;
+use App\Models\Tag;
+use App\Models\User;
+use CreateTagsTable;
 use Illuminate\Http\Request;
 
 class PropertyController extends Controller
@@ -92,41 +96,12 @@ class PropertyController extends Controller
         );
     }
 
-    public function addTag(Request $request, Property $property)
+    // Remove tag from property
+    public function removeTag(Property $property, Tag $tag)
     {
-        $user = $request->user();
-        $request->validate([
-            'tag_id' => 'required',
-        ]);
-
-        $tag = $user->tags()->where('id', $request->tag_id)->first();
-
-        if (!$tag) {
+        if ($property->tags()->where('id', $tag->id)->count() == 0) {
             return response()->json([
-                'message' => 'Tag not found',
-            ], 404);
-        }
-
-        $property->tags()->attach($tag);
-
-        return response()->json([
-            'message' => 'Tag added to property',
-            'data' => new PropertyFullResource($property),
-        ], 200);
-    }
-
-    public function removeTag(Request $request, Property $property)
-    {
-        $user = $request->user();
-        $request->validate([
-            'tag_id' => 'required',
-        ]);
-
-        $tag = $user->tags()->where('id', $request->tag_id)->first();
-
-        if (!$tag) {
-            return response()->json([
-                'message' => 'Tag not found',
+                'message' => 'Tag not found in property',
             ], 404);
         }
 
@@ -136,6 +111,44 @@ class PropertyController extends Controller
             'message' => 'Tag removed from property',
             'data' => new PropertyFullResource($property),
         ], 200);
+    }
+
+    // This is here just for future reference / testing purposes (not used)
+    public function updateTags(Property $property, CreateTagRequest $request)
+    {
+        $tagReq = $request->validated();
+        $user = $request->user();
+
+        $newTagsCreated =
+            $this->updateTagsHelper(
+                $property,
+                $user,
+                $request->has('name') ? [$tagReq['name']] : $tagReq['names']
+            );
+
+        return response()->json([
+            'message' => 'Property tags were successfully updated',
+            'data' => new PropertyFullResource($property),
+        ], $newTagsCreated ? 201 : 200);
+    }
+
+    // Update a property's tags
+    // @return bool true if new tags were added
+    public function updateTagsHelper(Property $property, User $user, $tags)
+    {
+        $new = 0;
+
+        // Detach all tags
+        $property->tags()->detach();
+
+        foreach ($tags as $newTag) {
+            $tag = TagController::createTag($user, $newTag);
+            $tag['tag']->properties()->attach($property);
+            if (!$tag['exists'])
+                $new++;
+        }
+
+        return $new > 0;
     }
 
     /**
