@@ -35,6 +35,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/all', 'indexAll');
             Route::get('/{propertyList}', 'show');
             Route::put('/{propertyList}', 'update');
+            Route::delete('/{propertyList}', 'destroy');
             Route::post('/', 'store');
         });
 

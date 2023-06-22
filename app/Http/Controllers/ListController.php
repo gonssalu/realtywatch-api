@@ -108,8 +108,24 @@ class ListController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PropertyList $propertyList)
+    public function destroy(PropertyList $propertyList, Request $request)
     {
+        $user = $request->user();
+
+        // Check if list belongs to user
+        if ($propertyList->user_id !== $user->id) {
+            return response()->json([
+                'message' => 'You are not authorized to update this list'
+            ], 403);
+        }
+
+        // Detach all properties from list
+        $propertyList->properties()->detach();
+
         $propertyList->delete();
+
+        return response()->json([
+            'message' => 'List deleted successfully'
+        ], 200);
     }
 }
