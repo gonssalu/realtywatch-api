@@ -83,13 +83,6 @@ class ListController extends Controller
         $user = $request->user();
         $listReq = $request->validated();
 
-        // Check if list belongs to user
-        if ($propertyList->user_id !== $user->id) {
-            return response()->json([
-                'message' => 'You are not authorized to update this list'
-            ], 403);
-        }
-
         //Check if user already has a list (excluding this one) with the same name
         if ($user->lists()->where('name', $listReq['name'])->andWhere('id', '!=', $propertyList->id)->first()) {
             return response()->json([
@@ -101,7 +94,7 @@ class ListController extends Controller
 
         return response()->json([
             'message' => 'List updated successfully',
-            'data' => new ListResource($propertyList)
+            'data' => new ListWithPropertiesResource($propertyList)
         ], 200);
     }
 
@@ -111,13 +104,6 @@ class ListController extends Controller
     public function destroy(PropertyList $propertyList, Request $request)
     {
         $user = $request->user();
-
-        // Check if list belongs to user
-        if ($propertyList->user_id !== $user->id) {
-            return response()->json([
-                'message' => 'You are not authorized to update this list'
-            ], 403);
-        }
 
         // Detach all properties from list
         $propertyList->properties()->detach();

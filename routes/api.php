@@ -24,19 +24,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::put('/', 'update');
         Route::patch('/password', 'changePassword');
 
-        Route::prefix('properties')->controller(PropertyController::class)->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{property}', 'show');
-        });
-
         Route::prefix('lists')->controller(ListController::class)->group(function () {
             Route::get('/', 'index');
             Route::get('/sidebar', 'indexSidebar');
             Route::get('/all', 'indexAll');
-            Route::get('/{propertyList}', 'show');
-            Route::put('/{propertyList}', 'update');
-            Route::delete('/{propertyList}', 'destroy');
             Route::post('/', 'store');
+
+            Route::prefix('{propertyList')->middleware('propertylist.owner')->group(function () {
+                Route::get('/{propertyList}', 'show');
+                Route::put('/{propertyList}', 'update');
+                Route::delete('/{propertyList}', 'destroy');
+            });
         });
 
         Route::prefix('tags')->controller(TagController::class)->group(function () {
@@ -48,6 +46,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::prefix('properties')->controller(PropertyController::class)->group(function () {
+        Route::get('/', 'index');
         Route::prefix('{property}')->middleware('property.owner')->group(function () {
             Route::get('/', 'show');
             Route::get('/details', 'showDetails');
