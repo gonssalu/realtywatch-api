@@ -43,16 +43,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('/', 'create');
             Route::delete('/{tag}', 'destroy');
         });
-    });
 
-    Route::prefix('properties')->controller(PropertyController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::post('/', 'store');
-        Route::prefix('{property}')->middleware('property.owner')->group(function () {
-            Route::get('/', 'show');
-            Route::get('/details', 'showDetails');
-            Route::put('/tags', 'updateTags');
-            Route::delete('/tags/{tag}', 'removeTag');
+        Route::prefix('properties')->controller(PropertyController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/', 'store');
+            Route::prefix('{property}')->middleware('property.owner')->group(function () {
+                Route::get('/', 'show');
+                Route::get('/details', 'showDetails');
+                Route::put('/tags', 'updateTags');
+                Route::delete('/tags/{tag}', 'removeTag');
+            });
         });
     });
 
