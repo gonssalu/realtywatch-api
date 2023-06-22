@@ -75,8 +75,15 @@ class TagController extends Controller
         ], $new > 0 ? 201 : 200);
     }
 
-    public function destroy(Tag $tag)
+    public function destroy(Tag $tag, Request $request)
     {
+        // Check if user owns tag
+        if ($tag->user->id != $request->user()->id) {
+            return response()->json([
+                'message' => 'Unauthorized',
+            ], 401);
+        }
+
         // Remove tag from all properties
         $tag->properties()->detach();
         // Remove tag from all lists
