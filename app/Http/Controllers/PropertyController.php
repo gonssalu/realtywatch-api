@@ -154,6 +154,17 @@ class PropertyController extends Controller
         return $new > 0;
     }
 
+    public function updateListsHelper(Property $property, User $user, $lists)
+    {
+        // Detach all lists from property
+        $property->lists()->detach();
+
+        foreach ($lists as $listId) {
+            $list = $user->lists()->whereId($listId)->first();
+            $list->properties()->attach($property);
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      */
