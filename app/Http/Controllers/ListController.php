@@ -52,6 +52,13 @@ class ListController extends Controller
         $user = $request->user();
         $listReq = $request->validated();
 
+        //Check if user already has a list with the same name
+        if ($user->lists()->where('name', $listReq['name'])->first()) {
+            return response()->json([
+                'message' => 'A list with that name already exists'
+            ], 409);
+        }
+
         $list = $user->lists()->create($listReq);
 
         return response()->json([
@@ -81,6 +88,13 @@ class ListController extends Controller
             return response()->json([
                 'message' => 'You are not authorized to update this list'
             ], 403);
+        }
+
+        //Check if user already has a list (excluding this one) with the same name
+        if ($user->lists()->where('name', $listReq['name'])->andWhere('id', '!=', $propertyList->id)->first()) {
+            return response()->json([
+                'message' => 'A list with that name already exists'
+            ], 409);
         }
 
         $propertyList->update($listReq);
