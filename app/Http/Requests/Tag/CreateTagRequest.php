@@ -23,7 +23,7 @@ class CreateTagRequest extends FormRequest
      */
     public function rules(): array
     {
-        $nameRules = 'string|lowercase|min:3|max:32';
+        $nameRules = 'string|lowercase|min:1|max:32';
 
         //TODO: test client max number of tags per request
         return [
