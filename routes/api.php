@@ -30,10 +30,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/all', 'indexAll');
             Route::post('/', 'store');
 
-            Route::prefix('{propertyList')->middleware('propertylist.owner')->group(function () {
-                Route::get('/{propertyList}', 'show');
-                Route::put('/{propertyList}', 'update');
-                Route::delete('/{propertyList}', 'destroy');
+            Route::prefix('{propertyList}')->middleware('propertylist.owner')->group(function () {
+                Route::get('/', 'show');
+                Route::put('/', 'update');
+                Route::delete('/', 'destroy');
             });
         });
 
