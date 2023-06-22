@@ -38,8 +38,8 @@ class StorePropertyRequest extends FormRequest
         return [
             /* MAIN STUFF */
             'title' => 'required|string|min:3|max:200',
-            'property_type' => ['required',],
-            'status' => ['required',],
+            'type' => 'required|in:available,unavailable,unknown',
+            'status' => 'required|in:house,apartment,office,shop,warehouse,garage,land,other',
             'description' => 'string|max:5000',
             'typology' => 'string|max:12',
             'gross_area' => 'integer|min:0',
@@ -49,16 +49,11 @@ class StorePropertyRequest extends FormRequest
             /* TAGS */
             'tags' => [
                 'array',
-                'min:1',
                 'max:10',
             ],
             'tags.*' => 'required|string|lowercase|min:1|max:32',
             /* LISTS */
-            'lists' => [
-                'array',
-                'min:1',
-                'max:10'
-            ],
+            'lists' => 'array',
             'lists.*' => [
                 'required',
                 'integer',
