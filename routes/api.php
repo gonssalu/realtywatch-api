@@ -34,6 +34,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/sidebar', 'indexSidebar');
             Route::get('/all', 'indexAll');
             Route::get('/{propertyList}', 'show');
+            Route::put('/{propertyList}', 'update');
+            Route::post('/', 'store');
         });
 
         Route::prefix('tags')->controller(TagController::class)->group(function () {

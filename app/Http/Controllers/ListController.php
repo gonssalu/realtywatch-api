@@ -49,7 +49,15 @@ class ListController extends Controller
      */
     public function store(StorePropertyListRequest $request)
     {
-        //
+        $user = $request->user();
+        $listReq = $request->validated();
+
+        $list = $user->lists()->create($listReq);
+
+        return response()->json([
+            'message' => 'List created successfully',
+            'data' => new ListResource($list)
+        ], 201);
     }
 
     /**
@@ -65,7 +73,22 @@ class ListController extends Controller
      */
     public function update(UpdatePropertyListRequest $request, PropertyList $propertyList)
     {
-        //
+        $user = $request->user();
+        $listReq = $request->validated();
+
+        // Check if list belongs to user
+        if ($propertyList->user_id !== $user->id) {
+            return response()->json([
+                'message' => 'You are not authorized to update this list'
+            ], 403);
+        }
+
+        $propertyList->update($listReq);
+
+        return response()->json([
+            'message' => 'List updated successfully',
+            'data' => new ListResource($propertyList)
+        ], 200);
     }
 
     /**

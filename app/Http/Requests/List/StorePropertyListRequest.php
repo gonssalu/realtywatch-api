@@ -22,7 +22,8 @@ class StorePropertyListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'string|min:1|max:100|required',
+            'description' => 'string|max:5000',
         ];
     }
 }

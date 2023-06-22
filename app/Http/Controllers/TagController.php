@@ -80,8 +80,8 @@ class TagController extends Controller
         // Check if user owns tag
         if ($tag->user->id != $request->user()->id) {
             return response()->json([
-                'message' => 'Unauthorized',
-            ], 401);
+                'message' => 'You are not authorized to delete this tag',
+            ], 403);
         }
 
         // Remove tag from all properties
