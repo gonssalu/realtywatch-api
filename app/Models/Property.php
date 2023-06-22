@@ -119,7 +119,7 @@ class Property extends Model
         //TODO: ADD DECIMALS
     ];
 
-    public function getFullCoverUrlAttribute(): string
+    public function getFullCoverUrlAttribute(): string|null
     {
         return $this->cover_url == null ? null : asset('storage/properties/' . $this->cover_url);
     }
