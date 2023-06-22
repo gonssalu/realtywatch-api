@@ -121,7 +121,7 @@ class Property extends Model
 
     public function getFullCoverUrlAttribute(): string
     {
-        return asset('storage/properties/' . $this->cover_url);
+        return $this->cover_url == null ? null : asset('storage/properties/' . $this->cover_url);
     }
 
     public function user(): BelongsTo
