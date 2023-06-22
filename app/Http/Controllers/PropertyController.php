@@ -22,20 +22,29 @@ class PropertyController extends Controller
      */
     public function store(StorePropertyRequest $request)
     {
-        /* TODO: Needs planning
+        $propertyReq = $request->validated();
         $user = $request->user();
-        $property = $user->properties()->create($request->all());
 
-        return response(
-            [
-                'message' => 'Property created',
-                'property' => new PropertyResource($property),
-            ],
-            201
-        );
-        */
+        //Configure missing values
+        $propertyReq['user_id'] = $user->id;
 
-        $user = $request->user();
+        //TODO: Price stuff
+        $propertyReq['listing_type'] = 'none';
+
+        $tags = $propertyReq['tags'];
+        $lists = $propertyReq['lists'];
+        unset($propertyReq['tags']);
+        unset($propertyReq['lists']);
+
+        $property = Property::create($propertyReq);
+
+        $this->updateTagsHelper($property, $user, $tags);
+        $this->updateListsHelper($property, $user, $lists);
+
+        return response()->json([
+            'message' => 'Property created',
+            'data' => new PropertyFullResource($property),
+        ], 201);
     }
 
     /**
