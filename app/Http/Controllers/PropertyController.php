@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Property\SearchPropertyRequest;
+use App\Http\Requests\Tag\CreateTagRequest;
 use App\Http\Resources\Property\PropertyFullResource;
 use App\Http\Resources\Property\PropertyHeaderResource;
 use App\Models\AdministrativeDivision;
@@ -110,6 +111,29 @@ class PropertyController extends Controller
 
         return response()->json([
             'message' => 'Tag added to property',
+            'data' => new PropertyFullResource($property),
+        ], 200);
+    }
+
+    public function removeTag(Request $request, Property $property)
+    {
+        $user = $request->user();
+        $request->validate([
+            'tag_id' => 'required',
+        ]);
+
+        $tag = $user->tags()->where('id', $request->tag_id)->first();
+
+        if (!$tag) {
+            return response()->json([
+                'message' => 'Tag not found',
+            ], 404);
+        }
+
+        $property->tags()->detach($tag);
+
+        return response()->json([
+            'message' => 'Tag removed from property',
             'data' => new PropertyFullResource($property),
         ], 200);
     }
