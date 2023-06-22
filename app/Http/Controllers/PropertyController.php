@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Property\SearchPropertyRequest;
+use App\Http\Requests\Property\StorePropertyRequest;
 use App\Http\Requests\Tag\CreateTagRequest;
 use App\Http\Resources\Property\PropertyFullResource;
 use App\Http\Resources\Property\PropertyHeaderResource;
@@ -19,7 +20,7 @@ class PropertyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePropertyRequest $request)
     {
         /* TODO: Needs planning
         $user = $request->user();
@@ -33,6 +34,8 @@ class PropertyController extends Controller
             201
         );
         */
+
+        $user = $request->user();
     }
 
     /**

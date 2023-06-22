@@ -25,6 +25,7 @@ class CreateTagRequest extends FormRequest
     {
         $nameRules = 'string|lowercase|min:1|max:32';
 
+        //When changing this also change StorePropertyRequest
         //TODO: test client max number of tags per request
         return [
             'name' => "$nameRules|required_without:names",
