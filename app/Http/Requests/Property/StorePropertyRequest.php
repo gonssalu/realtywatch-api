@@ -44,7 +44,7 @@ class StorePropertyRequest extends FormRequest
             'typology' => 'string|max:12',
             'gross_area' => 'integer|min:0',
             'useful_area' => 'integer|min:0',
-            'wc' => 'integer|min:0',
+            'wc' => 'integer|min:0|max:100',
             'rating' => 'integer|min:0|max:10',
             /* TAGS */
             'tags' => [
