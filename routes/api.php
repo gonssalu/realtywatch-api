@@ -40,6 +40,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/', 'index');
             Route::get('/sidebar', 'indexSidebar');
             Route::post('/', 'create');
+            Route::delete('/{tag}', 'destroy');
         });
     });
 

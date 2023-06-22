@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Tag\CreateTagRequest;
 use App\Http\Resources\TagResource;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class TagController extends Controller
@@ -72,5 +73,19 @@ class TagController extends Controller
             'message' => $new > 0 ? 'New tags were created successfully' : 'All of the tags provided already existed',
             'data' => TagResource::collection($newTags)
         ], $new > 0 ? 201 : 200);
+    }
+
+    public function destroy(Tag $tag)
+    {
+        // Remove tag from all properties
+        $tag->properties()->detach();
+        // Remove tag from all lists
+        $tag->lists()->detach();
+
+        $tag->delete();
+
+        return response()->json([
+            'message' => 'Tag deleted successfully',
+        ], 200);
     }
 }
