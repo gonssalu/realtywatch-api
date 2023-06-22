@@ -19,7 +19,7 @@ class CreatePropertiesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->enum('listing_type', ['sale', 'rent', 'both']);
+            $table->enum('listing_type', ['sale', 'rent', 'both', 'none']);
             $table->smallInteger('quantity')->nullable();
             $table->string('title');
             $table->text('description')->nullable();
