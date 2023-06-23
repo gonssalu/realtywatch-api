@@ -18,6 +18,7 @@ class SimpleAdmDivisionResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'level' => $this->level,
+            'parent_id' => $this->parent_id,
         ];
     }
 }

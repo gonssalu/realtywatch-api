@@ -6,6 +6,7 @@ use App\Http\Resources\AdmDivision\AdmDivisionResource;
 use App\Http\Resources\AdmDivision\SimpleAdmDivisionResource;
 use App\Models\AdministrativeDivision;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AdmDivisionController extends Controller
 {
@@ -21,11 +22,26 @@ class AdmDivisionController extends Controller
         return AdmDivisionResource::collection($adm);
     }
 
-    public function level($level)
+    public function level($level, Request $request)
     {
-        $adms = AdministrativeDivision::whereLevel((int)$level)->get();
+        $adms = AdministrativeDivision::whereLevel((int)$level);
 
-        return SimpleAdmDivisionResource::collection($adms);
+        if ($level != 1)
+            if ($request->has('parent_id')) {
+                // Validate parent id
+                $parent_id = $request->validate([
+                    'parent_id' => [
+                        'integer',
+                        Rule::exists('administrative_divisions', 'id')->where(function ($query) use ($level) {
+                            $query->where('level', $level - 1);
+                        })
+                    ],
+                ])['parent_id'];
+
+                $adms = $adms->whereParentId($parent_id);
+            }
+
+        return SimpleAdmDivisionResource::collection($adms->get());
     }
 
     public function all()
