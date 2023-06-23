@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\StorageLocation;
 use App\Http\Requests\Property\SearchPropertyRequest;
 use App\Http\Requests\Property\StorePropertyRequest;
 use App\Http\Requests\Tag\CreateTagRequest;
@@ -15,6 +16,7 @@ use App\Models\User;
 use CreateTagsTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PropertyController extends Controller
 {
@@ -47,6 +49,7 @@ class PropertyController extends Controller
         // Start transaction!
         DB::beginTransaction();
 
+        $mediaAdded = [];
         try {
             $property = Property::create($propertyReq);
 
@@ -63,14 +66,32 @@ class PropertyController extends Controller
             if (isset($propertyReq['lists']))
                 $this->updateListsHelper($property, $user, $propertyReq['lists']);
 
+            if (isset($propertyReq['media'])) {
+                $mediaReq = $propertyReq['media'];
+                if (isset($mediaReq['blueprints']))
+                    $mediaAdded[] = $this->processMedia($property, $mediaReq['blueprints'], 'blueprint');
+
+                if (isset($mediaReq['images']))
+                    $mediaAdded[] = $this->processMedia($property, $mediaReq['images'], 'image');
+
+                if (isset($mediaReq['videos']))
+                    $mediaAdded[] = $this->processMedia($property, $mediaReq['videos'], 'video');
+            }
+
             // Commit the transaction if everything is successful
             DB::commit();
         } catch (\Exception $e) {
             // Something went wrong, rollback the transaction
             DB::rollback();
+
+            // Delete the added media until now
+            foreach ($mediaAdded as $media)
+                foreach ($media as $path)
+                    Storage::delete(StorageLocation::PROPERTY_MEDIA . '/' . $path);
+
             return response()->json([
-                'message' => 'Something went wrong while creating the property',
-                'error' => $e->getMessage(),
+                'message' => 'Something went wrong while creating the property'/*,
+                'error' => $e->getMessage(),*/
             ], 500);
         }
 
@@ -79,6 +100,46 @@ class PropertyController extends Controller
             'message' => 'Property created',
             'data' => new PropertyFullResource($property),
         ], 201);
+    }
+
+    public function processMedia($property, $mediaList, $type, $useAsCover = false): array
+    {
+        $hasCover = false;
+        $orderImage = 0;
+        $imgsAdded = [];
+
+        // Store every image
+        foreach ($mediaList as $media) {
+            $pathImg = $this->saveMedia($property, $media, $orderImage, $type);
+            $imgsAdded[] = $pathImg;
+            $orderImage++;
+
+            // Set the first image as cover
+            if (!$hasCover && $useAsCover) {
+                $property->cover = $pathImg;
+                $hasCover = true;
+                $property->save();
+            }
+        }
+
+        return $imgsAdded;
+    }
+
+    public function saveMedia($property, $image, $orderImage, $type): string
+    {
+        $pathImg = StorageLocation::GenerateFileName($property->id) . '.' . $image->extension();
+
+        // Create db record
+        $property->media()->create([
+            'type' => $type,
+            'order' => $orderImage,
+            'url' => $pathImg,
+        ]);
+
+        // Store the media
+        $image->storeAs(StorageLocation::PROPERTY_MEDIA, $pathImg);
+
+        return $pathImg;
     }
 
     /**
