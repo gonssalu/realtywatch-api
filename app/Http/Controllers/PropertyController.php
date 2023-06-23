@@ -32,16 +32,16 @@ class PropertyController extends Controller
         //TODO: Price stuff
         $propertyReq['listing_type'] = 'none';
 
-        $tags = $propertyReq['tags'];
-        $lists = $propertyReq['lists'];
-        unset($propertyReq['tags']);
-        unset($propertyReq['lists']);
-
         $addressReq = $propertyReq['address'];
         unset($propertyReq['address']);
-        $addressReq['coordinates'] = DB::raw('POINT(' . $addressReq['latitude'] . ', ' . $addressReq['longitude'] . ')');
-        unset($addressReq['latitude']);
-        unset($addressReq['longitude']);
+
+        // Process coordinates
+        if (isset($addressReq['latitude']) && isset($addressReq['longitude'])) {
+            $addressReq['coordinates_'] = DB::raw('POINT(' . $addressReq['latitude'] . ', ' . $addressReq['longitude'] . ')');
+            unset($addressReq['latitude']);
+            unset($addressReq['longitude']);
+        }
+
         $addressReq['user_id'] = $user->id;
 
         // Start transaction!
@@ -50,10 +50,18 @@ class PropertyController extends Controller
         try {
             $property = Property::create($propertyReq);
 
-            $addressReq = $property->address()->create($addressReq);
+            $property->address()->create($addressReq);
 
-            $this->updateTagsHelper($property, $user, $tags);
-            $this->updateListsHelper($property, $user, $lists);
+            // Add coordinates to address
+            DB::table('property_addresses')->where('property_id', $property->id)->update([
+                'coordinates' => $addressReq["coordinates_"],
+            ]);
+
+            if (isset($propertyReq['tags']))
+                $this->updateTagsHelper($property, $user, $propertyReq['tags']);
+
+            if (isset($propertyReq['lists']))
+                $this->updateListsHelper($property, $user, $propertyReq['lists']);
 
             // Commit the transaction if everything is successful
             DB::commit();
@@ -62,6 +70,7 @@ class PropertyController extends Controller
             DB::rollback();
             return response()->json([
                 'message' => 'Something went wrong while creating the property',
+                'error' => $e->getMessage(),
             ], 500);
         }
 
