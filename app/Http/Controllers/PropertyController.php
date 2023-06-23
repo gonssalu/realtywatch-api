@@ -68,11 +68,12 @@ class PropertyController extends Controller
 
             if (isset($propertyReq['media'])) {
                 $mediaReq = $propertyReq['media'];
-                if (isset($mediaReq['blueprints']))
-                    $mediaAdded[] = $this->processMedia($property, $mediaReq['blueprints'], 'blueprint');
 
                 if (isset($mediaReq['images']))
-                    $mediaAdded[] = $this->processMedia($property, $mediaReq['images'], 'image');
+                    $mediaAdded[] = $this->processMedia($property, $mediaReq['images'], 'image', true);
+
+                if (isset($mediaReq['blueprints']))
+                    $mediaAdded[] = $this->processMedia($property, $mediaReq['blueprints'], 'blueprint');
 
                 if (isset($mediaReq['videos']))
                     $mediaAdded[] = $this->processMedia($property, $mediaReq['videos'], 'video');
@@ -116,7 +117,7 @@ class PropertyController extends Controller
 
             // Set the first image as cover
             if (!$hasCover && $useAsCover) {
-                $property->cover = $pathImg;
+                $property->cover_url = $pathImg;
                 $hasCover = true;
                 $property->save();
             }
