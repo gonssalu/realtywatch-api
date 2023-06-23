@@ -36,6 +36,8 @@ class AdmDivisionController extends Controller
                             $query->where('level', $level - 1);
                         })
                     ],
+                ], [
+                    'parent_id.exists' => 'That parent_id does not exist for level ' . ($level - 1),
                 ])['parent_id'];
 
                 $adms = $adms->whereParentId($parent_id);
