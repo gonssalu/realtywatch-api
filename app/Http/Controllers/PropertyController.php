@@ -14,6 +14,7 @@ use App\Models\Tag;
 use App\Models\User;
 use CreateTagsTable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PropertyController extends Controller
 {
@@ -36,10 +37,34 @@ class PropertyController extends Controller
         unset($propertyReq['tags']);
         unset($propertyReq['lists']);
 
-        $property = Property::create($propertyReq);
+        $addressReq = $propertyReq['address'];
+        unset($propertyReq['address']);
+        $addressReq['coordinates'] = DB::raw('POINT(' . $addressReq['latitude'] . ', ' . $addressReq['longitude'] . ')');
+        unset($addressReq['latitude']);
+        unset($addressReq['longitude']);
+        $addressReq['user_id'] = $user->id;
 
-        $this->updateTagsHelper($property, $user, $tags);
-        $this->updateListsHelper($property, $user, $lists);
+        // Start transaction!
+        DB::beginTransaction();
+
+        try {
+            $property = Property::create($propertyReq);
+
+            $addressReq = $property->address()->create($addressReq);
+
+            $this->updateTagsHelper($property, $user, $tags);
+            $this->updateListsHelper($property, $user, $lists);
+
+            // Commit the transaction if everything is successful
+            DB::commit();
+        } catch (\Exception $e) {
+            // Something went wrong, rollback the transaction
+            DB::rollback();
+            return response()->json([
+                'message' => 'Something went wrong while creating the property',
+            ], 500);
+        }
+
 
         return response()->json([
             'message' => 'Property created',
