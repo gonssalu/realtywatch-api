@@ -58,7 +58,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::prefix('administrative-divisions')->controller(AdmDivisionController::class)->group(function () {
         //Route::get('/', 'index');
-        Route::get('/level/{level}', 'level');
+        Route::get('/level/{level}', 'level')->where('level', '[0-9]+');
         Route::get('/', 'all');
     });
 });

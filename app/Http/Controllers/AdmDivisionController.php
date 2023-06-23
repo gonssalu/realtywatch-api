@@ -23,7 +23,7 @@ class AdmDivisionController extends Controller
 
     public function level($level)
     {
-        $adms = AdministrativeDivision::whereLevel($level);
+        $adms = AdministrativeDivision::whereLevel((int)$level)->get();
 
         return SimpleAdmDivisionResource::collection($adms);
     }
