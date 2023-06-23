@@ -28,6 +28,9 @@ class StorePropertyRequest extends FormRequest
             'media.images.*.mimetypes' => 'The image must be a file of type: jpeg, png, webp, gif.',
             'media.videos.*.mimetypes' => 'The video must be a file of type: mp4, webm, h264, 3gp.',
             'media.blueprints.*.mimetypes' => 'The blueprint must be a file of type: jpeg, png, webp, pdf.',
+            'address.adm1_id.exists' => 'That id does not exist for level 1 administrative divisions.',
+            'address.adm2_id.exists' => 'That id does not exist for level 2 administrative divisions.',
+            'address.adm3_id.exists' => 'That id does not exist for level 3 administrative divisions.',
         ];
     }
 
@@ -93,6 +96,15 @@ class StorePropertyRequest extends FormRequest
             'address.full_address' => 'required_without:adm1_id|string|max:500', // Required without adm1_id
             'address.latitude' => 'numeric|between:-90,90',
             'address.longitude' => 'numeric|between:-180,180',
+
+            /* MEDIA */
+            'media' => 'array',
+            'media.images' => 'array',
+            'media.images.*' => 'required|mimetypes:image/jpeg,image/png,image/webp,image/gif|max:10240',
+            'media.blueprints' => 'array',
+            'media.blueprints.*' => 'required|mimetypes:image/jpeg,image/png,image/webp,application/pdf|max:10240',
+            'media.videos' => 'array',
+            'media.videos.*' => 'required|mimetypes:video/mp4,video/webm,video/h264,video/3gp|max:102400',
         ];
     }
 }
