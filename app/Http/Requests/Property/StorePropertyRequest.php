@@ -93,7 +93,7 @@ class StorePropertyRequest extends FormRequest
                 }),
             ],
             'address.postal_code' => 'string|min:4|max:10',
-            'address.full_address' => 'required_without:adm1_id|string|max:500', // Required without adm1_id
+            'address.full_address' => 'required_without:adm1_id|string|max:200', // Required without adm1_id
             'address.latitude' => 'numeric|between:-90,90',
             'address.longitude' => 'numeric|between:-180,180',
 
