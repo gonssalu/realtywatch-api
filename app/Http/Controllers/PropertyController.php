@@ -13,6 +13,7 @@ use App\Models\AdministrativeDivision;
 use App\Models\Property;
 use App\Models\Tag;
 use App\Models\User;
+use Carbon\Carbon;
 use CreateTagsTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -77,6 +78,22 @@ class PropertyController extends Controller
 
                 if (isset($mediaReq['videos']))
                     $mediaAdded[] = $this->processMedia($property, $mediaReq['videos'], 'video');
+            }
+
+            // Process offers
+            //$hasOffer = false;
+            if (isset($propertyReq['offers'])) {
+                $offersReq = $propertyReq['offers'];
+                foreach ($offersReq as $offerReq) {
+                    $offerReq['property_id'] = $property->id;
+                    $offer = $property->offers()->create($offerReq);
+                    $offer->priceHistory()->create([
+                        'price' => $offerReq['price'],
+                        'datetime' => Carbon::now(),
+                        'latest' => true,
+                    ]);
+                    //$hasOffer = true;
+                }
             }
 
             // Commit the transaction if everything is successful

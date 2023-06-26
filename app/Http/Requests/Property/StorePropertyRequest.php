@@ -105,6 +105,13 @@ class StorePropertyRequest extends FormRequest
             'media.blueprints.*' => 'required|mimetypes:image/jpeg,image/png,image/webp,application/pdf|max:10240',
             'media.videos' => 'array',
             'media.videos.*' => 'required|mimetypes:video/mp4,video/webm,video/h264,video/3gp|max:102400',
+
+            /* OFFERS */
+            'offers' => 'array',
+            'offers.*.listing_type' => 'required|in:rent,sale',
+            'offers.*.url' => 'required|url',
+            'offers.*.description' => 'required|string|max:200',
+            'offers.*.price' => 'nullable|numeric|min:0',
         ];
     }
 }

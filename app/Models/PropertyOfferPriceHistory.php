@@ -54,7 +54,6 @@ class PropertyOfferPriceHistory extends Model
     protected $casts = [
         'datetime' => 'datetime',
         'price' => 'decimal',
-        'online' => 'boolean',
         'latest' => 'boolean',
     ];
 
