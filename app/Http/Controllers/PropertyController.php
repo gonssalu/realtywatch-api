@@ -88,7 +88,7 @@ class PropertyController extends Controller
                     $offerReq['property_id'] = $property->id;
                     $offer = $property->offers()->create($offerReq);
                     $offer->priceHistory()->create([
-                        'price' => $offerReq['price'],
+                        'price' => isset($offerReq['price']) ? $offerReq['price'] : null,
                         'datetime' => Carbon::now(),
                         'latest' => true,
                     ]);
