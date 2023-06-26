@@ -81,19 +81,44 @@ class PropertyController extends Controller
             }
 
             // Process offers
-            //$hasOffer = false;
+            $hasRentOffer = false;
+            $hasSaleOffer = false;
+            $minPriceRent = null;
+            $minPriceSale = null;
             if (isset($propertyReq['offers'])) {
                 $offersReq = $propertyReq['offers'];
                 foreach ($offersReq as $offerReq) {
                     $offerReq['property_id'] = $property->id;
                     $offer = $property->offers()->create($offerReq);
-                    $offer->priceHistory()->create([
+                    $ph = $offer->priceHistory()->create([
                         'price' => isset($offerReq['price']) ? $offerReq['price'] : null,
                         'datetime' => Carbon::now(),
                         'latest' => true,
                     ]);
-                    //$hasOffer = true;
+
+                    if ($offer->type == 'sale' && (!$minPriceSale || $ph->price < $minPriceSale)) {
+                        $hasSaleOffer = true;
+                        $minPriceSale = $ph->price;
+                    } else if ($offer->type == 'rent' && (!$minPriceRent || $ph->price < $minPriceRent)) {
+                        $hasRentOffer = true;
+                        $minPriceRent = $ph->price;
+                    }
                 }
+
+                if ($hasSaleOffer) {
+                    $property->listing_type = 'sale';
+                    $property->current_price_sale = $minPriceSale;
+                }
+
+                if ($hasRentOffer) {
+                    $property->listing_type = 'rent';
+                    $property->current_price_rent = $minPriceRent;
+                }
+
+                if ($hasSaleOffer && $hasRentOffer)
+                    $property->listing_type = 'both';
+
+                $property->save();
             }
 
             // Commit the transaction if everything is successful
