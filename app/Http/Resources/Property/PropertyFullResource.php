@@ -22,7 +22,8 @@ class PropertyFullResource extends JsonResource
         $address = new PropertyAddressResource($this->address);
         $characteristics = PropertyCharacteristicResource::collection($this->characteristics);
         $tags = PropertyTagResource::collection($this->tags);
-
+        $saleOffers = PropertyOfferResource::collection($this->offers()->where('listing_type', 'sale'));
+        $rentOffers = PropertyOfferResource::collection($this->offers()->where('listing_type', 'rent'));
         return [
             'id' => $this->id,
             'quantity' => $this->quantity,
@@ -43,6 +44,11 @@ class PropertyFullResource extends JsonResource
             'characteristics' => $characteristics,
             'tags' => $tags,
             'media' => $media,
+            'offers' =>
+            [
+                'sale' => $saleOffers,
+                'rent' => $rentOffers,
+            ]
         ];
     }
 }
