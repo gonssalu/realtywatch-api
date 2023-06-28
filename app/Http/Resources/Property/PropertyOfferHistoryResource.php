@@ -14,11 +14,6 @@ class PropertyOfferHistoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return
-            [
-                'price' => $this->price,
-                'datetime' => $this->datetime,
-                'latest' => $this->latest,
-            ];
+        return ['price' => $this->price, 'datetime' => $this->datetime, 'latest' => $this->latest];
     }
 }

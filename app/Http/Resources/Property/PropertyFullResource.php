@@ -19,11 +19,13 @@ class PropertyFullResource extends JsonResource
             'videos' => PropertyMediaResource::collection($this->videos()->sortBy('order')),
             'blueprints' => PropertyMediaResource::collection($this->blueprints()->sortBy('order')),
         ];
+
         $address = new PropertyAddressResource($this->address);
         $characteristics = PropertyCharacteristicResource::collection($this->characteristics);
         $tags = PropertyTagResource::collection($this->tags);
-        $saleOffers = PropertyOfferResource::collection($this->offers()->where('listing_type', 'sale'));
-        $rentOffers = PropertyOfferResource::collection($this->offers()->where('listing_type', 'rent'));
+        $saleOffers = PropertyOfferResource::collection($this->offersSale());
+        $rentOffers = PropertyOfferResource::collection($this->offersRent());
+
         return [
             'id' => $this->id,
             'quantity' => $this->quantity,

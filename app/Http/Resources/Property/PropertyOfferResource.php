@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Property;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,12 +15,14 @@ class PropertyOfferResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $priceHistory = PropertyOfferHistoryResource::collection($this->priceHistory->sortByDesc('latest'));
+
         return
             [
                 'id' => $this->id,
                 'url' => $this->url,
                 'description' => $this->description,
-                'price_history' => PropertyOfferHistoryResource::collection($this->priceHistory),
+                'price_history' => $priceHistory,
             ];
     }
 }

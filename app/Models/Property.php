@@ -169,6 +169,16 @@ class Property extends Model
         return $this->hasMany(PropertyOffer::class);
     }
 
+    public function offersSale()
+    {
+        return $this->offers->where('listing_type', 'sale');
+    }
+
+    public function offersRent()
+    {
+        return $this->offers->where('listing_type', 'rent');
+    }
+
     /* TODO: Is this needed? */
     public function priceHistories(): HasManyThrough
     {

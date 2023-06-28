@@ -49,6 +49,7 @@ class CreatePropertyMediaTable extends Migration
      */
     public function down()
     {
+        DB::unprepared('DROP TRIGGER IF EXISTS property_media_set_default_order');
         Schema::dropIfExists('property_media');
     }
 }

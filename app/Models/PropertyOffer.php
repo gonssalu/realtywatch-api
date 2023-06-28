@@ -71,7 +71,7 @@ class PropertyOffer extends Model
 
     public function priceHistory(): HasMany
     {
-        return $this->hasMany(PropertyOfferPriceHistory::class, 'offer_id');
+        return $this->hasMany(PropertyOfferPriceHistory::class, 'offer_id', 'id');
     }
 
     public function agency(): BelongsTo

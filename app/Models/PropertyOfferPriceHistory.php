@@ -52,13 +52,12 @@ class PropertyOfferPriceHistory extends Model
      * @var array
      */
     protected $casts = [
-        'datetime' => 'datetime',
-        'price' => 'decimal',
         'latest' => 'boolean',
+        'datetime' => 'datetime'
     ];
 
     public function offer(): BelongsTo
     {
-        return $this->belongsTo(PropertyOffer::class, 'offer_id');
+        return $this->belongsTo(PropertyOffer::class, 'offer_id', 'id');
     }
 }
