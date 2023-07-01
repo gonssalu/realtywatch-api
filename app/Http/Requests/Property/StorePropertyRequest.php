@@ -112,6 +112,12 @@ class StorePropertyRequest extends FormRequest
             'offers.*.url' => 'required|url',
             'offers.*.description' => 'required|string|max:200',
             'offers.*.price' => 'nullable|numeric|min:0',
+
+            /* CHARACTERISTICS */
+            'characteristics' => 'array',
+            'characteristics.*.name' => 'required|string|min:1|max:30',
+            'characteristics.*.type' => 'required|in:numerical,textual',
+            'characteristics.*.value' => 'required|string|max:200',
         ];
     }
 }

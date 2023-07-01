@@ -18,6 +18,7 @@ use CreateTagsTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Str;
 
 class PropertyController extends Controller
 {
@@ -119,6 +120,21 @@ class PropertyController extends Controller
                     $property->listing_type = 'both';
 
                 $property->save();
+            }
+
+            // Process characteristics
+            if (isset($propertyReq['characteristics'])) {
+                $characteristicsReq = $propertyReq['characteristics'];
+                foreach ($characteristicsReq as $characteristicReq) {
+                    $charac = $user->customCharacteristics->where(DB::raw('LOWER(`name`)'), '=', Str::lower($characteristicReq['name']))->first();
+
+                    if (!$charac) {
+                        $characteristicReq['user_id'] = $user->id;
+                        $charac = $user->customCharacteristics()->create($characteristicReq);
+                    }
+
+                    $charac->properties()->attach($property, ['value' => $characteristicReq['value']]);
+                }
             }
 
             // Commit the transaction if everything is successful
