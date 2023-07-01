@@ -150,8 +150,8 @@ class PropertyController extends Controller
                     Storage::delete(StorageLocation::PROPERTY_MEDIA . '/' . $path);
 
             return response()->json([
-                'message' => 'Something went wrong while creating the property',
-                'error' => $e->getMessage(),
+                'message' => 'Something went wrong while creating the property'/*,
+                'error' => $e->getMessage(),*/
             ], 500);
         }
 
