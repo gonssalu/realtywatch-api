@@ -134,7 +134,8 @@ class PropertyController extends Controller
                         $charac = $user->customCharacteristics()->create($characteristicReq);
                     }
 
-                    $charac->properties()->attach($property, ['value' => $characteristicReq['value']]);
+                    if (!$charac->properties()->where('properties.id', $property->id)->exists())
+                        $charac->properties()->attach($property, ['value' => $characteristicReq['value']]);
                 }
             }
 
@@ -149,8 +150,8 @@ class PropertyController extends Controller
                     Storage::delete(StorageLocation::PROPERTY_MEDIA . '/' . $path);
 
             return response()->json([
-                'message' => 'Something went wrong while creating the property'/*,
-                'error' => $e->getMessage(),*/
+                'message' => 'Something went wrong while creating the property',
+                'error' => $e->getMessage(),
             ], 500);
         }
 
