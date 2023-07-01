@@ -15,6 +15,7 @@ use App\Models\Tag;
 use App\Models\User;
 use Carbon\Carbon;
 use CreateTagsTable;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -126,7 +127,7 @@ class PropertyController extends Controller
             if (isset($propertyReq['characteristics'])) {
                 $characteristicsReq = $propertyReq['characteristics'];
                 foreach ($characteristicsReq as $characteristicReq) {
-                    $charac = $user->customCharacteristics->where(DB::raw('LOWER(`name`)'), '=', Str::lower($characteristicReq['name']))->first();
+                    $charac = $user->customCharacteristics()->where(DB::raw('LOWER(`name`)'), '=', Str::lower($characteristicReq['name']))->where('type', $characteristicReq['type'])->first();
 
                     if (!$charac) {
                         $characteristicReq['user_id'] = $user->id;
@@ -142,7 +143,6 @@ class PropertyController extends Controller
         } catch (\Exception $e) {
             // Something went wrong, rollback the transaction
             DB::rollback();
-
             // Delete the added media until now
             foreach ($mediaAdded as $media)
                 foreach ($media as $path)
