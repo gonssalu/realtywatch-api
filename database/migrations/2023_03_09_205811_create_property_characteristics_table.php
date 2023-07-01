@@ -21,6 +21,7 @@ class CreatePropertyCharacteristicsTable extends Migration
             $table->foreign('property_id')->references('id')->on('properties');
             $table->unsignedBigInteger('characteristic_id');
             $table->foreign('characteristic_id')->references('id')->on('characteristics');
+            $table->unique(['characteristic_id', 'property_id']);
             $table->string('value');
         });
 
