@@ -99,11 +99,11 @@ class StorePropertyRequest extends FormRequest
 
             /* MEDIA */
             'media' => 'array',
-            'media.images' => 'array',
+            'media.images' => 'array|max:30',
             'media.images.*' => 'required|mimetypes:image/jpeg,image/png,image/webp,image/gif|max:10240',
-            'media.blueprints' => 'array',
+            'media.blueprints' => 'array|max:10',
             'media.blueprints.*' => 'required|mimetypes:image/jpeg,image/png,image/webp,application/pdf|max:10240',
-            'media.videos' => 'array',
+            'media.videos' => 'array|max:3',
             'media.videos.*' => 'required|mimetypes:video/mp4,video/webm,video/h264,video/3gp|max:102400',
 
             /* OFFERS */
