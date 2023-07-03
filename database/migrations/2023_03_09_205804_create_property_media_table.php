@@ -17,7 +17,8 @@ class CreatePropertyMediaTable extends Migration
 
         Schema::create('property_media', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('property_id')->foreign('properties.id');
+            $table->unsignedBigInteger('property_id');
+            $table->foreign('property_id')->references('id')->on('properties');
             $table->enum('type', ['image', 'video', 'blueprint', 'other']);
             $table->integer('order');
             $table->text('url');
