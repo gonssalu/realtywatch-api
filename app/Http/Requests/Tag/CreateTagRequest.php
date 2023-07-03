@@ -32,7 +32,7 @@ class CreateTagRequest extends FormRequest
             'names' => [
                 'array',
                 'min:1',
-                'max:10',
+                'max:15',
                 'required_without:name'
             ],
             'names.*' => "$nameRules|required",

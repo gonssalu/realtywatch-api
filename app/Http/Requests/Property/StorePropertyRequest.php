@@ -58,7 +58,7 @@ class StorePropertyRequest extends FormRequest
             /* TAGS */
             'tags' => [
                 'array',
-                'max:10',
+                'max:15',
             ],
             'tags.*' => 'required|string|lowercase|min:1|max:32',
             /* LISTS */
