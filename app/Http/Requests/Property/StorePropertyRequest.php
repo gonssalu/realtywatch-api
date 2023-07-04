@@ -75,25 +75,27 @@ class StorePropertyRequest extends FormRequest
             'address' => 'required|array',
             'address.adm1_id' => [
                 'integer',
-                'required_without:full_address', // Required without full_address
+                'required_without_all:address.adm3_id,address.adm2_id,address.full_address',
                 Rule::exists('administrative_divisions', 'id')->where(function ($query) {
                     $query->where('level', 1);
                 }),
             ],
             'address.adm2_id' => [
                 'integer',
+                'required_without_all:address.adm1_id,address.adm3_id,address.full_address',
                 Rule::exists('administrative_divisions', 'id')->where(function ($query) {
                     $query->where('level', 2);
                 }),
             ],
             'address.adm3_id' => [
                 'integer',
+                'required_without_all:address.adm1_id,address.adm2_id,address.full_address',
                 Rule::exists('administrative_divisions', 'id')->where(function ($query) {
                     $query->where('level', 3);
                 }),
             ],
             'address.postal_code' => 'string|min:4|max:10',
-            'address.full_address' => 'required_without:adm1_id|string|max:200', // Required without adm1_id
+            'address.full_address' => 'required_without_all:address.adm1_id,address.adm2_id,address.adm3_id|string|max:200', // Required without adm1_id
             'address.latitude' => 'numeric|between:-90,90',
             'address.longitude' => 'numeric|between:-180,180',
 
