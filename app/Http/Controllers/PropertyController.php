@@ -353,5 +353,39 @@ class PropertyController extends Controller
     public function destroy(Property $property)
     {
         $property->delete();
+        return response()->json([
+            'message' => 'Property has been trashed',
+        ], 200);
+    }
+
+    public function permanentDestroy(Property $property)
+    {
+        $mediaPaths = [];
+        DB::beginTransaction();
+        try {
+            $mediaPaths = $property->media()->pluck('url')->toArray();
+            $property->media()->delete();
+            $property->priceHistories()->delete();
+            $property->offers()->delete();
+            $property->address()->delete();
+            $property->characteristics()->detach();
+            $property->tags()->detach();
+            $property->lists()->detach();
+            $property->forceDelete();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'message' => 'Something went wrong while permanently deleting the property'/*,
+                'error' => $e->getMessage(),*/
+            ], 500);
+        }
+
+        foreach ($mediaPaths as $path)
+            Storage::delete(StorageLocation::PROPERTY_MEDIA . '/' . $path);
+
+        return response()->json([
+            'message' => 'Property has been permanently deleted',
+        ], 200);
     }
 }

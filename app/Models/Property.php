@@ -179,7 +179,6 @@ class Property extends Model
         return $this->offers->where('listing_type', 'rent');
     }
 
-    /* TODO: Is this needed? */
     public function priceHistories(): HasManyThrough
     {
         return $this->hasManyThrough(PropertyOfferPriceHistory::class, PropertyOffer::class);

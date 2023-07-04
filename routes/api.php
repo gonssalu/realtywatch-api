@@ -52,6 +52,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('properties')->controller(PropertyController::class)->group(function () {
             Route::get('/', 'index');
             Route::post('/', 'store')->middleware('throttle:10,1');
+
+            Route::delete('/', 'destroy');
+            Route::get('/trashed', 'trashed');
+            Route::delete('/permanent', 'permanentDestroy');
+
             Route::prefix('{property}')->middleware('property.owner')->group(function () {
                 Route::get('/', 'show');
                 Route::get('/details', 'showDetails');
