@@ -47,6 +47,17 @@ class PropertyController extends Controller
             unset($addressReq['longitude']);
         }
 
+        // Process administrative divisions & validate them
+        // This prevents a user from maliciously trying to use a different adm division
+        if (isset($addressReq['adm3_id'])) {
+            $adm3 = AdministrativeDivision::whereId($addressReq['adm3_id'])->first();
+            $addressReq['adm2_id'] = $adm3->parent->id;
+            $addressReq['adm1_id'] = $adm3->parent->parent->id;
+        } else if (isset($addressReq['adm2_id'])) {
+            $adm2 = AdministrativeDivision::whereId($addressReq['adm2_id'])->first();
+            $addressReq['adm1_id'] = $adm2->parent->id;
+        }
+
         $addressReq['user_id'] = $user->id;
 
         // Start transaction!
