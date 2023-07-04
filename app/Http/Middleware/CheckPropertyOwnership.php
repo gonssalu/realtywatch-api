@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Property;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,16 @@ class CheckPropertyOwnership
     public function handle(Request $request, Closure $next): Response
     {
         $property = $request->route('property');
+        if ($property === null) {
+            $property = Property::withTrashed()->whereId($request->route('trashedProperty'))->first();
+            if ($property === null)
+                return response(
+                    [
+                        'message' => 'Property not found',
+                    ],
+                    404
+                );
+        }
 
         if ($request->user()->id != $property->user_id) {
             return response(

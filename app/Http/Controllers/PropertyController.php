@@ -358,8 +358,15 @@ class PropertyController extends Controller
         ], 200);
     }
 
-    public function permanentDestroy(Property $property)
+    public function permanentDestroy(Request $request, $trashedProperty)
     {
+        $property = $request->user()->properties()->onlyTrashed()->where('id', $trashedProperty)->first();
+
+        if (!$property)
+            return response()->json([
+                'message' => 'Property not found in trash',
+            ], 404);
+
         $mediaPaths = [];
         DB::beginTransaction();
         try {
@@ -376,8 +383,8 @@ class PropertyController extends Controller
         } catch (Exception $e) {
             DB::rollback();
             return response()->json([
-                'message' => 'Something went wrong while permanently deleting the property'/*,
-                'error' => $e->getMessage(),*/
+                'message' => 'Something went wrong while permanently deleting the property',
+                'error' => $e->getMessage(),
             ], 500);
         }
 
@@ -386,6 +393,26 @@ class PropertyController extends Controller
 
         return response()->json([
             'message' => 'Property has been permanently deleted',
+        ], 200);
+    }
+
+    public function trashed(Request $request)
+    {
+        $properties = $request->user()->properties()->onlyTrashed()->paginate(12);
+        return PropertyHeaderResource::collection($properties);
+    }
+
+    public function restore(Request $request, $trashedProperty)
+    {
+        $property = $request->user()->properties()->onlyTrashed()->where('id', $trashedProperty)->first();
+        if (!$property)
+            return response()->json([
+                'message' => 'Property not found in trash',
+            ], 404);
+
+        $property->restore();
+        return response()->json([
+            'message' => 'Property has been restored',
         ], 200);
     }
 }

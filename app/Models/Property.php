@@ -181,7 +181,7 @@ class Property extends Model
 
     public function priceHistories(): HasManyThrough
     {
-        return $this->hasManyThrough(PropertyOfferPriceHistory::class, PropertyOffer::class);
+        return $this->hasManyThrough(PropertyOfferPriceHistory::class, PropertyOffer::class, 'property_id', 'offer_id');
     }
 
     public function characteristics(): BelongsToMany
