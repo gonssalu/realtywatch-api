@@ -108,6 +108,9 @@ class ListController extends Controller
         // Detach all properties from list
         $propertyList->properties()->detach();
 
+        // Detach all tags from list
+        $propertyList->tags()->detach();
+
         $propertyList->delete();
 
         return response()->json([
