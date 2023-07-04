@@ -8,13 +8,11 @@ use App\Http\Requests\Property\StorePropertyRequest;
 use App\Http\Requests\Tag\CreateTagRequest;
 use App\Http\Resources\Property\PropertyFullResource;
 use App\Http\Resources\Property\PropertyHeaderResource;
-use App\Http\Resources\TagResource;
 use App\Models\AdministrativeDivision;
 use App\Models\Property;
 use App\Models\Tag;
 use App\Models\User;
 use Carbon\Carbon;
-use CreateTagsTable;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +32,6 @@ class PropertyController extends Controller
         //Configure missing values
         $propertyReq['user_id'] = $user->id;
 
-        //TODO: Price stuff
         $propertyReq['listing_type'] = 'none';
 
         $addressReq = $propertyReq['address'];
@@ -141,7 +138,7 @@ class PropertyController extends Controller
 
             // Commit the transaction if everything is successful
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Something went wrong, rollback the transaction
             DB::rollback();
             // Delete the added media until now
@@ -212,7 +209,6 @@ class PropertyController extends Controller
 
     public function index(SearchPropertyRequest $request)
     {
-        //TODO: Isto ser algo geral para ser chamado dentro de cenas ooo NASTY THOU! IT WORK OM>G
         $search = $request->validated();
         $properties = $request->user()->properties();
 
