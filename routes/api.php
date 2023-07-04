@@ -53,6 +53,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/', 'index');
             Route::post('/', 'store')->middleware('throttle:10,1');
 
+            Route::get('/polygon', 'indexPropertiesInPolygon');
+
             Route::get('/trashed', 'trashed');
 
             Route::prefix('{property}')->middleware('property.owner')->group(function () {

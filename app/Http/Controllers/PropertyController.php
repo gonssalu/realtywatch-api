@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\StorageLocation;
+use App\Http\Requests\Property\IndexPolygonPropertiesRequest;
 use App\Http\Requests\Property\SearchPropertyRequest;
 use App\Http\Requests\Property\StorePropertyRequest;
 use App\Http\Requests\Tag\CreateTagRequest;
@@ -27,7 +28,7 @@ class PropertyController extends Controller
     public function store(StorePropertyRequest $request)
     {
         $propertyReq = $request->validated();
-        $originalReq = $propertyReq;
+        $originalReq = $propertyReq; //TODO: disable the debug mode
         $user = $request->user();
 
         //Configure missing values
@@ -162,6 +163,7 @@ class PropertyController extends Controller
                 foreach ($media as $path)
                     Storage::delete(StorageLocation::PROPERTY_MEDIA . '/' . $path);
 
+            //TODO: disable the debug mode
             return response()->json([
                 'message' => 'Something went wrong while creating the property',
                 'error' => $e->getMessage(),
@@ -417,5 +419,37 @@ class PropertyController extends Controller
         return response()->json([
             'message' => 'Property has been restored',
         ], 200);
+    }
+
+    /*public function restoreAll(Request $request)
+    {
+        //TODO
+        $request->user()->properties()->onlyTrashed()->restore();
+        return response()->json([
+            'message' => 'All properties have been restored',
+        ], 200);
+    }
+
+    public function permanentlyDestroyAll(Request $request)
+    {
+        //TODO
+    }*/
+
+    public function indexPropertiesInPolygon(IndexPolygonPropertiesRequest $request)
+    {
+        $polygonReq = $request->validated();
+        $user = $request->user();
+        $polygon = $polygonReq['p'];
+
+        $text = "POLYGON((";
+        foreach ($polygon as $point)
+            $text .= $point['x'] . " " . $point['y'] . ", ";
+        $text .= $polygon[0]['x'] . " " . $polygon[0]['y'] . "))";
+
+        $properties = $user->properties()->whereHas('address', function ($query) use ($text) {
+            $query->whereRaw("ST_CONTAINS(ST_GEOMFROMTEXT('$text'), coordinates)");
+        })->paginate(12);
+
+        return PropertyHeaderResource::collection($properties);
     }
 }
