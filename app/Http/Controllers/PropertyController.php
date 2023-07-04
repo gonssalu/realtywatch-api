@@ -27,7 +27,7 @@ class PropertyController extends Controller
     public function store(StorePropertyRequest $request)
     {
         $propertyReq = $request->validated();
-        $originalReq = $propertyReq;
+        //$originalReq = $propertyReq;
         $user = $request->user();
 
         //Configure missing values
@@ -163,9 +163,9 @@ class PropertyController extends Controller
                     Storage::delete(StorageLocation::PROPERTY_MEDIA . '/' . $path);
 
             return response()->json([
-                'message' => 'Something went wrong while creating the property',
+                'message' => 'Something went wrong while creating the property'/*,
                 'error' => $e->getMessage(),
-                'request' => $originalReq,
+                'request' => $originalReq,*/
             ], 500);
         }
 
