@@ -8,13 +8,11 @@ use App\Http\Requests\Property\StorePropertyRequest;
 use App\Http\Requests\Tag\CreateTagRequest;
 use App\Http\Resources\Property\PropertyFullResource;
 use App\Http\Resources\Property\PropertyHeaderResource;
-use App\Http\Resources\TagResource;
 use App\Models\AdministrativeDivision;
 use App\Models\Property;
 use App\Models\Tag;
 use App\Models\User;
 use Carbon\Carbon;
-use CreateTagsTable;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -140,7 +138,7 @@ class PropertyController extends Controller
 
             // Commit the transaction if everything is successful
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Something went wrong, rollback the transaction
             DB::rollback();
             // Delete the added media until now
