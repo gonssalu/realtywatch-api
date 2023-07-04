@@ -48,7 +48,7 @@ class StorePropertyRequest extends FormRequest
             /* MAIN STUFF */
             'title' => 'required|string|min:3|max:200',
             'type' => 'optional|nullable|in:house,apartment,office,shop,warehouse,garage,land,other',
-            'status' => 'required|in:available,unavailable,unknown',
+            'status' => 'optional|nullable|in:available,unavailable,unknown',
             'description' => 'string|max:5000',
             'typology' => 'string|max:12',
             'gross_area' => 'integer|min:0',
