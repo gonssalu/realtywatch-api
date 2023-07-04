@@ -31,9 +31,7 @@ class AuthController extends Controller
 
         $accessToken = $user->myCreateToken($request->device_name);
 
-        $csrfToken = csrf_token();
-
-        return response(['message' => 'Login was successful', 'user' => new UserResource($user), 'access_token' => $accessToken, 'csrf_token' => $csrfToken]);
+        return response(['message' => 'Login was successful', 'user' => new UserResource($user), 'access_token' => $accessToken]);
     }
 
     public function logout(Request $request)
