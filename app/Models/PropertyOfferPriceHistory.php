@@ -53,7 +53,7 @@ class PropertyOfferPriceHistory extends Model
      */
     protected $casts = [
         'latest' => 'boolean',
-        'datetime' => 'datetime'
+        'datetime' => 'datetime',
     ];
 
     public function offer(): BelongsTo

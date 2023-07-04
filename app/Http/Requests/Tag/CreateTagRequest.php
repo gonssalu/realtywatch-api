@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Tag;
 
-use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class CreateTagRequest extends FormRequest
 {
@@ -33,7 +31,7 @@ class CreateTagRequest extends FormRequest
                 'array',
                 'min:1',
                 'max:15',
-                'required_without:name'
+                'required_without:name',
             ],
             'names.*' => "$nameRules|required",
         ];

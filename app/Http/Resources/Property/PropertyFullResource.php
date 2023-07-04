@@ -46,11 +46,10 @@ class PropertyFullResource extends JsonResource
             'characteristics' => $characteristics,
             'tags' => $tags,
             'media' => $media,
-            'offers' =>
-            [
+            'offers' => [
                 'sale' => $saleOffers,
                 'rent' => $rentOffers,
-            ]
+            ],
         ];
     }
 }

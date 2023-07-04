@@ -55,7 +55,7 @@ class ListController extends Controller
         //Check if user already has a list with the same name
         if ($user->lists()->where('name', $listReq['name'])->first()) {
             return response()->json([
-                'message' => 'A list with that name already exists'
+                'message' => 'A list with that name already exists',
             ], 409);
         }
 
@@ -63,7 +63,7 @@ class ListController extends Controller
 
         return response()->json([
             'message' => 'List created successfully',
-            'data' => new ListResource($list)
+            'data' => new ListResource($list),
         ], 201);
     }
 
@@ -86,7 +86,7 @@ class ListController extends Controller
         //Check if user already has a list (excluding this one) with the same name
         if ($user->lists()->where('name', $listReq['name'])->andWhere('id', '!=', $propertyList->id)->first()) {
             return response()->json([
-                'message' => 'A list with that name already exists'
+                'message' => 'A list with that name already exists',
             ], 409);
         }
 
@@ -94,7 +94,7 @@ class ListController extends Controller
 
         return response()->json([
             'message' => 'List updated successfully',
-            'data' => new ListWithPropertiesResource($propertyList)
+            'data' => new ListWithPropertiesResource($propertyList),
         ], 200);
     }
 
@@ -114,7 +114,7 @@ class ListController extends Controller
         $propertyList->delete();
 
         return response()->json([
-            'message' => 'List deleted successfully'
+            'message' => 'List deleted successfully',
         ], 200);
     }
 }

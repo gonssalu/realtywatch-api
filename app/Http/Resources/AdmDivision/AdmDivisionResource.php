@@ -26,6 +26,7 @@ class AdmDivisionResource extends JsonResource
             $children = $this->children()->whereHas('addresses' . ($this->level + 1), function ($query) use ($request) {
                 $query->where('user_id', $request->user()->id);
             })->get();
+
             return array_merge($adm, ['children' => AdmDivisionResource::collection($children)]);
         }
 

@@ -24,9 +24,9 @@ class AdmDivisionController extends Controller
 
     public function level($level, Request $request)
     {
-        $adms = AdministrativeDivision::whereLevel((int)$level);
+        $adms = AdministrativeDivision::whereLevel((int) $level);
 
-        if ($level != 1)
+        if ($level != 1) {
             if ($request->has('parent_id')) {
                 // Validate parent id
                 $parent_id = $request->validate([
@@ -34,7 +34,7 @@ class AdmDivisionController extends Controller
                         'integer',
                         Rule::exists('administrative_divisions', 'id')->where(function ($query) use ($level) {
                             $query->where('level', $level - 1);
-                        })
+                        }),
                     ],
                 ], [
                     'parent_id.exists' => 'That parent_id does not exist for level ' . ($level - 1) . ' administrative divisions.',
@@ -42,6 +42,7 @@ class AdmDivisionController extends Controller
 
                 $adms = $adms->whereParentId($parent_id);
             }
+        }
 
         return SimpleAdmDivisionResource::collection($adms->get());
     }

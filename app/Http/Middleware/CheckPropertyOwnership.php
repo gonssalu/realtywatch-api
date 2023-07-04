@@ -19,13 +19,14 @@ class CheckPropertyOwnership
         $property = $request->route('property');
         if ($property === null) {
             $property = Property::withTrashed()->whereId($request->route('trashedProperty'))->first();
-            if ($property === null)
+            if ($property === null) {
                 return response(
                     [
                         'message' => 'Property not found',
                     ],
                     404
                 );
+            }
         }
 
         if ($request->user()->id != $property->user_id) {

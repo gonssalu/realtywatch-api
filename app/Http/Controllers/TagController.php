@@ -41,6 +41,7 @@ class TagController extends Controller
         }
 
         $tag = $user->tags()->create(['name' => $name]);
+
         return ['tag' => $tag, 'exists' => false];
     }
 
@@ -53,9 +54,10 @@ class TagController extends Controller
 
         if ($request->has('name')) {
             $tag = TagController::createTag($user, $tagReq['name']);
+
             return response()->json([
                 'message' => $tag['exists'] ? 'Tag already exists' : 'Tag created successfully',
-                'data' => new TagResource($tag['tag'])
+                'data' => new TagResource($tag['tag']),
             ], $tag['exists'] ? 200 : 201);
         }
 
@@ -65,13 +67,14 @@ class TagController extends Controller
         foreach ($tagReq['names'] as $newTag) {
             $tag = TagController::createTag($user, $newTag);
             $newTags[] = $tag['tag'];
-            if (!$tag['exists'])
+            if (!$tag['exists']) {
                 $new++;
+            }
         }
 
         return response()->json([
             'message' => $new > 0 ? 'New tags were created successfully' : 'All of the tags provided already existed',
-            'data' => TagResource::collection($newTags)
+            'data' => TagResource::collection($newTags),
         ], $new > 0 ? 201 : 200);
     }
 

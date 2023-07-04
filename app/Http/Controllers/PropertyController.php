@@ -36,8 +36,9 @@ class PropertyController extends Controller
 
         $propertyReq['listing_type'] = 'none';
 
-        if (!isset($propertyReq['status']))
+        if (!isset($propertyReq['status'])) {
             $propertyReq['status'] = 'unknown';
+        }
 
         $addressReq = $propertyReq['address'];
         unset($propertyReq['address']);
@@ -55,7 +56,7 @@ class PropertyController extends Controller
             $adm3 = AdministrativeDivision::whereId($addressReq['adm3_id'])->first();
             $addressReq['adm2_id'] = $adm3->parent->id;
             $addressReq['adm1_id'] = $adm3->parent->parent->id;
-        } else if (isset($addressReq['adm2_id'])) {
+        } elseif (isset($addressReq['adm2_id'])) {
             $adm2 = AdministrativeDivision::whereId($addressReq['adm2_id'])->first();
             $addressReq['adm1_id'] = $adm2->parent->id;
         }
@@ -72,28 +73,34 @@ class PropertyController extends Controller
             $property->address()->create($addressReq);
 
             // Add coordinates to address
-            if (isset($addressReq['coordinates_']))
+            if (isset($addressReq['coordinates_'])) {
                 DB::table('property_addresses')->where('property_id', $property->id)->update([
-                    'coordinates' => $addressReq["coordinates_"],
+                    'coordinates' => $addressReq['coordinates_'],
                 ]);
+            }
 
-            if (isset($propertyReq['tags']))
+            if (isset($propertyReq['tags'])) {
                 $this->updateTagsHelper($property, $user, $propertyReq['tags']);
+            }
 
-            if (isset($propertyReq['lists']))
+            if (isset($propertyReq['lists'])) {
                 $this->updateListsHelper($property, $user, $propertyReq['lists']);
+            }
 
             if (isset($propertyReq['media'])) {
                 $mediaReq = $propertyReq['media'];
 
-                if (isset($mediaReq['images']))
+                if (isset($mediaReq['images'])) {
                     $mediaAdded[] = $this->processMedia($property, $mediaReq['images'], 'image', true);
+                }
 
-                if (isset($mediaReq['blueprints']))
+                if (isset($mediaReq['blueprints'])) {
                     $mediaAdded[] = $this->processMedia($property, $mediaReq['blueprints'], 'blueprint');
+                }
 
-                if (isset($mediaReq['videos']))
+                if (isset($mediaReq['videos'])) {
                     $mediaAdded[] = $this->processMedia($property, $mediaReq['videos'], 'video');
+                }
             }
 
             // Process offers
@@ -115,7 +122,7 @@ class PropertyController extends Controller
                     if ($offer->listing_type == 'sale' && (!$minPriceSale || $ph->price < $minPriceSale)) {
                         $hasSaleOffer = true;
                         $minPriceSale = $ph->price;
-                    } else if ($offer->listing_type == 'rent' && (!$minPriceRent || $ph->price < $minPriceRent)) {
+                    } elseif ($offer->listing_type == 'rent' && (!$minPriceRent || $ph->price < $minPriceRent)) {
                         $hasRentOffer = true;
                         $minPriceRent = $ph->price;
                     }
@@ -131,8 +138,9 @@ class PropertyController extends Controller
                     $property->current_price_rent = $minPriceRent;
                 }
 
-                if ($hasSaleOffer && $hasRentOffer)
+                if ($hasSaleOffer && $hasRentOffer) {
                     $property->listing_type = 'both';
+                }
 
                 $property->save();
             }
@@ -148,8 +156,9 @@ class PropertyController extends Controller
                         $charac = $user->customCharacteristics()->create($characteristicReq);
                     }
 
-                    if (!$charac->properties()->where('properties.id', $property->id)->exists())
+                    if (!$charac->properties()->where('properties.id', $property->id)->exists()) {
                         $charac->properties()->attach($property, ['value' => $characteristicReq['value']]);
+                    }
                 }
             }
 
@@ -159,9 +168,11 @@ class PropertyController extends Controller
             // Something went wrong, rollback the transaction
             DB::rollback();
             // Delete the added media until now
-            foreach ($mediaAdded as $media)
-                foreach ($media as $path)
+            foreach ($mediaAdded as $media) {
+                foreach ($media as $path) {
                     Storage::delete(StorageLocation::PROPERTY_MEDIA . '/' . $path);
+                }
+            }
 
             //TODO: disable the debug mode
             return response()->json([
@@ -170,7 +181,6 @@ class PropertyController extends Controller
                 'request' => $originalReq,
             ], 500);
         }
-
 
         return response()->json([
             'message' => 'Property created',
@@ -326,8 +336,9 @@ class PropertyController extends Controller
         foreach ($tags as $newTag) {
             $tag = TagController::createTag($user, $newTag);
             $tag['tag']->properties()->attach($property);
-            if (!$tag['exists'])
+            if (!$tag['exists']) {
                 $new++;
+            }
         }
 
         return $new > 0;
@@ -358,6 +369,7 @@ class PropertyController extends Controller
     public function destroy(Property $property)
     {
         $property->delete();
+
         return response()->json([
             'message' => 'Property has been trashed',
         ], 200);
@@ -367,10 +379,11 @@ class PropertyController extends Controller
     {
         $property = $request->user()->properties()->onlyTrashed()->where('id', $trashedProperty)->first();
 
-        if (!$property)
+        if (!$property) {
             return response()->json([
                 'message' => 'Property not found in trash',
             ], 404);
+        }
 
         $mediaPaths = [];
         DB::beginTransaction();
@@ -387,14 +400,16 @@ class PropertyController extends Controller
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
+
             return response()->json([
                 'message' => 'Something went wrong while permanently deleting the property',
                 'error' => $e->getMessage(),
             ], 500);
         }
 
-        foreach ($mediaPaths as $path)
+        foreach ($mediaPaths as $path) {
             Storage::delete(StorageLocation::PROPERTY_MEDIA . '/' . $path);
+        }
 
         return response()->json([
             'message' => 'Property has been permanently deleted',
@@ -404,18 +419,21 @@ class PropertyController extends Controller
     public function trashed(Request $request)
     {
         $properties = $request->user()->properties()->onlyTrashed()->paginate(12);
+
         return PropertyHeaderResource::collection($properties);
     }
 
     public function restore(Request $request, $trashedProperty)
     {
         $property = $request->user()->properties()->onlyTrashed()->where('id', $trashedProperty)->first();
-        if (!$property)
+        if (!$property) {
             return response()->json([
                 'message' => 'Property not found in trash',
             ], 404);
+        }
 
         $property->restore();
+
         return response()->json([
             'message' => 'Property has been restored',
         ], 200);
@@ -441,10 +459,11 @@ class PropertyController extends Controller
         $user = $request->user();
         $polygon = $polygonReq['p'];
 
-        $text = "POLYGON((";
-        foreach ($polygon as $point)
-            $text .= $point['x'] . " " . $point['y'] . ", ";
-        $text .= $polygon[0]['x'] . " " . $polygon[0]['y'] . "))";
+        $text = 'POLYGON((';
+        foreach ($polygon as $point) {
+            $text .= $point['x'] . ' ' . $point['y'] . ', ';
+        }
+        $text .= $polygon[0]['x'] . ' ' . $polygon[0]['y'] . '))';
 
         $properties = $user->properties()->whereHas('address', function ($query) use ($text) {
             $query->whereRaw("ST_CONTAINS(ST_GEOMFROMTEXT('$text'), coordinates)");

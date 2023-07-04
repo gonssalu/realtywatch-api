@@ -11,11 +11,11 @@ class CharacteristicController extends Controller
     {
         $user = $request->user();
         $characteristics = [
-            "textual" => CharacteristicResource::collection($user->textualCharacteristics()),
-            "numerical" => CharacteristicResource::collection(
+            'textual' => CharacteristicResource::collection($user->textualCharacteristics()),
+            'numerical' => CharacteristicResource::collection(
                 $user->numericalCharacteristics()
             ),
-            "other" => CharacteristicResource::collection($user->otherCharacteristics()),
+            'other' => CharacteristicResource::collection($user->otherCharacteristics()),
         ];
 
         return response()->json([

@@ -16,7 +16,7 @@ class CharacteristicResource extends JsonResource
     {
         return [
             'name' => $this->name,
-            'type' => $this->type
+            'type' => $this->type,
         ];
     }
 }

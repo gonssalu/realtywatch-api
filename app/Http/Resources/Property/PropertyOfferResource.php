@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Property;
 
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
