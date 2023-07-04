@@ -34,7 +34,6 @@ class PropertyController extends Controller
         //Configure missing values
         $propertyReq['user_id'] = $user->id;
 
-        //TODO: Price stuff
         $propertyReq['listing_type'] = 'none';
 
         $addressReq = $propertyReq['address'];
@@ -212,7 +211,6 @@ class PropertyController extends Controller
 
     public function index(SearchPropertyRequest $request)
     {
-        //TODO: Isto ser algo geral para ser chamado dentro de cenas ooo NASTY THOU! IT WORK OM>G
         $search = $request->validated();
         $properties = $request->user()->properties();
 
