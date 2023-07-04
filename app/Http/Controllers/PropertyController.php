@@ -71,9 +71,10 @@ class PropertyController extends Controller
             $property->address()->create($addressReq);
 
             // Add coordinates to address
-            DB::table('property_addresses')->where('property_id', $property->id)->update([
-                'coordinates' => $addressReq["coordinates_"],
-            ]);
+            if (isset($addressReq['coordinates_']))
+                DB::table('property_addresses')->where('property_id', $property->id)->update([
+                    'coordinates' => $addressReq["coordinates_"],
+                ]);
 
             if (isset($propertyReq['tags']))
                 $this->updateTagsHelper($property, $user, $propertyReq['tags']);
