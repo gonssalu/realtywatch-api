@@ -34,6 +34,9 @@ class PropertyController extends Controller
 
         $propertyReq['listing_type'] = 'none';
 
+        if (!isset($propertyReq['status']))
+            $propertyReq['status'] = 'unknown';
+
         $addressReq = $propertyReq['address'];
         unset($propertyReq['address']);
 
@@ -95,10 +98,10 @@ class PropertyController extends Controller
                         'latest' => true,
                     ]);
 
-                    if ($offer->type == 'sale' && (!$minPriceSale || $ph->price < $minPriceSale)) {
+                    if ($offer->listing_type == 'sale' && (!$minPriceSale || $ph->price < $minPriceSale)) {
                         $hasSaleOffer = true;
                         $minPriceSale = $ph->price;
-                    } else if ($offer->type == 'rent' && (!$minPriceRent || $ph->price < $minPriceRent)) {
+                    } else if ($offer->listing_type == 'rent' && (!$minPriceRent || $ph->price < $minPriceRent)) {
                         $hasRentOffer = true;
                         $minPriceRent = $ph->price;
                     }
