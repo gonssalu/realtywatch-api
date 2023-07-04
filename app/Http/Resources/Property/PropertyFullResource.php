@@ -28,7 +28,7 @@ class PropertyFullResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'quantity' => $this->quantity,
+            /*'quantity' => $this->quantity,*/
             'listing_type' => $this->listing_type,
             'title' => $this->title,
             'description' => $this->description,

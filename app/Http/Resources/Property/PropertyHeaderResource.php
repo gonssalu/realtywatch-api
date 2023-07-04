@@ -16,7 +16,7 @@ class PropertyHeaderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'quantity' => $this->quantity,
+            /*'quantity' => $this->quantity,*/
             'listing_type' => $this->listing_type,
             'title' => $this->title,
             'cover_url' => $this->full_cover_url,
