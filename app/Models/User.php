@@ -121,6 +121,21 @@ class User extends Authenticatable
         return $this->hasMany(Characteristic::class);
     }
 
+    public function textualCharacteristics()
+    {
+        return $this->customCharacteristics->where('type', 'textual');
+    }
+
+    public function numericalCharacteristics()
+    {
+        return $this->customCharacteristics->where('type', 'numerical');
+    }
+
+    public function otherCharacteristics()
+    {
+        return $this->customCharacteristics->where('type', 'other');
+    }
+
     public function agencies(): HasMany
     {
         return $this->hasMany(Agency::class);

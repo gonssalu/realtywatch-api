@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdmDivisionController;
+use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\TagController;
@@ -42,6 +43,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/sidebar', 'indexSidebar');
             Route::post('/', 'create')->middleware('throttle:20,1');
             Route::delete('/{tag}', 'destroy');
+        });
+
+        Route::prefix('characteristics')->controller(CharacteristicController::class)->group(function () {
+            Route::get('/', 'index');
         });
 
         Route::prefix('properties')->controller(PropertyController::class)->group(function () {
