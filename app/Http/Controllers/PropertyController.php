@@ -457,6 +457,11 @@ class PropertyController extends Controller
     {
         $polygonReq = $request->validated();
         $user = $request->user();
+
+        //HACK if no polygon is specified, return all properties
+        if (!isset($polygonReq['p']))
+            return PropertyHeaderResource::collection($user->properties()->paginate(12));
+
         $polygon = $polygonReq['p'];
 
         $text = 'POLYGON((';
