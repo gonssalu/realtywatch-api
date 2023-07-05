@@ -22,7 +22,7 @@ class IndexPolygonPropertiesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'p' => 'required|array|min:3|max:20',
+            'p' => 'array|min:3|max:20',
             'p.*.x' => 'required|numeric|between:-90,90',
             'p.*.y' => 'required|numeric|between:-180,180',
         ];
