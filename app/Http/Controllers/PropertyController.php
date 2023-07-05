@@ -383,16 +383,8 @@ class PropertyController extends Controller
         ], 200);
     }
 
-    public function permanentDestroy(Request $request, $trashedProperty)
+    private function permanentDeleteProp(Property $property)
     {
-        $property = $request->user()->properties()->onlyTrashed()->where('id', $trashedProperty)->first();
-
-        if (!$property) {
-            return response()->json([
-                'message' => 'Property not found in trash',
-            ], 404);
-        }
-
         $mediaPaths = [];
         DB::beginTransaction();
         try {
@@ -409,9 +401,28 @@ class PropertyController extends Controller
         } catch (Exception $e) {
             DB::rollback();
 
+            return null;
+        }
+
+        return $mediaPaths;
+    }
+
+    public function permanentDestroy(Request $request, $trashedProperty)
+    {
+        $property = $request->user()->properties()->onlyTrashed()->where('id', $trashedProperty)->first();
+
+        if (!$property) {
             return response()->json([
-                'message' => 'Something went wrong while permanently deleting the property',
-                'error' => $e->getMessage(),
+                'message' => 'Property not found in trash',
+            ], 404);
+        }
+
+        $mediaPaths = $this->permanentDeleteProp($property);
+
+        if (!$mediaPaths) {
+            return response()->json([
+                'message' => 'Something went wrong while permanently deleting the property'/*,
+                'error' => $e->getMessage(),*/
             ], 500);
         }
 
@@ -447,19 +458,44 @@ class PropertyController extends Controller
         ], 200);
     }
 
-    /*public function restoreAll(Request $request)
+    public function restoreAll(Request $request)
     {
-        //TODO
         $request->user()->properties()->onlyTrashed()->restore();
         return response()->json([
             'message' => 'All properties have been restored',
         ], 200);
     }
 
-    public function permanentlyDestroyAll(Request $request)
+    public function emptyTrash(Request $request)
     {
-        //TODO
-    }*/
+        $properties = $request->user()->properties()->onlyTrashed()->get();
+        $errors = [];
+        foreach ($properties as $property) {
+            $propId = $property->id;
+            $mediaPaths = $this->permanentDeleteProp($property);
+            if (!$mediaPaths) {
+                $errors[] = $propId;
+                continue;
+            }
+            foreach ($mediaPaths as $path) {
+                Storage::delete(StorageLocation::PROPERTY_MEDIA . '/' . $path);
+            }
+        }
+
+        if (count($errors) > 0) {
+            $errors = array_map(function ($id) {
+                return ['property_id' => $id, 'message' => 'Something went wrong while permanently deleting the property'];
+            }, $errors);
+            return response()->json([
+                'message' => 'Success, but some properties could not be permanently deleted.',
+                'errors' => $errors,
+            ], 207);
+        }
+
+        return response()->json([
+            'message' => 'All properties in the trash have been permanently deleted',
+        ], 200);
+    }
 
     public function indexPropertiesInPolygon(IndexPolygonPropertiesRequest $request)
     {

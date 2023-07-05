@@ -56,6 +56,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/polygon', 'indexPropertiesInPolygon');
 
             Route::get('/trashed', 'trashed');
+            Route::delete('/trashed', 'emptyTrash');
+            Route::patch('/trashed/restore', 'restoreAll');
 
             Route::prefix('{property}')->middleware('property.owner')->group(function () {
                 Route::get('/', 'show');
