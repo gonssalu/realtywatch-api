@@ -21,6 +21,7 @@ class SearchPropertyRequest extends FormRequest
      */
     public function rules(): array
     {
+        //ATTENTION: Same as in app\Http\Requests\Property\IndexPolygonPropertiesRequest.php
         return [
             'query' => 'string',
             'include_tags' => 'json',

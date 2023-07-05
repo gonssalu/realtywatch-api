@@ -21,10 +21,16 @@ class IndexPolygonPropertiesRequest extends FormRequest
      */
     public function rules(): array
     {
+        //ATTENTION: Same as in app\Http\Requests\Property\SearchPropertyRequest.php
         return [
             'p' => 'array|min:3|max:20',
             'p.*.x' => 'required|numeric|between:-90,90',
             'p.*.y' => 'required|numeric|between:-180,180',
+            'query' => 'string',
+            'include_tags' => 'json',
+            'exclude_tags' => 'json',
+            'adm_id' => 'integer',
+            'list_id' => 'integer',
         ];
     }
 }

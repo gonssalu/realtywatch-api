@@ -236,12 +236,11 @@ class PropertyController extends Controller
         return new PropertyFullResource($property);
     }
 
-    public function index(SearchPropertyRequest $request)
+    private function handleSearch($search, $props)
     {
-        $search = $request->validated();
-        $properties = $request->user()->properties();
-
+        $properties = $props;
         // Search for a property with the query
+        //BUG: MAJOR BUG CUZ OF ORWHERE
         if (isset($search['query'])) {
             $properties->where('title', 'like', '%' . $search['query'] . '%')->orWhere('description', 'like', '%' . $search['query'] . '%');
         }
@@ -282,6 +281,15 @@ class PropertyController extends Controller
                 $query->where('adm' . $adm_level . '_id', $adm_id);
             });
         }
+
+        return $properties;
+    }
+
+    public function index(SearchPropertyRequest $request)
+    {
+        $search = $request->validated();
+        $properties = $request->user()->properties();
+        $properties = $this->handleSearch($search, $properties);
 
         return PropertyHeaderResource::collection(
             $properties->paginate(12)
@@ -456,11 +464,12 @@ class PropertyController extends Controller
     public function indexPropertiesInPolygon(IndexPolygonPropertiesRequest $request)
     {
         $polygonReq = $request->validated();
-        $user = $request->user();
+        $props = $request->user()->properties();
+        $props = $this->handleSearch($polygonReq, $props);
 
         //HACK if no polygon is specified, return all properties
         if (!isset($polygonReq['p']))
-            return PropertyHeaderResource::collection($user->properties()->paginate(12));
+            return PropertyHeaderResource::collection($props->paginate(12));
 
         $polygon = $polygonReq['p'];
 
@@ -470,7 +479,7 @@ class PropertyController extends Controller
         }
         $text .= $polygon[0]['x'] . ' ' . $polygon[0]['y'] . '))';
 
-        $properties = $user->properties()->whereHas('address', function ($query) use ($text) {
+        $properties = $props->whereHas('address', function ($query) use ($text) {
             $query->whereRaw("ST_CONTAINS(ST_GEOMFROMTEXT('$text'), coordinates)");
         })->paginate(12);
 
