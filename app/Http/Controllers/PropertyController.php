@@ -95,12 +95,9 @@ class PropertyController extends Controller
                 $offersReq = $propertyReq['offers'];
                 foreach ($offersReq as $offerReq) {
                     $offerReq['property_id'] = $property->id;
-                    $offer = $property->offers()->create($offerReq);
-                    $ph = $offer->priceHistory()->create([
-                        'price' => isset($offerReq['price']) ? $offerReq['price'] : null,
-                        'datetime' => Carbon::now(),
-                        'latest' => true,
-                    ]);
+                    $offerHelper = $this->createOfferHelper($property, $offerReq);
+                    $offer = $offerHelper[0]; // Offer instance
+                    $ph = $offerHelper[1]; // PriceHistory instance
 
                     if ($offer->listing_type == 'sale' && (!$minPriceSale || $ph->price < $minPriceSale)) {
                         $hasSaleOffer = true;
@@ -169,6 +166,18 @@ class PropertyController extends Controller
             'message' => 'Property created',
             'data' => new PropertyFullResource($property),
         ], 201);
+    }
+
+    private function createOfferHelper(Property $property, $offerReq)
+    {
+        $offer = $property->offers()->create($offerReq);
+        $ph = $offer->priceHistory()->create([
+            'price' => isset($offerReq['price']) ? $offerReq['price'] : null,
+            'datetime' => Carbon::now(),
+            'latest' => true,
+        ]);
+
+        return [$offer, $ph];
     }
 
     /**
@@ -247,37 +256,51 @@ class PropertyController extends Controller
             }
 
             // Process offers
-            /*$hasRentOffer = false;
+            $hasRentOffer = false;
             $hasSaleOffer = false;
             $minPriceRent = null;
             $minPriceSale = null;
+
             if (isset($propertyReq['offers'])) {
                 $offersReq = $propertyReq['offers'];
-                foreach ($offersReq as $offerReq) {
-                    $offerReq['property_id'] = $property->id;
-                    $offer = $property->offers()->create($offerReq);
-                    $ph = $offer->priceHistory()->create([
-                        'price' => isset($offerReq['price']) ? $offerReq['price'] : null,
-                        'datetime' => Carbon::now(),
-                        'latest' => true,
-                    ]);
 
-                    if ($offer->listing_type == 'sale' && (!$minPriceSale || $ph->price < $minPriceSale)) {
-                        $hasSaleOffer = true;
-                        $minPriceSale = $ph->price;
-                    } elseif ($offer->listing_type == 'rent' && (!$minPriceRent || $ph->price < $minPriceRent)) {
-                        $hasRentOffer = true;
-                        $minPriceRent = $ph->price;
+                foreach ($offersReq as $offerReq) {
+                    $offerId = isset($offerReq['id']) ? $offerReq['id'] : null;
+                    if ($offerId) {
+                        $offer = $property->offers()->where('id', $offerId)->first();
+                        $offer->update($offerReq);
+
+                        $newPrice = isset($offerReq['price']) ? $offerReq['price'] : null;
+
+                        if ($offer->priceHistory()->last()->price != $newPrice) {
+                            $offer->priceHistory()->last()->update([
+                                'latest' => false,
+                            ]);
+
+                            $offer->priceHistory()->create([
+                                'price' => isset($offerReq['price']) ? $offerReq['price'] : null,
+                                'datetime' => Carbon::now(),
+                                'latest' => true,
+                            ]);
+                        }
+                    } else {
+                        $offerReq['property_id'] = $property->id;
+                        $this->createOfferHelper($property, $offerReq);
                     }
                 }
 
+                $hasSaleOffer = $property->offersSale()->exists();
+                $hasRentOffer = $property->offersRent()->exists();
+
                 if ($hasSaleOffer) {
                     $property->listing_type = 'sale';
+                    $minPriceSale = $property->offersSale()->where('latest', true)->min('price');
                     $property->current_price_sale = $minPriceSale;
                 }
 
                 if ($hasRentOffer) {
                     $property->listing_type = 'rent';
+                    $minPriceRent = $property->offersRent()->where('latest', true)->min('price');
                     $property->current_price_rent = $minPriceRent;
                 }
 
@@ -286,7 +309,7 @@ class PropertyController extends Controller
                 }
 
                 $property->save();
-            }*/
+            }
 
             // Process characteristics
             if (isset($propertyReq['characteristics'])) {
