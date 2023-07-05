@@ -5,7 +5,7 @@ namespace App\Http\Requests\Property;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StorePropertyRequest extends FormRequest
+class UpdatePropertyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -43,7 +43,7 @@ class StorePropertyRequest extends FormRequest
     {
         $user_id = $this->user()->id;
 
-        //When changing tag stuff also change CreateTagRequest & UpdatePropertyRequest
+        //When changing tag stuff also change CreateTagRequest & StorePropertyRequest
         return [
             /* MAIN STUFF */
             'title' => 'required|string|min:3|max:200',
@@ -107,13 +107,18 @@ class StorePropertyRequest extends FormRequest
             'media.blueprints.*' => 'required|mimetypes:image/jpeg,image/png,image/webp,application/pdf|max:10240',
             'media.videos' => 'array|max:3',
             'media.videos.*' => 'required|mimetypes:video/mp4,video/webm,video/h264,video/3gp|max:102400',
+            'media.remove' => 'array',
+            'media.remove.*' => 'required|integer|exists:property_media,id', //validate property id
 
             /* OFFERS */
             'offers' => 'array',
+            'offers.*.id' => 'nullable|integer|exists:property_offers,id', //validate property id
             'offers.*.listing_type' => 'required|in:rent,sale',
             'offers.*.url' => 'required|url',
             'offers.*.description' => 'required|string|max:200',
             'offers.*.price' => 'nullable|numeric|min:0|max:999999999',
+            'offers.remove' => 'array',
+            'offers.remove.*' => 'required|integer|exists:property_offers,id', //validate property id
 
             /* CHARACTERISTICS */
             'characteristics' => 'array',

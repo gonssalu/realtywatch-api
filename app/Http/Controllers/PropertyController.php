@@ -6,6 +6,7 @@ use App\Helpers\StorageLocation;
 use App\Http\Requests\Property\IndexPolygonPropertiesRequest;
 use App\Http\Requests\Property\SearchPropertyRequest;
 use App\Http\Requests\Property\StorePropertyRequest;
+use App\Http\Requests\Property\UpdatePropertyRequest;
 use App\Http\Requests\Tag\CreateTagRequest;
 use App\Http\Resources\Property\PropertyFullResource;
 use App\Http\Resources\Property\PropertyHeaderResource;
@@ -36,30 +37,12 @@ class PropertyController extends Controller
 
         $propertyReq['listing_type'] = 'none';
 
-        if (!isset($propertyReq['status'])) {
-            $propertyReq['status'] = 'unknown';
-        }
+        // Validate status
+        $propertyReq['status'] = $propertyReq['status'] ?? 'unknown';
 
-        $addressReq = $propertyReq['address'];
+        // Validate address
+        $addressReq = $this->validateAddressReq($propertyReq);
         unset($propertyReq['address']);
-
-        // Process coordinates
-        if (isset($addressReq['latitude']) && isset($addressReq['longitude'])) {
-            $addressReq['coordinates_'] = DB::raw('POINT(' . $addressReq['latitude'] . ', ' . $addressReq['longitude'] . ')');
-            unset($addressReq['latitude']);
-            unset($addressReq['longitude']);
-        }
-
-        // Process administrative divisions & validate them
-        // This prevents a user from maliciously trying to use a different adm division
-        if (isset($addressReq['adm3_id'])) {
-            $adm3 = AdministrativeDivision::whereId($addressReq['adm3_id'])->first();
-            $addressReq['adm2_id'] = $adm3->parent->id;
-            $addressReq['adm1_id'] = $adm3->parent->parent->id;
-        } elseif (isset($addressReq['adm2_id'])) {
-            $adm2 = AdministrativeDivision::whereId($addressReq['adm2_id'])->first();
-            $addressReq['adm1_id'] = $adm2->parent->id;
-        }
 
         $addressReq['user_id'] = $user->id;
 
@@ -188,17 +171,185 @@ class PropertyController extends Controller
         ], 201);
     }
 
-    public function processMedia($property, $mediaList, $type, $useAsCover = false): array
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdatePropertyRequest $request, Property $property)
+    {
+        $propertyReq = $request->validated();
+        $user = $request->user();
+
+        // Validate status
+        $propertyReq['status'] = $propertyReq['status'] ?? 'unknown';
+
+        // Validate address
+        $addressReq = $this->validateAddressReq($propertyReq);
+        unset($propertyReq['address']);
+
+        // Start transaction!
+        DB::beginTransaction();
+
+        $mediaAdded = [];
+        $mediaToRemove = [];
+        try {
+            $property->update($propertyReq);
+
+            $property->address()->update($addressReq);
+
+            // Update address coordinates
+            if (isset($addressReq['coordinates_'])) {
+                DB::table('property_addresses')->where('property_id', $property->id)->update([
+                    'coordinates' => $addressReq['coordinates_'],
+                ]);
+            }
+
+            if (isset($propertyReq['tags'])) {
+                $property->tags()->detach();
+                $this->updateTagsHelper($property, $user, $propertyReq['tags']);
+            }
+
+            if (isset($propertyReq['lists'])) {
+                $property->lists()->detach();
+                $this->updateListsHelper($property, $user, $propertyReq['lists']);
+            }
+
+            if (isset($propertyReq['media'])) {
+                $mediaReq = $propertyReq['media'];
+
+                if (isset($mediaReq['remove'])) {
+                    $mediaToRemove = $mediaReq['remove'];
+                    foreach ($mediaToRemove as $mediaId) {
+                        $media = $property->media()->where('id', $mediaId)->first();
+                        if ($media) {
+                            $media->delete();
+                            $mediaToRemove[] = $media->url;
+                        }
+                    }
+                }
+
+                if (isset($mediaReq['images'])) {
+                    $lastEntry = $property->photos()->last();
+                    $lastOrder = $lastEntry ? $lastEntry->order + 1 : 0;
+                    $mediaAdded[] = $this->processMedia($property, $mediaReq['images'], 'image', false, $lastOrder);
+                }
+
+                if (isset($mediaReq['blueprints'])) {
+                    $lastEntry = $property->blueprints()->last();
+                    $lastOrder = $lastEntry ? $lastEntry->order + 1 : 0;
+                    $mediaAdded[] = $this->processMedia($property, $mediaReq['blueprints'], 'blueprint', false, $lastOrder);
+                }
+
+                if (isset($mediaReq['videos'])) {
+                    $lastEntry = $property->videos()->last();
+                    $lastOrder = $lastEntry ? $lastEntry->order + 1 : 0;
+                    $mediaAdded[] = $this->processMedia($property, $mediaReq['videos'], 'video', false, $lastOrder);
+                }
+            }
+
+            // Process offers
+            /*$hasRentOffer = false;
+            $hasSaleOffer = false;
+            $minPriceRent = null;
+            $minPriceSale = null;
+            if (isset($propertyReq['offers'])) {
+                $offersReq = $propertyReq['offers'];
+                foreach ($offersReq as $offerReq) {
+                    $offerReq['property_id'] = $property->id;
+                    $offer = $property->offers()->create($offerReq);
+                    $ph = $offer->priceHistory()->create([
+                        'price' => isset($offerReq['price']) ? $offerReq['price'] : null,
+                        'datetime' => Carbon::now(),
+                        'latest' => true,
+                    ]);
+
+                    if ($offer->listing_type == 'sale' && (!$minPriceSale || $ph->price < $minPriceSale)) {
+                        $hasSaleOffer = true;
+                        $minPriceSale = $ph->price;
+                    } elseif ($offer->listing_type == 'rent' && (!$minPriceRent || $ph->price < $minPriceRent)) {
+                        $hasRentOffer = true;
+                        $minPriceRent = $ph->price;
+                    }
+                }
+
+                if ($hasSaleOffer) {
+                    $property->listing_type = 'sale';
+                    $property->current_price_sale = $minPriceSale;
+                }
+
+                if ($hasRentOffer) {
+                    $property->listing_type = 'rent';
+                    $property->current_price_rent = $minPriceRent;
+                }
+
+                if ($hasSaleOffer && $hasRentOffer) {
+                    $property->listing_type = 'both';
+                }
+
+                $property->save();
+            }*/
+
+            // Process characteristics
+            if (isset($propertyReq['characteristics'])) {
+                $characteristicsReq = $propertyReq['characteristics'];
+                $property->customCharacteristics()->detach();
+                foreach ($characteristicsReq as $characteristicReq) {
+                    $charac = $user->customCharacteristics()->where(DB::raw('LOWER(`name`)'), '=', Str::lower($characteristicReq['name']))->where('type', $characteristicReq['type'])->first();
+
+                    if (!$charac) {
+                        $characteristicReq['user_id'] = $user->id;
+                        $charac = $user->customCharacteristics()->create($characteristicReq);
+                    }
+
+                    if (!$charac->properties()->where('properties.id', $property->id)->exists()) {
+                        $charac->properties()->attach($property, ['value' => $characteristicReq['value']]);
+                    }
+                }
+            }
+
+            // Commit the transaction if everything is successful
+            DB::commit();
+        } catch (Exception $e) {
+            // Something went wrong, rollback the transaction
+            DB::rollback();
+
+            // Delete the added media until now
+            foreach ($mediaAdded as $media) {
+                foreach ($media as $path) {
+                    Storage::delete(StorageLocation::PROPERTY_MEDIA . '/' . $path);
+                }
+            }
+
+            //TODO: disable the debug mode
+            return response()->json([
+                'message' => 'Something went wrong while updating the property',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+
+        // Delete the removed media
+        foreach ($mediaToRemove as $path) {
+            Storage::delete(StorageLocation::PROPERTY_MEDIA . '/' . $path);
+        }
+
+        return response()->json([
+            'message' => 'Property updated',
+            'data' => new PropertyFullResource($property),
+        ], 200);
+    }
+
+    public function processMedia($property, $mediaList, $type, $useAsCover = false, $startingOrder = 0): array
     {
         $hasCover = false;
-        $orderImage = 0;
+        $orderImage = $startingOrder;
         $imgsAdded = [];
 
         // Store every image
         foreach ($mediaList as $media) {
             $pathImg = $this->saveMedia($property, $media, $orderImage, $type);
             $imgsAdded[] = $pathImg;
-            $orderImage++;
+
+            if ($orderImage != 2000000000)
+                $orderImage++;
 
             // Set the first image as cover
             if (!$hasCover && $useAsCover) {
@@ -363,12 +514,29 @@ class PropertyController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Property $property)
+    private function validateAddressReq($propertyReq)
     {
-        //
+        $addressReq = $propertyReq['address'];
+
+        // Process coordinates
+        if (isset($addressReq['latitude']) && isset($addressReq['longitude'])) {
+            $addressReq['coordinates_'] = DB::raw('POINT(' . $addressReq['latitude'] . ', ' . $addressReq['longitude'] . ')');
+            unset($addressReq['latitude']);
+            unset($addressReq['longitude']);
+        }
+
+        // Process administrative divisions & validate them
+        // This prevents a user from maliciously trying to use a different adm division
+        if (isset($addressReq['adm3_id'])) {
+            $adm3 = AdministrativeDivision::whereId($addressReq['adm3_id'])->first();
+            $addressReq['adm2_id'] = $adm3->parent->id;
+            $addressReq['adm1_id'] = $adm3->parent->parent->id;
+        } elseif (isset($addressReq['adm2_id'])) {
+            $adm2 = AdministrativeDivision::whereId($addressReq['adm2_id'])->first();
+            $addressReq['adm1_id'] = $adm2->parent->id;
+        }
+
+        return $addressReq;
     }
 
     /**
