@@ -113,7 +113,7 @@ class StorePropertyRequest extends FormRequest
             'offers.*.listing_type' => 'required|in:rent,sale',
             'offers.*.url' => 'required|url',
             'offers.*.description' => 'required|string|max:200',
-            'offers.*.price' => 'nullable|numeric|min:0',
+            'offers.*.price' => 'nullable|numeric|min:0|max:999999999',
 
             /* CHARACTERISTICS */
             'characteristics' => 'array',
