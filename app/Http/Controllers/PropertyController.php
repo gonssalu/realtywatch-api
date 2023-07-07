@@ -413,11 +413,6 @@ class PropertyController extends Controller
     private function handleSearch($search, $props)
     {
         $properties = $props;
-        // Search for a property with the query
-        //BUG: MAJOR BUG CUZ OF ORWHERE
-        if (isset($search['query'])) {
-            $properties->where('title', 'like', '%' . $search['query'] . '%')->orWhere('description', 'like', '%' . $search['query'] . '%');
-        }
 
         // Check if property is in the specified list
         if (isset($search['list_id'])) {
@@ -453,6 +448,14 @@ class PropertyController extends Controller
 
             $properties->whereHas('address', function ($query) use ($adm_id, $adm_level) {
                 $query->where('adm' . $adm_level . '_id', $adm_id);
+            });
+        }
+
+        // Search for a property with the query
+        if (isset($search['query'])) {
+            $properties->where(function ($query) use ($search) {
+                $query->where('title', 'like', '%' . $search['query'] . '%')
+                    ->orWhere('description', 'like', '%' . $search['query'] . '%');
             });
         }
 
