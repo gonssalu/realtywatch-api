@@ -715,4 +715,30 @@ class PropertyController extends Controller
 
         return PropertyHeaderResource::collection($properties);
     }
+
+    public function deleteCover(Property $property)
+    {
+        $property->cover_url = null;
+        $property->save();
+
+        return response()->json([
+            'message' => 'Cover deleted',
+            'data' => new PropertyHeaderResource($property), //TODO: Header?
+        ], 200);
+    }
+
+    public function updateCover(Property $property, Request $request)
+    {
+        $coverReq = $request->validate([
+            'cover_url' => 'required|url',
+        ]);
+
+        $property->cover_url = $coverReq['cover_url'];
+        $property->save();
+
+        return response()->json([
+            'message' => 'Cover updated',
+            'data' => new PropertyHeaderResource($property), //TODO: Header?
+        ], 200);
+    }
 }

@@ -65,6 +65,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 Route::put('/tags', 'updateTags')->middleware('throttle:20,1');
                 Route::delete('/tags/{tag}', 'removeTag');
 
+                Route::patch('/cover', 'updateCover');
+                Route::delete('/cover', 'deleteCover');
+
                 // Delete and restore
                 Route::delete('/', 'destroy');
             });
