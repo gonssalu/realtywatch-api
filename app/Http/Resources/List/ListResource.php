@@ -20,6 +20,7 @@ class ListResource extends JsonResource
             'description' => $this->description,
             'num_properties' => $this->properties->count(),
             'tags' => $this->tags->pluck('name'),
+            'covers' => $this->properties->where('cover_url', '!=', null)->pluck('full_cover_url')->shuffle()->take(4),
         ];
     }
 }
