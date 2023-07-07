@@ -730,10 +730,10 @@ class PropertyController extends Controller
     public function updateCover(Property $property, Request $request)
     {
         $coverReq = $request->validate([
-            'cover_url' => 'required|url',
+            'index' => 'required|integer',
         ]);
 
-        $property->cover_url = $coverReq['cover_url'];
+        $property->cover_url = $property->photos()->pluck('url')[$coverReq['index']];
         $property->save();
 
         return response()->json([
