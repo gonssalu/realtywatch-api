@@ -17,7 +17,7 @@ class ListController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $lists = $user->lists()->with('tags')->paginate(12);
+        $lists = $user->lists()->paginate(12);
 
         return ListResource::collection($lists);
     }
