@@ -741,4 +741,19 @@ class PropertyController extends Controller
             'data' => new PropertyHeaderResource($property), //TODO: Header?
         ], 200);
     }
+
+    public function updateRating(Property $property, Request $request)
+    {
+        $req = $request->validate([
+            'rating' => 'required|integer|min:0|max:10',
+        ]);
+
+        $property->rating = $req['rating'];
+        $property->save();
+
+        return response()->json([
+            'message' => 'Rating updated',
+            'data' => new PropertyHeaderResource($property),
+        ], 200);
+    }
 }

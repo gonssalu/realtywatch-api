@@ -68,6 +68,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 Route::patch('/cover', 'updateCover');
                 Route::delete('/cover', 'deleteCover');
 
+                Route::patch('/rating', 'updateRating');
+
                 // Delete and restore
                 Route::delete('/', 'destroy');
             });
