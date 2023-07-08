@@ -22,6 +22,7 @@ class PropertyAddressResource extends JsonResource
                 'adm2' => ($this->adm2_id ? $this->adm2->name : null),
                 'adm3_id' => $this->adm3_id,
                 'adm3' => ($this->adm3_id ? $this->adm3->name : null),
+                'postal_code' => $this->postal_code,
                 'full_address' => $this->full_address,
                 'coordinates' => $this->coordinates,
             ];
