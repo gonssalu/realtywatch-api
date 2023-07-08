@@ -16,6 +16,7 @@ class PropertyCharacteristicResource extends JsonResource
     {
         return
             [
+                'id' => $this->id,
                 'name' => $this->name,
                 'type' => $this->type,
                 'value' => $this->pivot->value,
