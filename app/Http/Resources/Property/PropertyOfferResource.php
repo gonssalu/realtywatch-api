@@ -22,6 +22,7 @@ class PropertyOfferResource extends JsonResource
                 'url' => $this->url,
                 'description' => $this->description,
                 'price_history' => $priceHistory,
+                'price' => $priceHistory->first()->price,
             ];
     }
 }
