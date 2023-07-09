@@ -11,7 +11,7 @@ class OfferController extends Controller
 {
     public function destroy(PropertyOffer $offer, Request $request)
     {
-        if ($offer->property->user_id !== $request->user()->id()) {
+        if ($offer->property->user_id !== $request->user()->id) {
             return response()->json([
                 'message' => 'You are not authorized to delete this offer',
             ], 403);
