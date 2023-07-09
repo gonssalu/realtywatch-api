@@ -6,6 +6,7 @@ use App\Http\Controllers\ListController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\OfferController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -79,6 +80,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 Route::patch('/restore', 'restore');
             });
         });
+    });
+
+    Route::prefix('offers')->controller(OfferController::class)->group(function () {
+        Route::delete('/{offer}', 'destroy');
     });
 
     Route::prefix('administrative-divisions')->controller(AdmDivisionController::class)->group(function () {
