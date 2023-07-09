@@ -14,7 +14,7 @@ class PropertyOfferResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $priceHistory = PropertyOfferHistoryResource::collection($this->priceHistory->sortByDesc('latest'));
+        $priceHistory = PropertyOfferHistoryResource::collection($this->priceHistory->sortByDesc('datetime')->sortByDesc('latest'));
 
         return
             [
