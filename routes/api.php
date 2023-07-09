@@ -80,10 +80,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 Route::patch('/restore', 'restore');
             });
         });
-    });
 
-    Route::prefix('offers')->controller(OfferController::class)->group(function () {
-        Route::delete('/{offer}', 'destroy');
+        Route::prefix('offers')->controller(OfferController::class)->group(function () {
+            Route::delete('/{offer}', 'destroy');
+        });
     });
 
     Route::prefix('administrative-divisions')->controller(AdmDivisionController::class)->group(function () {

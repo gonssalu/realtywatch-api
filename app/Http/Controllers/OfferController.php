@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\PropertyOffer;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
 
 class OfferController extends Controller
@@ -15,7 +17,18 @@ class OfferController extends Controller
             ], 403);
         }
 
-        $offer->delete();
+        DB::beginTransaction();
+        try {
+
+            $offer->priceHistory()->delete();
+            $offer->delete();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'An error occured while deleting the offer.',
+            ], 500);
+        }
 
         return response()->json([
             'message' => 'Offer deleted successfully',
