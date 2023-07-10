@@ -84,7 +84,7 @@ class ListController extends Controller
         $listReq = $request->validated();
 
         //Check if user already has a list (excluding this one) with the same name
-        if ($user->lists()->where('name', $listReq['name'])->andWhere('id', '!=', $propertyList->id)->first()) {
+        if ($user->lists()->where('name', $listReq['name'])->where('id', '!=', $propertyList->id)->first()) {
             return response()->json([
                 'message' => 'A list with that name already exists',
             ], 409);

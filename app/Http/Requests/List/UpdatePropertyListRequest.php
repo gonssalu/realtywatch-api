@@ -23,7 +23,7 @@ class UpdatePropertyListRequest extends FormRequest
     {
         return [
             'name' => 'string|min:1|max:100|required',
-            'description' => 'string|max:5000',
+            'description' => 'string|nullable|max:5000',
         ];
     }
 }
