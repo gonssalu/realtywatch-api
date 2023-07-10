@@ -64,5 +64,6 @@ class Kernel extends HttpKernel
         'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         'property.owner' => \App\Http\Middleware\CheckPropertyOwnership::class,
         'propertylist.owner' => \App\Http\Middleware\CheckPropertyListOwnership::class,
+        'characteristic.owner' => \App\Http\Middleware\CheckCharacteristicOwnership::class,
     ];
 }

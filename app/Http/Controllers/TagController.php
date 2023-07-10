@@ -121,10 +121,10 @@ class TagController extends Controller
         $tagsToDelete = $user->tags()->whereIn('id', $tagReq['tags'])->get();
         $count = 0;
         foreach ($tagsToDelete as $tag) {
-            // Detach all properties from list
+            // Detach all properties from tag
             $tag->properties()->detach();
 
-            // Detach all tags from list
+            // Detach all lists from tag
             $tag->lists()->detach();
 
             $tag->delete();

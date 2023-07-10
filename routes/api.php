@@ -51,6 +51,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::prefix('characteristics')->controller(CharacteristicController::class)->group(function () {
             Route::get('/', 'index');
+            Route::get('/paginated', 'indexPaginated');
+            Route::post('/', 'store');
+
+            Route::delete('/', 'destroyMultiple');
+
+            Route::prefix('{characteristic}')->middleware('characteristic.owner')->group(function () {
+                Route::put('/', 'update');
+                Route::delete('/', 'destroy');
+            });
         });
 
         Route::prefix('properties')->controller(PropertyController::class)->group(function () {
