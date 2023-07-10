@@ -59,6 +59,7 @@ class CharacteristicController extends Controller
 
     public function destroy(Characteristic $characteristic)
     {
+        $characteristic->properties()->detach();
         $characteristic->delete();
 
         return response()->json([
