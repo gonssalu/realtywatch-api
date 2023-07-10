@@ -23,7 +23,7 @@ class DestroyMultipleCharacteristicsRequest extends FormRequest
     {
         return [
             'characteristics' => 'required|array',
-            'characteristics.*' => 'required|integer|exists:characteristic,id',
+            'characteristics.*' => 'required|integer|exists:characteristics,id',
         ];
     }
 }
