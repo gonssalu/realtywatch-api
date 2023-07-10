@@ -31,6 +31,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/sidebar', 'indexSidebar');
             Route::get('/all', 'indexAll');
             Route::post('/', 'store');
+            Route::delete('/', 'destroyMultiple');
 
             Route::prefix('{propertyList}')->middleware('propertylist.owner')->group(function () {
                 Route::get('/', 'show');

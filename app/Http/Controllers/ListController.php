@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\List\DestroyMultipleListsRequest;
 use App\Http\Requests\List\StorePropertyListRequest;
 use App\Http\Requests\List\UpdatePropertyListRequest;
 use App\Http\Resources\List\ListResource;
@@ -17,7 +18,7 @@ class ListController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $lists = $user->lists()->orderBy('name')->paginate(12);
+        $lists = $user->lists()->orderBy('name')->paginate(10);
 
         return ListResource::collection($lists);
     }
@@ -115,6 +116,36 @@ class ListController extends Controller
 
         return response()->json([
             'message' => 'List deleted successfully',
+        ], 200);
+    }
+
+    public function destroyMultiple(DestroyMultipleListsRequest $request)
+    {
+        $user = $request->user();
+
+        $listReq = $request->validated();
+
+        $listsToDelete = $user->lists()->whereIn('id', $listReq['lists'])->get();
+        $count = 0;
+        foreach ($listsToDelete as $list) {
+            // Detach all properties from list
+            $list->properties()->detach();
+
+            // Detach all tags from list
+            $list->tags()->detach();
+
+            $list->delete();
+            $count++;
+        }
+
+        if ($count == 0) {
+            return response()->json([
+                'message' => 'No valid lists were provided',
+            ], 422);
+        }
+
+        return response()->json([
+            'message' => 'Lists deleted successfully',
         ], 200);
     }
 }
