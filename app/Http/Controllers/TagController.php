@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Tag\CreateTagRequest;
+use App\Http\Requests\Tag\DestroyMultipleTagsRequest;
+use App\Http\Resources\Tag\TagManageResource;
 use App\Http\Resources\TagResource;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -17,7 +19,18 @@ class TagController extends Controller
         $user = $request->user();
         $tags = $user->tags();
 
-        $tags = $tags->paginate(12);
+        $tags = $tags->paginate(10);
+
+        return TagManageResource::collection($tags);
+    }
+
+    /**
+     * Display a paginated listing of the resource.
+     */
+    public function indexAll(Request $request)
+    {
+        $user = $request->user();
+        $tags = $user->tags();
 
         return TagResource::collection($tags);
     }
@@ -96,6 +109,36 @@ class TagController extends Controller
 
         return response()->json([
             'message' => 'Tag deleted successfully',
+        ], 200);
+    }
+
+    public function destroyMultiple(DestroyMultipleTagsRequest $request)
+    {
+        $user = $request->user();
+
+        $tagReq = $request->validated();
+
+        $tagsToDelete = $user->lists()->whereIn('id', $tagReq['tags'])->get();
+        $count = 0;
+        foreach ($tagsToDelete as $tag) {
+            // Detach all properties from list
+            $tag->properties()->detach();
+
+            // Detach all tags from list
+            $tag->lists()->detach();
+
+            $tag->delete();
+            $count++;
+        }
+
+        if ($count == 0) {
+            return response()->json([
+                'message' => 'No valid tags were provided',
+            ], 422);
+        }
+
+        return response()->json([
+            'message' => 'Tags deleted successfully',
         ], 200);
     }
 }

@@ -43,8 +43,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('tags')->controller(TagController::class)->group(function () {
             Route::get('/', 'index');
             Route::get('/sidebar', 'indexSidebar');
+            Route::get('/all', 'indexAll');
             Route::post('/', 'create')->middleware('throttle:20,1');
             Route::delete('/{tag}', 'destroy');
+            Route::delete('/', 'destroyMultiple');
         });
 
         Route::prefix('characteristics')->controller(CharacteristicController::class)->group(function () {
