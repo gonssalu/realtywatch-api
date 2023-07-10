@@ -19,7 +19,7 @@ class TagController extends Controller
         $user = $request->user();
         $tags = $user->tags();
 
-        $tags = $tags->paginate(10);
+        $tags = $tags->orderBy('name')->paginate(10);
 
         return TagManageResource::collection($tags);
     }

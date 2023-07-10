@@ -29,11 +29,9 @@ class CharacteristicController extends Controller
     public function indexPaginated(Request $request)
     {
         $user = $request->user();
-        $characteristics = $user->customCharacteristics()->paginate(10);
+        $characteristics = $user->customCharacteristics()->orderBy('name')->paginate(10);
 
-        return response()->json([
-            'data' => CharacteristicResource::collection($characteristics),
-        ], 200);
+        return CharacteristicResource::collection($characteristics);
     }
 
     public function store(CharacteristicStoreUpdateRequest $request)
