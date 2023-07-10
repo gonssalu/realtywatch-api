@@ -118,7 +118,7 @@ class TagController extends Controller
 
         $tagReq = $request->validated();
 
-        $tagsToDelete = $user->lists()->whereIn('id', $tagReq['tags'])->get();
+        $tagsToDelete = $user->tags()->whereIn('id', $tagReq['tags'])->get();
         $count = 0;
         foreach ($tagsToDelete as $tag) {
             // Detach all properties from list
