@@ -30,7 +30,7 @@ class TagController extends Controller
     public function indexAll(Request $request)
     {
         $user = $request->user();
-        $tags = $user->tags();
+        $tags = $user->tags()->get();
 
         return TagResource::collection($tags);
     }
