@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\TooMuchMediaProperty;
 use App\Helpers\StorageLocation;
 use App\Http\Requests\Property\IndexPolygonPropertiesRequest;
 use App\Http\Requests\Property\SearchPropertyRequest;
@@ -237,18 +238,27 @@ class PropertyController extends Controller
                 }
 
                 if (isset($mediaReq['images'])) {
+                    if ($property->photos()->count() + count($mediaReq['images']) > 30)
+                        throw new TooMuchMediaProperty(30, 'images');
+
                     $lastEntry = $property->photos()->last();
                     $lastOrder = $lastEntry ? $lastEntry->order + 1 : 0;
                     $mediaAdded[] = $this->processMedia($property, $mediaReq['images'], 'image', false, $lastOrder);
                 }
 
                 if (isset($mediaReq['blueprints'])) {
+                    if ($property->blueprints()->count() + count($mediaReq['blueprints']) > 10)
+                        throw new TooMuchMediaProperty(10, 'blueprints');
+
                     $lastEntry = $property->blueprints()->last();
                     $lastOrder = $lastEntry ? $lastEntry->order + 1 : 0;
                     $mediaAdded[] = $this->processMedia($property, $mediaReq['blueprints'], 'blueprint', false, $lastOrder);
                 }
 
                 if (isset($mediaReq['videos'])) {
+                    if ($property->videos()->count() + count($mediaReq['videos']) > 3)
+                        throw new TooMuchMediaProperty(3, 'videos');
+
                     $lastEntry = $property->videos()->last();
                     $lastOrder = $lastEntry ? $lastEntry->order + 1 : 0;
                     $mediaAdded[] = $this->processMedia($property, $mediaReq['videos'], 'video', false, $lastOrder);
@@ -341,6 +351,9 @@ class PropertyController extends Controller
                     Storage::delete(StorageLocation::PROPERTY_MEDIA . '/' . $path);
                 }
             }
+
+            if ($e instanceof TooMuchMediaProperty)
+                return $e->render();
 
             //TODO: disable the debug mode
             return response()->json([
