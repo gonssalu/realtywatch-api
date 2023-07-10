@@ -17,7 +17,7 @@ class TagManageResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'property_count' => $this->properties()->count(),
+            'num_properties' => $this->properties()->count(),
         ];
     }
 }
