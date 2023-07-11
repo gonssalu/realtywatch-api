@@ -477,13 +477,13 @@ class PropertyController extends Controller
 
         // Check if property is in the specified administrative area
         if (isset($search['adm_id'])) {
-            $adm_id = $search['adm_id'];
+            /*$adm_id = $search['adm_id'];
             $adm = AdministrativeDivision::whereId($adm_id)->get();
             $adm_level = $adm ? $adm->level : 1;
 
             $properties->whereHas('address', function ($query) use ($adm_id, $adm_level) {
                 $query->where('adm' . $adm_level . '_id', $adm_id);
-            });
+            });*/
         }
 
         // Search for a property with the query
@@ -494,7 +494,7 @@ class PropertyController extends Controller
             });
         }
 
-        return $properties;
+        return $properties->orderByDesc('created_at');
     }
 
     public function index(SearchPropertyRequest $request)
@@ -502,6 +502,7 @@ class PropertyController extends Controller
         $search = $request->validated();
         $properties = $request->user()->properties();
         $properties = $this->handleSearch($search, $properties);
+
 
         return PropertyHeaderResource::collection(
             $properties->paginate(12)
