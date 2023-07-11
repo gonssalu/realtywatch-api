@@ -289,8 +289,10 @@ class PropertyController extends Controller
 
                         $newPrice = isset($offerReq['price']) ? $offerReq['price'] : null;
 
-                        if ($offer->priceHistory()->last()->price != $newPrice) {
-                            $offer->priceHistory()->last()->update([
+                        $lastPhs = $offer->priceHistory()->get()->last();
+
+                        if ($lastPhs->price != $newPrice) {
+                            $lastPhs->update([
                                 'latest' => false,
                             ]);
 
