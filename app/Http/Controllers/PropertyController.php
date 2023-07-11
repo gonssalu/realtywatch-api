@@ -686,7 +686,7 @@ class PropertyController extends Controller
 
     public function trashed(Request $request)
     {
-        $properties = $request->user()->properties()->onlyTrashed()->paginate(12);
+        $properties = $request->user()->properties()->onlyTrashed()->orderByDesc('deleted_at')->paginate(12);
 
         return PropertyHeaderResource::collection($properties);
     }
