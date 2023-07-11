@@ -504,11 +504,12 @@ class PropertyController extends Controller
         ]);
 
         $properties = $request->user()->properties();
-        $properties =
-            $properties->where(function ($query) use ($search) {
+        if (isset($search['query']))
+            $properties = $properties->where(function ($query) use ($search) {
                 $query->where('title', 'like', '%' . $search['query'] . '%')
                     ->orWhere('id', 'like', '%' . $search['query'] . '%');
-            })->take('20')->get();
+            });
+        $properties = $properties->take('20')->get();
 
         return PropertyTitleResource::collection(
             $properties
