@@ -216,13 +216,13 @@ class PropertyController extends Controller
                 ]);
             }
 
+            $property->tags()->detach();
             if (isset($propertyReq['tags'])) {
-                $property->tags()->detach();
                 $this->updateTagsHelper($property, $user, $propertyReq['tags']);
             }
 
+            $property->lists()->detach();
             if (isset($propertyReq['lists'])) {
-                $property->lists()->detach();
                 $this->updateListsHelper($property, $user, $propertyReq['lists']);
             }
 
@@ -345,9 +345,9 @@ class PropertyController extends Controller
             }
 
             // Process characteristics
+            $property->characteristics()->detach();
             if (isset($propertyReq['characteristics'])) {
                 $characteristicsReq = $propertyReq['characteristics'];
-                $property->characteristics()->detach();
                 foreach ($characteristicsReq as $characteristicReq) {
                     $charac = $user->customCharacteristics()->where(DB::raw('LOWER(`name`)'), '=', Str::lower($characteristicReq['name']))->where('type', $characteristicReq['type'])->first();
 
