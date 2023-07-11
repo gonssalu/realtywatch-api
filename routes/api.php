@@ -37,6 +37,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 Route::get('/', 'show');
                 Route::put('/', 'update');
                 Route::delete('/', 'destroy');
+                Route::patch('/properties', 'addMultipleProperties');
             });
         });
 

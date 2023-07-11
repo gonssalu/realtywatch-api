@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\List\AddMultiplePropertiesRequest;
 use App\Http\Requests\List\DestroyMultipleListsRequest;
 use App\Http\Requests\List\StorePropertyListRequest;
 use App\Http\Requests\List\UpdatePropertyListRequest;
@@ -43,6 +44,18 @@ class ListController extends Controller
         $lists = $user->lists()->get();
 
         return ['data' => ListResource::collection($lists), 'total' => $user->lists()->count()];
+    }
+
+    public function addMultipleProperties(PropertyList $propertyList, AddMultiplePropertiesRequest $request)
+    {
+        $listReq = $request->validated();
+
+        $propertyList->properties()->attach($listReq['properties']);
+
+        return response()->json([
+            'message' => 'Properties added successfully',
+            'data' => new ListWithPropertiesResource($propertyList),
+        ], 200);
     }
 
     /**
