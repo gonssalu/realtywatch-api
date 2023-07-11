@@ -280,6 +280,11 @@ class PropertyController extends Controller
                     $offerId = isset($offerReq['id']) ? $offerReq['id'] : null;
                     if ($offerId) {
                         $offer = $property->offers()->where('id', $offerId)->first();
+
+                        //If an offer with the provided Id does not exist in this property, ignore the update and do nothing
+                        if (!$offer)
+                            continue;
+
                         $offer->update($offerReq);
 
                         $newPrice = isset($offerReq['price']) ? $offerReq['price'] : null;
@@ -301,8 +306,8 @@ class PropertyController extends Controller
                     }
                 }
 
-                $hasSaleOffer = $property->offersSale()->exists();
-                $hasRentOffer = $property->offersRent()->exists();
+                $hasSaleOffer = $property->offersSale()->count() > 0;
+                $hasRentOffer = $property->offersRent()->count() > 0;
 
                 if ($hasSaleOffer) {
                     $property->listing_type = 'sale';
@@ -326,7 +331,7 @@ class PropertyController extends Controller
             // Process characteristics
             if (isset($propertyReq['characteristics'])) {
                 $characteristicsReq = $propertyReq['characteristics'];
-                $property->customCharacteristics()->detach();
+                $property->characteristics()->detach();
                 foreach ($characteristicsReq as $characteristicReq) {
                     $charac = $user->customCharacteristics()->where(DB::raw('LOWER(`name`)'), '=', Str::lower($characteristicReq['name']))->where('type', $characteristicReq['type'])->first();
 
@@ -361,6 +366,7 @@ class PropertyController extends Controller
             return response()->json([
                 'message' => 'Something went wrong while updating the property',
                 'error' => $e->getMessage(),
+                'trace' => $e->getTrace(),
             ], 500);
         }
 
