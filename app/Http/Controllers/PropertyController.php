@@ -11,6 +11,7 @@ use App\Http\Requests\Property\UpdatePropertyRequest;
 use App\Http\Requests\Tag\CreateTagRequest;
 use App\Http\Resources\Property\PropertyFullResource;
 use App\Http\Resources\Property\PropertyHeaderResource;
+use App\Http\Resources\Property\PropertyTitleResource;
 use App\Models\AdministrativeDivision;
 use App\Models\Property;
 use App\Models\Tag;
@@ -493,6 +494,20 @@ class PropertyController extends Controller
 
         return PropertyHeaderResource::collection(
             $properties->paginate(12)
+        );
+    }
+
+    public function indexTitles(Request $request)
+    {
+        $search = $request->validate([
+            'query' => 'string',
+        ]);
+
+        $properties = $request->user()->properties();
+        $properties = $properties->where('title', 'like', '%' . $search['query'] . '%')->take('20');
+
+        return PropertyTitleResource::collection(
+            $properties
         );
     }
 

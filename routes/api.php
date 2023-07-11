@@ -64,6 +64,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::prefix('properties')->controller(PropertyController::class)->group(function () {
             Route::get('/', 'index');
+            Route::get('/titles', 'indexTitles');
             Route::post('/', 'store')->middleware('throttle:10,1');
 
             Route::get('/polygon', 'indexPropertiesInPolygon');
@@ -74,9 +75,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
             Route::prefix('{property}')->middleware('property.owner')->group(function () {
                 Route::get('/', 'show');
+                Route::get('/details', 'showDetails');
+
                 Route::put('/', 'update')->middleware('throttle:10,1');
 
-                Route::get('/details', 'showDetails');
                 Route::put('/tags', 'updateTags')->middleware('throttle:20,1');
                 Route::delete('/tags/{tag}', 'removeTag');
 
