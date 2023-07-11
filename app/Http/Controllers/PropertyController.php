@@ -280,7 +280,6 @@ class PropertyController extends Controller
                     $offer = $property->offers()->where('id', $offerId)->first();
                     if ($offer) {
                         $offer->priceHistory()->delete();
-                        $offer->property()->detach();
                         $offer->delete();
                     }
                 }
