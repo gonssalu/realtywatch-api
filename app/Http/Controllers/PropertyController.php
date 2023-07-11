@@ -276,7 +276,6 @@ class PropertyController extends Controller
 
             if (isset($propertyReq['offers_remove'])) {
                 $offersToRemove = $propertyReq['offers_remove'];
-                throw new Exception($propertyReq['offers_remove']);
                 foreach ($offersToRemove as $offerId) {
                     $offer = $property->offers()->where('id', $offerId)->first();
                     if ($offer) {
