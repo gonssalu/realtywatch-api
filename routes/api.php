@@ -3,10 +3,10 @@
 use App\Http\Controllers\AdmDivisionController;
 use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\ListController;
+use App\Http\Controllers\OfferController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\OfferController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -74,6 +74,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
             Route::prefix('{property}')->middleware('property.owner')->group(function () {
                 Route::get('/', 'show');
+                Route::put('/', 'update')->middleware('throttle:10,1');
+
                 Route::get('/details', 'showDetails');
                 Route::put('/tags', 'updateTags')->middleware('throttle:20,1');
                 Route::delete('/tags/{tag}', 'removeTag');
