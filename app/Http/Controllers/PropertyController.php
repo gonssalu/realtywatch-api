@@ -202,6 +202,8 @@ class PropertyController extends Controller
         $mediaAdded = [];
         $mediaToRemove = [];
         try {
+            $coords = $addressReq['coordinates_'];
+            unset($addressReq['coordinates_']);
             $property->update($propertyReq);
 
             $property->address()->update($addressReq);
@@ -209,7 +211,7 @@ class PropertyController extends Controller
             // Update address coordinates
             if (isset($addressReq['coordinates_'])) {
                 DB::table('property_addresses')->where('property_id', $property->id)->update([
-                    'coordinates' => $addressReq['coordinates_'],
+                    'coordinates' => $coords,
                 ]);
             }
 
