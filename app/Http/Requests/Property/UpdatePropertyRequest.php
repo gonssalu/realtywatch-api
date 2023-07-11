@@ -117,8 +117,8 @@ class UpdatePropertyRequest extends FormRequest
             'offers.*.url' => 'required|url',
             'offers.*.description' => 'required|string|max:200',
             'offers.*.price' => 'nullable|numeric|min:0|max:999999999',
-            'offers.remove' => 'array',
-            'offers.remove.*' => 'required|integer|exists:property_offers,id', //validate property id
+            'offers_remove' => 'array',
+            'offers_remove.*' => 'required|integer|exists:property_offers,id', //validate property id
 
             /* CHARACTERISTICS */
             'characteristics' => 'array',

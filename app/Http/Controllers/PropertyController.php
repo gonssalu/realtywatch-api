@@ -230,8 +230,8 @@ class PropertyController extends Controller
                 $mediaReq = $propertyReq['media'];
 
                 if (isset($mediaReq['remove'])) {
-                    $mediaToRemove = $mediaReq['remove'];
-                    foreach ($mediaToRemove as $mediaId) {
+                    $mediaIds = $mediaReq['remove'];
+                    foreach ($mediaIds as $mediaId) {
                         $media = $property->media()->where('id', $mediaId)->first();
                         if ($media) {
                             $media->delete();
@@ -273,6 +273,18 @@ class PropertyController extends Controller
             $hasSaleOffer = false;
             $minPriceRent = null;
             $minPriceSale = null;
+
+            if (isset($propertyReq['offers_remove'])) {
+                $offersToRemove = $propertyReq['offers_remove'];
+                foreach ($offersToRemove as $offerId) {
+                    $offer = $property->offers()->where('id', $offerId)->first();
+                    if ($offer) {
+                        $offer->priceHistory()->delete();
+                        $offer->property()->detach();
+                        $offer->delete();
+                    }
+                }
+            }
 
             if (isset($propertyReq['offers'])) {
                 $offersReq = $propertyReq['offers'];
