@@ -510,18 +510,28 @@ class PropertyController extends Controller
         }
 
         // Check if property has the specified price
-        if (isset($search['price_min'])) {
+        if (isset($search['price_min']) && isset($search['price_max'])) {
             $properties->where(function ($query) use ($search) {
-                $query->where('current_price_sale', '>=', $search['price_min'])
-                    ->orWhere('current_price_rent', '>=', $search['price_min']);
+                $query->where(function ($query) use ($search) {
+                    $query->where('current_price_sale', '>=', $search['price_min'])
+                        ->where('current_price_sale', '<=', $search['price_max']);
+                })->orWhere(function ($query) use ($search) {
+                    $query->where('current_price_rent', '>=', $search['price_min'])
+                        ->where('current_price_rent', '<=', $search['price_max']);
+                });
             });
-        }
-
-        if (isset($search['price_max'])) {
-            $properties->where(function ($query) use ($search) {
-                $query->where('current_price_sale', '<=', $search['price_max'])
-                    ->orWhere('current_price_rent', '<=', $search['price_max']);
-            });
+        } else {
+            if (isset($search['price_min'])) {
+                $properties->where(function ($query) use ($search) {
+                    $query->where('current_price_sale', '>=', $search['price_min'])
+                        ->orWhere('current_price_rent', '>=', $search['price_min']);
+                });
+            } else if (isset($search['price_max'])) {
+                $properties->where(function ($query) use ($search) {
+                    $query->where('current_price_sale', '<=', $search['price_max'])
+                        ->orWhere('current_price_rent', '<=', $search['price_max']);
+                });
+            }
         }
 
         // Check if property has the specified area
