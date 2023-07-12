@@ -5,6 +5,7 @@ use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', 'show');
         Route::put('/', 'update');
         Route::patch('/password', 'changePassword');
+
+        Route::prefix('statistics')->controller(StatisticsController::class)->group(function () {
+            Route::get('/', 'statistics');
+        });
 
         Route::prefix('lists')->controller(ListController::class)->group(function () {
             Route::get('/', 'index');
