@@ -37,7 +37,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 Route::get('/', 'show');
                 Route::put('/', 'update');
                 Route::delete('/', 'destroy');
-                Route::post('/properties', 'addMultipleProperties');
+                Route::prefix('properties')->group(function () {
+                    Route::post('/', 'addMultipleProperties');
+                    Route::delete('/{property}', 'removeProperty')->middleware('property.owner');
+                });
             });
         });
 
