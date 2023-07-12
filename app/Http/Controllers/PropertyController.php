@@ -203,11 +203,8 @@ class PropertyController extends Controller
         $mediaAdded = [];
         $mediaToRemove = [];
         try {
-            $coords = $addressReq['coordinates_'];
-            unset($addressReq['coordinates_']);
+            $coords = isset($addressReq['coordinates_']) ? $addressReq['coordinates_'] : null;
             $property->update($propertyReq);
-
-            $property->address()->update($addressReq);
 
             // Update address coordinates
             if (isset($addressReq['coordinates_'])) {
@@ -215,6 +212,9 @@ class PropertyController extends Controller
                     'coordinates' => $coords,
                 ]);
             }
+
+            unset($addressReq['coordinates_']);
+            $property->address()->update($addressReq);
 
             $property->tags()->detach();
             if (isset($propertyReq['tags'])) {
@@ -241,8 +241,9 @@ class PropertyController extends Controller
                 }
 
                 if (isset($mediaReq['images'])) {
-                    if ($property->photos()->count() + count($mediaReq['images']) > 30)
+                    if ($property->photos()->count() + count($mediaReq['images']) > 30) {
                         throw new TooMuchMediaProperty(30, 'images');
+                    }
 
                     $lastEntry = $property->photos()->last();
                     $lastOrder = $lastEntry ? $lastEntry->order + 1 : 0;
@@ -250,8 +251,9 @@ class PropertyController extends Controller
                 }
 
                 if (isset($mediaReq['blueprints'])) {
-                    if ($property->blueprints()->count() + count($mediaReq['blueprints']) > 10)
+                    if ($property->blueprints()->count() + count($mediaReq['blueprints']) > 10) {
                         throw new TooMuchMediaProperty(10, 'blueprints');
+                    }
 
                     $lastEntry = $property->blueprints()->last();
                     $lastOrder = $lastEntry ? $lastEntry->order + 1 : 0;
@@ -259,8 +261,9 @@ class PropertyController extends Controller
                 }
 
                 if (isset($mediaReq['videos'])) {
-                    if ($property->videos()->count() + count($mediaReq['videos']) > 3)
+                    if ($property->videos()->count() + count($mediaReq['videos']) > 3) {
                         throw new TooMuchMediaProperty(3, 'videos');
+                    }
 
                     $lastEntry = $property->videos()->last();
                     $lastOrder = $lastEntry ? $lastEntry->order + 1 : 0;
@@ -294,8 +297,9 @@ class PropertyController extends Controller
                         $offer = $property->offers()->where('id', $offerId)->first();
 
                         //If an offer with the provided Id does not exist in this property, ignore the update and do nothing
-                        if (!$offer)
+                        if (!$offer) {
                             continue;
+                        }
 
                         $offer->update($offerReq);
 
@@ -373,8 +377,9 @@ class PropertyController extends Controller
                 }
             }
 
-            if ($e instanceof TooMuchMediaProperty)
+            if ($e instanceof TooMuchMediaProperty) {
                 return $e->render();
+            }
 
             //TODO: disable the debug mode
             return response()->json([
@@ -406,8 +411,9 @@ class PropertyController extends Controller
             $pathImg = $this->saveMedia($property, $media, $orderImage, $type);
             $imgsAdded[] = $pathImg;
 
-            if ($orderImage != 2000000000)
+            if ($orderImage != 2000000000) {
                 $orderImage++;
+            }
 
             // Set the first image as cover
             if (!$hasCover && $useAsCover) {
@@ -526,7 +532,7 @@ class PropertyController extends Controller
                     $query->where('current_price_sale', '>=', $search['price_min'])
                         ->orWhere('current_price_rent', '>=', $search['price_min']);
                 });
-            } else if (isset($search['price_max'])) {
+            } elseif (isset($search['price_max'])) {
                 $properties->where(function ($query) use ($search) {
                     $query->where('current_price_sale', '<=', $search['price_max'])
                         ->orWhere('current_price_rent', '<=', $search['price_max']);
@@ -563,8 +569,9 @@ class PropertyController extends Controller
                 $search['typology'] = array_diff($search['typology'], ['T6+']);
                 $properties->where('typology', 'like', 'T%')->whereRaw('CAST(SUBSTRING(typology, 2) AS UNSIGNED) >= 6');
             }
-            if (count($search['typology']) > 0)
+            if (count($search['typology']) > 0) {
                 $properties->whereIn('typology', $search['typology']);
+            }
         }
 
         return $properties->orderByDesc('created_at');
@@ -575,7 +582,6 @@ class PropertyController extends Controller
         $search = $request->validated();
         $properties = $request->user()->properties();
         $properties = $this->handleSearch($search, $properties);
-
 
         return PropertyHeaderResource::collection(
             $properties->paginate(12)
@@ -589,11 +595,12 @@ class PropertyController extends Controller
         ]);
 
         $properties = $request->user()->properties();
-        if (isset($search['query']))
+        if (isset($search['query'])) {
             $properties = $properties->where(function ($query) use ($search) {
                 $query->where('title', 'like', '%' . $search['query'] . '%')
                     ->orWhere('id', 'like', '%' . $search['query'] . '%');
             });
+        }
         $properties = $properties->take('20')->get();
 
         return PropertyTitleResource::collection(
@@ -743,7 +750,7 @@ class PropertyController extends Controller
 
         if (!$mediaPaths) {
             return response()->json([
-                'message' => 'Something went wrong while permanently deleting the property'/*,
+                'message' => 'Something went wrong while permanently deleting the property', /*,
                 'error' => $e->getMessage(),*/
             ], 500);
         }
@@ -783,6 +790,7 @@ class PropertyController extends Controller
     public function restoreAll(Request $request)
     {
         $request->user()->properties()->onlyTrashed()->restore();
+
         return response()->json([
             'message' => 'All properties have been restored',
         ], 200);
@@ -797,6 +805,7 @@ class PropertyController extends Controller
             $mediaPaths = $this->permanentDeleteProp($property);
             if (!$mediaPaths) {
                 $errors[] = $propId;
+
                 continue;
             }
             foreach ($mediaPaths as $path) {
@@ -808,6 +817,7 @@ class PropertyController extends Controller
             $errors = array_map(function ($id) {
                 return ['property_id' => $id, 'message' => 'Something went wrong while permanently deleting the property'];
             }, $errors);
+
             return response()->json([
                 'message' => 'Success, but some properties could not be permanently deleted.',
                 'errors' => $errors,
@@ -826,8 +836,9 @@ class PropertyController extends Controller
         $props = $this->handleSearch($polygonReq, $props);
 
         //HACK if no polygon is specified, return all properties
-        if (!isset($polygonReq['p']))
+        if (!isset($polygonReq['p'])) {
             return PropertyHeaderResource::collection($props->paginate(12));
+        }
 
         $polygon = $polygonReq['p'];
 
