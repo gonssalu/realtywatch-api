@@ -37,7 +37,7 @@ class SearchPropertyRequest extends FormRequest
             'lt.*' => 'string|in:both,sale,rent,none',
             //status
             's' => 'array',
-            's.*' => 'string|in:available|unavailable|unknown',
+            's.*' => 'string|in:available,unavailable,unknown',
             'price_min' => 'integer',
             'price_max' => 'integer',
             'area_min' => 'integer',
