@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Property;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SearchPropertyRequest extends FormRequest
 {
@@ -28,6 +29,21 @@ class SearchPropertyRequest extends FormRequest
             'exclude_tags' => 'json',
             'adm_id' => 'integer',
             'list_id' => 'integer',
+            'type' => 'array',
+            'type.*' => 'string|in:house,apartment,office,shop,warehouse,garage,land,other',
+            'listing_type' => 'array',
+            'listing_type.*' => 'string|in:both,sale,rent,none',
+            'status' => 'array',
+            'status.*' => 'string|in:available|unavailable|unknown',
+            'price_min' => 'integer',
+            'price_max' => 'integer',
+            'area_min' => 'integer',
+            'area_max' => 'integer',
+            'rating_min' => 'integer',
+            'rating_max' => 'integer',
+            'wc' => 'integer',
+            'typology' => 'array',
+            'typology.*' => ['string', Rule::in(['T0', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6+'])],
         ];
     }
 }

@@ -494,6 +494,63 @@ class PropertyController extends Controller
             });
         }
 
+        // Check if property is of the specified type
+        if (isset($search['type'])) {
+            $properties->whereIn('type', $search['type']);
+        }
+
+        // Check if property is of the specified listing type
+        if (isset($search['listing_type'])) {
+            $properties->whereIn('listing_type', $search['listing_type']);
+        }
+
+        // Check if property has the specified status
+        if (isset($search['status'])) {
+            $properties->whereIn('status', $search['status']);
+        }
+
+        // Check if property has the specified price
+        if (isset($search['price_min'])) {
+            $properties->where('current_price_sale', '>=', $search['price_min']);
+        }
+
+        if (isset($search['price_max'])) {
+            $properties->where('current_price_sale', '<=', $search['price_max']);
+        }
+
+        // Check if property has the specified area
+        if (isset($search['area_min'])) {
+            $properties->where('gross_area', '>=', $search['area_min']);
+        }
+
+        if (isset($search['area_max'])) {
+            $properties->where('gross_area', '<=', $search['area_max']);
+        }
+
+        // Check if property has the specified rating
+        if (isset($search['rating_min'])) {
+            $properties->where('rating', '>=', $search['rating_min']);
+        }
+
+        if (isset($search['rating_max'])) {
+            $properties->where('rating', '<=', $search['rating_max']);
+        }
+
+        // Check if property has the specified wc
+        if (isset($search['wc'])) {
+            $properties->where('wc', $search['wc']);
+        }
+
+        // Check if property has the specified typology
+        if (isset($search['typology'])) {
+            if (in_array('T6+', $search['typology'])) {
+                $search['typology'] = array_diff($search['typology'], ['T6+']);
+                $properties->where('typology', 'like', 'T%')->whereRaw('CAST(SUBSTRING(typology, 2) AS UNSIGNED) >= 6');
+            }
+            if (count($search['typology']) > 0)
+                $properties->whereIn('typology', $search['typology']);
+        }
+
         return $properties->orderByDesc('created_at');
     }
 
