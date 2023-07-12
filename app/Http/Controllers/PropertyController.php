@@ -479,9 +479,13 @@ class PropertyController extends Controller
         // Check if property is in the specified list
         if (isset($search['list_id'])) {
             $listId = $search['list_id'];
-            $properties->whereHas('lists', function ($query) use ($listId) {
-                $query->where('id', $listId);
-            }, '=', 1);
+            if ($listId == -1) {
+                $properties->doesntHave('lists');
+            } else {
+                $properties->whereHas('lists', function ($query) use ($listId) {
+                    $query->where('id', $listId);
+                }, '=', 1);
+            }
         }
 
         // Check if property has all tags
