@@ -8,6 +8,7 @@ use App\Http\Requests\List\StorePropertyListRequest;
 use App\Http\Requests\List\UpdatePropertyListRequest;
 use App\Http\Resources\List\ListResource;
 use App\Http\Resources\List\ListWithPropertiesResource;
+use App\Models\Property;
 use App\Models\PropertyList;
 use Illuminate\Http\Request;
 
@@ -159,6 +160,21 @@ class ListController extends Controller
 
         return response()->json([
             'message' => 'Lists deleted successfully',
+        ], 200);
+    }
+
+    public function removeProperty(PropertyList $propertyList, Property $property)
+    {
+        if (!$propertyList->properties()->find($property->id)) {
+            return response()->json([
+                'message' => 'Property not found in list',
+            ], 404);
+        }
+
+        $propertyList->properties()->detach($property->id);
+
+        return response()->json([
+            'message' => 'Property removed successfully'
         ], 200);
     }
 }
