@@ -26,9 +26,8 @@ class UserController extends Controller
 
         //Update profile picture
         if ($request->hasFile('photo')) {
-            $newUser['photo_url'] = basename($request->file('photo')->store(StorageLocation::USER_PHOTOS));
+            $newUser['photo_url'] = '/storage/users/' . basename($request->file('photo')->store(StorageLocation::USER_PHOTOS));
             unset($newUser['photo']);
-
             $deleteUserPhoto = true;
         } elseif ($request->has('remove_photo') && $request->remove_photo) {
             $newUser['photo_url'] = null;
