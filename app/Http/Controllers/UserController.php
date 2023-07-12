@@ -67,12 +67,11 @@ class UserController extends Controller
         $user->password = Hash::make($request->new_password);
         $user->save();
 
-        //TODO: Needs to test
         $tokenName = $user->currentAccessToken()->name;
 
         //Revoke tokens on pass change
         foreach ($user->tokens as $token) {
-            $token->revoke();
+            $token->delete();
         }
 
         $newToken = $user->myCreateToken($tokenName);
