@@ -29,12 +29,15 @@ class SearchPropertyRequest extends FormRequest
             'exclude_tags' => 'json',
             'adm_id' => 'integer',
             'list_id' => 'integer',
-            'type' => 'array',
-            'type.*' => 'string|in:house,apartment,office,shop,warehouse,garage,land,other',
-            'listing_type' => 'array',
-            'listing_type.*' => 'string|in:both,sale,rent,none',
-            'status' => 'array',
-            'status.*' => 'string|in:available|unavailable|unknown',
+            //type
+            't' => 'array',
+            't.*' => 'string|in:house,apartment,office,shop,warehouse,garage,land,other',
+            //listing_type
+            'lt' => 'array',
+            'lt.*' => 'string|in:both,sale,rent,none',
+            //status
+            's' => 'array',
+            's.*' => 'string|in:available|unavailable|unknown',
             'price_min' => 'integer',
             'price_max' => 'integer',
             'area_min' => 'integer',
@@ -42,8 +45,10 @@ class SearchPropertyRequest extends FormRequest
             'rating_min' => 'integer',
             'rating_max' => 'integer',
             'wc' => 'integer',
-            'typology' => 'array',
-            'typology.*' => ['string', Rule::in(['T0', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6+'])],
+            //typology
+            'tl' => 'array',
+            'tl.*' => ['string', Rule::in(['T0', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6+'])],
+            'address' => 'string',
         ];
     }
 }

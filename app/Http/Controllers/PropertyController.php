@@ -458,6 +458,24 @@ class PropertyController extends Controller
     {
         $properties = $props;
 
+        // Check if property is in the specified address
+        if (isset($search['address'])) {
+            $properties->whereHas('address', function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('full_address', 'like', '%' . $search['address'] . '%')->orWhere('postal_code', 'like', '%' . $search['address'] . '%')
+                        ->orWhereHas('adm1', function ($query) use ($search) {
+                            $query->where('name', 'like', '%' . $search['address'] . '%');
+                        })
+                        ->orWhereHas('adm2', function ($query) use ($search) {
+                            $query->where('name', 'like', '%' . $search['address'] . '%');
+                        })
+                        ->orWhereHas('adm3', function ($query) use ($search) {
+                            $query->where('name', 'like', '%' . $search['address'] . '%');
+                        });
+                });
+            });
+        }
+
         // Check if property is in the specified list
         if (isset($search['list_id'])) {
             $listId = $search['list_id'];
@@ -504,18 +522,18 @@ class PropertyController extends Controller
         }
 
         // Check if property is of the specified type
-        if (isset($search['type'])) {
-            $properties->whereIn('type', $search['type']);
+        if (isset($search['t'])) {
+            $properties->whereIn('type', $search['t']);
         }
 
         // Check if property is of the specified listing type
-        if (isset($search['listing_type'])) {
-            $properties->whereIn('listing_type', $search['listing_type']);
+        if (isset($search['lt'])) {
+            $properties->whereIn('listing_type', $search['lt']);
         }
 
         // Check if property has the specified status
-        if (isset($search['status'])) {
-            $properties->whereIn('status', $search['status']);
+        if (isset($search['s'])) {
+            $properties->whereIn('status', $search['s']);
         }
 
         // Check if property has the specified price
@@ -567,13 +585,13 @@ class PropertyController extends Controller
         }
 
         // Check if property has the specified typology
-        if (isset($search['typology'])) {
-            if (in_array('T6+', $search['typology'])) {
-                $search['typology'] = array_diff($search['typology'], ['T6+']);
+        if (isset($search['tl'])) {
+            if (in_array('T6+', $search['tl'])) {
+                $search['tl'] = array_diff($search['tl'], ['T6+']);
                 $properties->where('typology', 'like', 'T%')->whereRaw('CAST(SUBSTRING(typology, 2) AS UNSIGNED) >= 6');
             }
-            if (count($search['typology']) > 0) {
-                $properties->whereIn('typology', $search['typology']);
+            if (count($search['tl']) > 0) {
+                $properties->whereIn('typology', $search['tl']);
             }
         }
 

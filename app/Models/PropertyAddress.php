@@ -101,17 +101,17 @@ class PropertyAddress extends Model
 
     public function adm1(): BelongsTo
     {
-        return $this->belongsTo(AdministrativeDivision::class);
+        return $this->belongsTo(AdministrativeDivision::class, 'adm1_id');
     }
 
     public function adm2(): BelongsTo
     {
-        return $this->belongsTo(AdministrativeDivision::class);
+        return $this->belongsTo(AdministrativeDivision::class, 'adm2_id');
     }
 
     public function adm3(): BelongsTo
     {
-        return $this->belongsTo(AdministrativeDivision::class);
+        return $this->belongsTo(AdministrativeDivision::class, 'adm3_id');
     }
 
     public function user(): BelongsTo
