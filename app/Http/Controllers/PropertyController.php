@@ -207,13 +207,16 @@ class PropertyController extends Controller
             $property->update($propertyReq);
 
             // Update address coordinates
-            if (isset($addressReq['coordinates_'])) {
-                DB::table('property_addresses')->where('property_id', $property->id)->update([
-                    'coordinates' => $coords,
+            DB::table('property_addresses')
+                ->where('property_id', $property->id)
+                ->update([
+                    'coordinates' => isset($addressReq['coordinates_']) ? $coords : null,
                 ]);
-            }
 
             unset($addressReq['coordinates_']);
+            unset($addressReq['latitude']);
+            unset($addressReq['longitude']);
+
             $property->address()->update($addressReq);
 
             $property->tags()->detach();
