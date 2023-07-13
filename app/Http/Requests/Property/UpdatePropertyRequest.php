@@ -49,11 +49,11 @@ class UpdatePropertyRequest extends FormRequest
             'title' => 'required|string|min:3|max:200',
             'type' => 'nullable|in:house,apartment,office,shop,warehouse,garage,land,other',
             'status' => 'nullable|in:available,unavailable,unknown',
-            'description' => 'string|max:5000',
-            'typology' => 'string|max:12',
-            'gross_area' => 'integer|min:0',
-            'useful_area' => 'integer|min:0',
-            'wc' => 'integer|min:0|max:100',
+            'description' => 'nullable|string|max:5000',
+            'typology' => 'nullable|string|max:12',
+            'gross_area' => 'nullable|integer|min:0',
+            'useful_area' => 'nullable|integer|min:0',
+            'wc' => 'nullable|integer|min:0|max:100',
             'rating' => 'integer|min:0|max:10',
             /* TAGS */
             'tags' => [
@@ -74,6 +74,7 @@ class UpdatePropertyRequest extends FormRequest
             /* ADDRESS */
             'address' => 'required|array',
             'address.adm1_id' => [
+                'nullable',
                 'integer',
                 'required_without_all:address.adm3_id,address.adm2_id,address.full_address',
                 Rule::exists('administrative_divisions', 'id')->where(function ($query) {
@@ -81,6 +82,7 @@ class UpdatePropertyRequest extends FormRequest
                 }),
             ],
             'address.adm2_id' => [
+                'nullable',
                 'integer',
                 'required_without_all:address.adm1_id,address.adm3_id,address.full_address',
                 Rule::exists('administrative_divisions', 'id')->where(function ($query) {
@@ -88,16 +90,17 @@ class UpdatePropertyRequest extends FormRequest
                 }),
             ],
             'address.adm3_id' => [
+                'nullable',
                 'integer',
                 'required_without_all:address.adm1_id,address.adm2_id,address.full_address',
                 Rule::exists('administrative_divisions', 'id')->where(function ($query) {
                     $query->where('level', 3);
                 }),
             ],
-            'address.postal_code' => 'string|min:4|max:10',
-            'address.full_address' => 'required_without_all:address.adm1_id,address.adm2_id,address.adm3_id|string|max:200', // Required without adm1_id
-            'address.latitude' => 'numeric|between:-90,90',
-            'address.longitude' => 'numeric|between:-180,180',
+            'address.postal_code' => 'nullable|string|min:4|max:10',
+            'address.full_address' => 'nullable|required_without_all:address.adm1_id,address.adm2_id,address.adm3_id|string|max:200', // Required without adm1_id
+            'address.latitude' => 'nullable|required_with:address.longitude|numeric|between:-90,90',
+            'address.longitude' => 'nullable|required_with:address.latitude|numeric|between:-180,180',
 
             /* MEDIA */
             'media' => 'array',
