@@ -34,8 +34,6 @@ class UserController extends Controller
             $deleteUserPhoto = true;
         }
 
-        //TODO: Resend email verification?
-
         //Delete photo when true
         if (
             $deleteUserPhoto &&

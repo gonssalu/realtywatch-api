@@ -115,8 +115,7 @@ class Property extends Model
         'id' => 'integer',
         'user_id' => 'integer',
         'quantity' => 'integer',
-        'rating' => 'integer',
-        //TODO: ADD DECIMALS
+        'rating' => 'integer'
     ];
 
     public function getFullCoverUrlAttribute(): string|null
