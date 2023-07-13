@@ -86,6 +86,7 @@ class StatisticsController extends Controller
         $lists = $user->lists()->get();
         foreach ($lists as $list) {
             $statistics['lists'][] = array(
+                'id' => $list->id,
                 'name' => $list->name,
                 'count' => $list->properties()->count(),
                 'avg' => $list->properties()->where('rating', '!=', 0)->where('rating', '!=', null)->avg('rating'),
