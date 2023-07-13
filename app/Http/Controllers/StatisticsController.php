@@ -66,7 +66,8 @@ class StatisticsController extends Controller
 
         $tags = $user->tags()->get();
         foreach ($tags as $tag) {
-            $statistics['tags'][$tag->name] = array(
+            $statistics['tags'][] = array(
+                'name' => $tag->name,
                 'count' => $tag->properties()->count(),
                 'avg' => $tag->properties()->where('rating', '!=', 0)->where('rating', '!=', null)->avg('rating'),
                 'price' => [
@@ -76,9 +77,15 @@ class StatisticsController extends Controller
             );
         }
 
+        // order $statistics['tags'] by avg and take only the top 10
+        usort($statistics['tags'], function ($a, $b) {
+            return $a['avg'] < $b['avg'];
+        });
+        $statistics['tags'] = array_slice($statistics['tags'], 0, 5);
+
         $lists = $user->lists()->get();
         foreach ($lists as $list) {
-            $statistics['lists'][$list->id] = array(
+            $statistics['lists'][] = array(
                 'name' => $list->name,
                 'count' => $list->properties()->count(),
                 'avg' => $list->properties()->where('rating', '!=', 0)->where('rating', '!=', null)->avg('rating'),
@@ -88,6 +95,12 @@ class StatisticsController extends Controller
                 ]
             );
         }
+
+        // order $statistics['lists'] by avg and take only the top 10
+        usort($statistics['lists'], function ($a, $b) {
+            return $a['avg'] < $b['avg'];
+        });
+        $statistics['lists'] = array_slice($statistics['lists'], 0, 5);
         return $statistics;
     }
 }
