@@ -28,8 +28,16 @@ class DatabaseSeeder extends Seeder
         $this->callWith(PropertySeeder::class, ['user' => $users[0], 'num_props' => $seedType === 'small' ? 3 : 100]);
         $this->callWith(ListTagSeeder::class, ['user' => $users[0], 'qty' => $seedType === 'small' ? [1, [1, 2], 2, [1, 2]] : [7, [8, 16], 15, [1, 5]]]);
 
-        $this->callWith(PropertySeeder::class, ['user' => $users[1], 'num_props' => $seedType === 'small' ? 2 : 10]);
+        $this->callWith(PropertySeeder::class, ['user' => $users[1], 'num_props' => $seedType === 'small' ? 3 : 10]);
         $this->callWith(ListTagSeeder::class, ['user' => $users[1], 'qty' => [1, [1, 2], 2, [1, 2]]]);
+
+        $users[0]->properties()->orderByDesc('id')->take(5)->get()->each(function ($prop) {
+            $prop->delete();
+        });
+
+        $users[1]->properties()->orderByDesc('id')->take(1)->get()->each(function ($prop) {
+            $prop->delete();
+        });
 
         // WARNING: DO NOT RUN // $this->call(MediaSeeder::class);
 
