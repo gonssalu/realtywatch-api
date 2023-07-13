@@ -98,7 +98,7 @@ class UpdatePropertyRequest extends FormRequest
                 }),
             ],
             'address.postal_code' => 'nullable|string|min:4|max:10',
-            'address.full_address' => 'nullable|required_without_all:address.adm1_id,address.adm2_id,address.adm3_id|string|max:200', // Required without adm1_id
+            'address.full_address' => 'required_without_all:address.adm1_id,address.adm2_id,address.adm3_id|string|max:200', // Required without adm1_id
             'address.latitude' => 'nullable|required_with:address.longitude|numeric|between:-90,90',
             'address.longitude' => 'nullable|required_with:address.latitude|numeric|between:-180,180',
 
