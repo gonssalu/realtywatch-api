@@ -15,6 +15,7 @@ class PropertyTitleResource extends JsonResource
     public function toArray(Request $request): array
     {
         $lists = $this->lists;
+
         return [
             'id' => $this->id,
             'title' => $this->title,

@@ -25,6 +25,7 @@ class OfferController extends Controller
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
+
             return response()->json([
                 'message' => 'An error occured while deleting the offer.',
             ], 500);

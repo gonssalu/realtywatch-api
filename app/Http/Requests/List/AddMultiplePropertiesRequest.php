@@ -30,14 +30,15 @@ class AddMultiplePropertiesRequest extends FormRequest
     public function rules(): array
     {
         $user_id = $this->user()->id;
+
         return [
             'properties' => 'required|array',
             'properties.*' => [
                 'required', 'integer',
                 Rule::exists('properties', 'id')->where(function ($query) use ($user_id) {
                     $query->where('user_id', $user_id);
-                })
-            ]
+                }),
+            ],
         ];
     }
 }

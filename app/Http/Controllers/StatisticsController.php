@@ -2,11 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Characteristic;
-use App\Models\Property;
-use App\Models\PropertyList;
-use App\Models\PropertyOffer;
-use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class StatisticsController extends Controller
@@ -39,7 +34,7 @@ class StatisticsController extends Controller
                 'both' => 0,
             ],
             'tags' => [],
-            'lists' => []
+            'lists' => [],
         ];
 
         $statistics['total']['properties'] = $user->properties()->count();
@@ -50,14 +45,14 @@ class StatisticsController extends Controller
         foreach ($statistics['properties'] as $key => $value) {
             $keySearch = $key == 'no_type' ? null : $key;
             $qq = $user->properties()->where('type', $keySearch);
-            $statistics['properties'][$key] = array(
+            $statistics['properties'][$key] = [
                 'count' => (clone $qq)->count(),
                 'avg' => (clone $qq)->where('rating', '!=', 0)->where('rating', '!=', null)->avg('rating'),
                 'price' => [
-                    'sale' => (clone $qq)->where('current_price_sale', "!=", null)->avg('current_price_sale'),
-                    'rent' => $qq->where('current_price_rent', "!=", null)->avg('current_price_rent'),
-                ]
-            );
+                    'sale' => (clone $qq)->where('current_price_sale', '!=', null)->avg('current_price_sale'),
+                    'rent' => $qq->where('current_price_rent', '!=', null)->avg('current_price_rent'),
+                ],
+            ];
         }
 
         foreach ($statistics['listings'] as $key => $value) {
@@ -66,15 +61,15 @@ class StatisticsController extends Controller
 
         $tags = $user->tags()->get();
         foreach ($tags as $tag) {
-            $statistics['tags'][] = array(
+            $statistics['tags'][] = [
                 'name' => $tag->name,
                 'count' => $tag->properties()->count(),
                 'avg' => $tag->properties()->where('rating', '!=', 0)->where('rating', '!=', null)->avg('rating'),
                 'price' => [
-                    'sale' => $tag->properties()->where('current_price_sale', "!=", null)->avg('current_price_sale'),
-                    'rent' => $tag->properties()->where('current_price_rent', "!=", null)->avg('current_price_rent'),
-                ]
-            );
+                    'sale' => $tag->properties()->where('current_price_sale', '!=', null)->avg('current_price_sale'),
+                    'rent' => $tag->properties()->where('current_price_rent', '!=', null)->avg('current_price_rent'),
+                ],
+            ];
         }
 
         // order $statistics['tags'] by avg and take only the top 10
@@ -85,16 +80,16 @@ class StatisticsController extends Controller
 
         $lists = $user->lists()->get();
         foreach ($lists as $list) {
-            $statistics['lists'][] = array(
+            $statistics['lists'][] = [
                 'id' => $list->id,
                 'name' => $list->name,
                 'count' => $list->properties()->count(),
                 'avg' => $list->properties()->where('rating', '!=', 0)->where('rating', '!=', null)->avg('rating'),
                 'price' => [
-                    'sale' => $list->properties()->where('current_price_sale', "!=", null)->avg('current_price_sale'),
-                    'rent' => $list->properties()->where('current_price_rent', "!=", null)->avg('current_price_rent'),
-                ]
-            );
+                    'sale' => $list->properties()->where('current_price_sale', '!=', null)->avg('current_price_sale'),
+                    'rent' => $list->properties()->where('current_price_rent', '!=', null)->avg('current_price_rent'),
+                ],
+            ];
         }
 
         // order $statistics['lists'] by avg and take only the top 10
@@ -102,6 +97,7 @@ class StatisticsController extends Controller
             return $a['avg'] < $b['avg'];
         });
         $statistics['lists'] = array_slice($statistics['lists'], 0, 5);
+
         return $statistics;
     }
 }

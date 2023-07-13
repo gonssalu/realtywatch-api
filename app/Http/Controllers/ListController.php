@@ -174,7 +174,7 @@ class ListController extends Controller
         $propertyList->properties()->detach($property->id);
 
         return response()->json([
-            'message' => 'Property removed successfully'
+            'message' => 'Property removed successfully',
         ], 200);
     }
 }

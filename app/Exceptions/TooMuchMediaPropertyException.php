@@ -6,8 +6,8 @@ use Exception;
 
 class TooMuchMediaProperty extends Exception
 {
-
     protected $maxNumber;
+
     protected $mediaType;
 
     public function __construct($maxNumber, $mediaType)
