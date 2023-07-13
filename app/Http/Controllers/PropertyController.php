@@ -754,8 +754,7 @@ class PropertyController extends Controller
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
-
-            return null;
+            throw $e;
         }
 
         return $mediaPaths;
@@ -770,10 +769,10 @@ class PropertyController extends Controller
                 'message' => 'Property not found in trash',
             ], 404);
         }
-
-        $mediaPaths = $this->permanentDeleteProp($property);
-
-        if (!$mediaPaths) {
+        $mediaPaths = [];
+        try {
+            $mediaPaths = $this->permanentDeleteProp($property);
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'Something went wrong while permanently deleting the property', /*,
                 'error' => $e->getMessage(),*/
@@ -827,12 +826,14 @@ class PropertyController extends Controller
         $errors = [];
         foreach ($properties as $property) {
             $propId = $property->id;
-            $mediaPaths = $this->permanentDeleteProp($property);
-            if (!$mediaPaths) {
-                $errors[] = $propId;
+            $mediaPaths = [];
 
-                continue;
+            try {
+                $mediaPaths = $this->permanentDeleteProp($property);
+            } catch (Exception $e) {
+                $errors[] = $propId;
             }
+
             foreach ($mediaPaths as $path) {
                 Storage::delete(StorageLocation::PROPERTY_MEDIA . '/' . $path);
             }
