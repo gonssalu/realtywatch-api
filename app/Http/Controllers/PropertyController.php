@@ -31,7 +31,6 @@ class PropertyController extends Controller
     public function store(StorePropertyRequest $request)
     {
         $propertyReq = $request->validated();
-        $originalReq = $propertyReq; //TODO: disable the debug mode
         $user = $request->user();
 
         //Configure missing values
@@ -156,11 +155,10 @@ class PropertyController extends Controller
                 }
             }
 
-            //TODO: disable the debug mode
             return response()->json([
-                'message' => 'Something went wrong while creating the property',
+                'message' => 'Something went wrong while creating the property'/*,
                 'error' => $e->getMessage(),
-                'request' => $originalReq,
+                'request' => $originalReq,*/
             ], 500);
         }
 
@@ -237,6 +235,10 @@ class PropertyController extends Controller
                     foreach ($mediaIds as $mediaId) {
                         $media = $property->media()->where('id', $mediaId)->first();
                         if ($media) {
+                            if ($media->url == $property->cover_url) {
+                                $property->cover_url = null;
+                                $property->save();
+                            }
                             $media->delete();
                             $mediaToRemove[] = $media->url;
                         }
@@ -384,11 +386,10 @@ class PropertyController extends Controller
                 return $e->render();
             }
 
-            //TODO: disable the debug mode
             return response()->json([
-                'message' => 'Something went wrong while updating the property',
+                'message' => 'Something went wrong while updating the property'/*,
                 'error' => $e->getMessage(),
-                'trace' => $e->getTrace(),
+                'trace' => $e->getTrace(),*/
             ], 500);
         }
 
@@ -888,7 +889,7 @@ class PropertyController extends Controller
 
         return response()->json([
             'message' => 'Cover deleted',
-            'data' => new PropertyHeaderResource($property), //TODO: Header?
+            'data' => new PropertyHeaderResource($property),
         ], 200);
     }
 
@@ -903,7 +904,7 @@ class PropertyController extends Controller
 
         return response()->json([
             'message' => 'Cover updated',
-            'data' => new PropertyHeaderResource($property), //TODO: Header?
+            'data' => new PropertyHeaderResource($property),
         ], 200);
     }
 

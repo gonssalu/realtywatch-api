@@ -53,8 +53,6 @@ class AuthController extends Controller
 
         $accessToken = $regUser->myCreateToken($request->device_name);
 
-        event(new Registered($regUser)); /* TODO: IS THIS NEEDED ? */
-
         return response([
             'message' => 'User was successfuly registered',
             'user' => new UserResource($regUser),
