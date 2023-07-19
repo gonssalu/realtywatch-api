@@ -6,7 +6,6 @@ use App\Http\Requests\User\RegisterUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Hash;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
