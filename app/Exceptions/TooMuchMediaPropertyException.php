@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 
-class TooMuchMediaProperty extends Exception
+class TooMuchMediaPropertyException extends Exception
 {
     protected $maxNumber;
 

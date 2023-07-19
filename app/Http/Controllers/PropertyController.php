@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\TooMuchMediaProperty;
+use App\Exceptions\TooMuchMediaPropertyException;
 use App\Helpers\StorageLocation;
 use App\Http\Requests\Property\IndexPolygonPropertiesRequest;
 use App\Http\Requests\Property\SearchPropertyRequest;
@@ -156,7 +156,7 @@ class PropertyController extends Controller
             }
 
             return response()->json([
-                'message' => 'Something went wrong while creating the property'/*,
+                'message' => 'Something went wrong while creating the property', /*,
                 'error' => $e->getMessage(),
                 'request' => $originalReq,*/
             ], 500);
@@ -247,7 +247,7 @@ class PropertyController extends Controller
 
                 if (isset($mediaReq['images'])) {
                     if ($property->photos()->count() + count($mediaReq['images']) > 30) {
-                        throw new TooMuchMediaProperty(30, 'images');
+                        throw new TooMuchMediaPropertyException(30, 'images');
                     }
 
                     $lastEntry = $property->photos()->last();
@@ -257,7 +257,7 @@ class PropertyController extends Controller
 
                 if (isset($mediaReq['blueprints'])) {
                     if ($property->blueprints()->count() + count($mediaReq['blueprints']) > 10) {
-                        throw new TooMuchMediaProperty(10, 'blueprints');
+                        throw new TooMuchMediaPropertyException(10, 'blueprints');
                     }
 
                     $lastEntry = $property->blueprints()->last();
@@ -267,7 +267,7 @@ class PropertyController extends Controller
 
                 if (isset($mediaReq['videos'])) {
                     if ($property->videos()->count() + count($mediaReq['videos']) > 3) {
-                        throw new TooMuchMediaProperty(3, 'videos');
+                        throw new TooMuchMediaPropertyException(3, 'videos');
                     }
 
                     $lastEntry = $property->videos()->last();
@@ -382,12 +382,12 @@ class PropertyController extends Controller
                 }
             }
 
-            if ($e instanceof TooMuchMediaProperty) {
+            if ($e instanceof TooMuchMediaPropertyException) {
                 return $e->render();
             }
 
             return response()->json([
-                'message' => 'Something went wrong while updating the property'/*,
+                'message' => 'Something went wrong while updating the property', /*,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTrace(),*/
             ], 500);
@@ -510,12 +510,12 @@ class PropertyController extends Controller
         // Check if property is in the specified administrative area
         if (isset($search['adm_id'])) {
             /*$adm_id = $search['adm_id'];
-            $adm = AdministrativeDivision::whereId($adm_id)->get();
-            $adm_level = $adm ? $adm->level : 1;
+                  $adm = AdministrativeDivision::whereId($adm_id)->get();
+                  $adm_level = $adm ? $adm->level : 1;
 
-            $properties->whereHas('address', function ($query) use ($adm_id, $adm_level) {
-                $query->where('adm' . $adm_level . '_id', $adm_id);
-            });*/
+                  $properties->whereHas('address', function ($query) use ($adm_id, $adm_level) {
+                      $query->where('adm' . $adm_level . '_id', $adm_id);
+                  });*/
         }
 
         // Search for a property with the query
@@ -658,11 +658,11 @@ class PropertyController extends Controller
         $user = $request->user();
 
         $newTagsCreated =
-            $this->updateTagsHelper(
-                $property,
-                $user,
-                $request->has('name') ? [$tagReq['name']] : $tagReq['names']
-            );
+          $this->updateTagsHelper(
+              $property,
+              $user,
+              $request->has('name') ? [$tagReq['name']] : $tagReq['names']
+          );
 
         return response()->json([
             'message' => 'Property tags were successfully updated',
