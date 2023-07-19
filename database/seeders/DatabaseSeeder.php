@@ -16,14 +16,16 @@ class DatabaseSeeder extends Seeder
         $this->command->info('Starting database seeder');
         $this->command->info('-----------------------------------------------');
 
-        $seedType = $this->command->choice('What type of seed do you want to run?', ['small', 'large'], 0);
+        //$seedType = $this->command->choice('What type of seed do you want to run?', ['small', 'large'], 0);
+        $seedType = 'large';
+        //$this->call(AdministrativeDivisionSeeder::class);
 
-        $this->call(AdministrativeDivisionSeeder::class);
+        //$this->callWith(UserSeeder::class, ['seedType' => $seedType]);
 
-        $this->callWith(UserSeeder::class, ['seedType' => $seedType]);
+        User::factory(2)->create();
 
-        // Get the first two users
-        $users = User::query()->take(2)->get();
+        // Get the last two users
+        $users = User::query()->orderByDesc('id')->take(2)->get();
 
         $this->callWith(PropertySeeder::class, ['user' => $users[0], 'num_props' => $seedType === 'small' ? 3 : 100]);
         $this->callWith(ListTagSeeder::class, ['user' => $users[0], 'qty' => $seedType === 'small' ? [1, [1, 2], 2, [1, 2]] : [7, [8, 16], 15, [1, 5]]]);
